@@ -46,49 +46,49 @@ Student, Employee and Guest have different fee associated to the club they enrol
 If the member is a trainer there is no fee for that particular club he/she is associated to.
 Fee should not be added for an inactive club the person is associated too.</p>
      
-	<li>Show the List of the members</li>
+<li>Show the List of the members</li>
 	<p>Title: list of members.</p>
      	<p>Description: Here we can show the list of all the members with their data, ID, Name, Type, Role, Clubs and total-fee.</p>
       
-	<li>Update the data of a member</li>
+<li>Update the data of a member</li>
 	<p>Title: Update member.</p>
 	<p>Description: Making modification of the data of an existing member.</p>
       
-	<li>Delete the data of a member of the club</li>
+<li>Delete the data of a member of the club</li>
 	<p>Title: Delete a Member.</p>
 	<p>Description: Deleting the data of the member who leaves the club or clubs.</p>
 
-	<li>Adding a new club</li>
+<li>Adding a new club</li>
 	<p>Title: create new Club.</p>
 	<p>Description: we create a new record for each new club.
      We add the ID, Name, Description, fees {student fee, faculty fee, guest fee), trainer, chairs, Status {active or inactive}, contact information.</p>
      
-	<li>Show the details of the club and its associated players and members</li>
+<li>Show the details of the club and its associated players and members</li>
 	<p>Title: list the club information and the participant list.</p>
      	<p>Description: Here we can show the details of the club and a list of enrolled participating players and members of club for the current term. </p>  
       
-	<li>Update the data of a club</li>
+<li>Update the data of a club</li>
 	<p>Title: Update club details.</p>
 	<p>Description: Making modification of the data of existing details.</p>
       
-	<li>Delete the data of the club</li>
+<li>Delete the data of the club</li>
 	<p>Title: Delete the club.</p>
 	<p>Description: Deleting the data of the club for once and for all.</p>
 	
-	<li>Creating Schedule</li>
+<li>Creating Schedule</li>
 	<p>Title: create new schedule.</p>
     	<p>Description: we create a new schedule for each club. 
      We add the ID (auto populated), Time period (Mar-Aug 2023), term {summer, fall, winter, spring}, week {list of week}, time and location.</p>
      
-	<li>Show the details list of club and its schedule</li>
+<li>Show the details list of club and its schedule</li>
 	<p>Title: list the club and its associated schedule for a given time-period.</p>
      	<p>Description: Here we can show the details of the club and the entire associated schedule.</p>
       
-	<li>Update the data in the schedule</li>
+<li>Update the data in the schedule</li>
 	<p>Title: Update the schedule details.</p>
 	<p>Description: Making modification of the data of an existing schedule.</p>
     
-	<li>Delete the schedule</li>
+<li>Delete the schedule</li>
 	<p>Title: Delete the schedule.</p>
 	<p>Description: Deleting the schedule of the club for once and for all.</p>
 </ul>
