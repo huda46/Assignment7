@@ -1,7 +1,7 @@
 # Assignment7
 ## Clients
 
-Group 3
+<h5>Group 3<h5>
 <p> Nour elhouda Benaida</p>
 <p> George Elias</p>
 
@@ -26,13 +26,13 @@ The BTU Sport Club
 # Purpose and Titles
 
 ## Purpose
-To encourage our students and employees for an overall wellbeing we provide a platform for them to enjoy their free time by joining sport courses, which provides a means of relaxation, relief, skill building, team building and the most important having fun and meeting new people. In addition, our club members can develop skills that can help them train and participate in professional tournaments in the future but the most important purpose of the club is to enhance the enjoyment of sports to the students.
+To encourage our students and employees for an overall wellbeing we provide a platform for them to enjoy their free time by joining sport courses, which provides a means of relaxation, relief, skill building, team building and the most important having fun and meeting new people. In addition, our club members can develop skills that can help them train and participate in professional tournaments in the future but the most important purpose of the club is to enhance the enjoyment of sports to the members.
 
 ## Title
-btu-sportClub
+btu-WellnessClub
 
 ## Domain Name
-btu-sportClub
+btu-sports
 
 # List of Information management tasks
 
