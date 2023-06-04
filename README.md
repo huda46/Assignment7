@@ -1,10 +1,11 @@
 # Assignment7
 ## Clients
 
- <ul>Group 3
+<H5>Group 3<H5>
+<ul>
 <li> Nour elhouda Benaida</li>
 <li> George Elias</li>
- </ul>
+</ul>
 
 # Table of Contents
 The BTU Wellness Club 
