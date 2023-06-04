@@ -15,6 +15,11 @@ The BTU Sport Club
 <p> Many courses such as Tennis, Football, Volleyball... are offered to our students, employees and guests, as a means of entertainment and relaxation since studies and work could be a stressful task. Each Course is held many time during the week, therefore a participant has the freedom to choose the timing that suits him/her the most according to his/her timetable.</p>
 
 ## Activities
+<ul>
+  <li></li>
+  <li></li>
+  <li></li>
+</ul> 
 
 # Purpose and Titles
 
