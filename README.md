@@ -16,14 +16,15 @@ The BTU Sport Club
 
 ## Activities
 <ul>
-  <li></li>
-  <li></li>
-  <li></li>
+  <li>Practicing Sports such as Tennis, Football, Volleyball</li>
+  <li>Offering courses for relaxation such as Yoga, Pilates...</li>
+  <li>Even Dancing courses such as Bachata and West Coast Swing are offered</li>
 </ul> 
 
 # Purpose and Titles
 
 ## Purpose
+To encourage our students and employees to enjoy their free time by practicing sport courses with having regular performances as a mean of relaxation, relief and making new friends. In addition, our club members can develop skills that can help them maybe to participates in professional tournaments in the future. But the most important purpose of this club is to enhance the enjoyment of sport to the students.
 
 ## Title
 btu-sportClub
