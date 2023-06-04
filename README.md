@@ -91,5 +91,5 @@ Fee should not be added for an inactive club the person is associated too.</p>
 	<li>Delete the schedule</li>
 	<p>Title: Delete the schedule.</p>
 	<p>Description: Deleting the schedule of the club for once and for all.</p>
-
+</ul>
 
