@@ -3,7 +3,7 @@
 
 Group 3
 <p> Nour elhouda Benaida</p>
-<p> Goerge Elias</p>
+<p> George Elias</p>
 
 # Table of Contents
 The BTU Sport Club 
@@ -26,7 +26,7 @@ The BTU Sport Club
 # Purpose and Titles
 
 ## Purpose
-To encourage our students and employees to enjoy their free time by practicing sport courses with having regular performances as a mean of relaxation, relief and making new friends. In addition, our club members can develop skills that can help them maybe to participates in professional tournaments in the future. But the most important purpose of this club is to enhance the enjoyment of sport to the students.
+To encourage our students and employees for an overall wellbeing we provide a platform for them to enjoy their free time by joining sport courses, which provides a means of relaxation, relief, skill building, team building and the most important having fun and meeting new people. In addition, our club members can develop skills that can help them train and participate in professional tournaments in the future but the most important purpose of the club is to enhance the enjoyment of sports to the students.
 
 ## Title
 btu-sportClub
