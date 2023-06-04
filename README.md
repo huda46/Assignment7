@@ -44,7 +44,7 @@ BTU-sports
 <p>Constraints: The fee is calculated based on the following condition. 
 Student, Employee and Guest have different fee associated to the club they enroll in.
 If the member is a trainer there is no fee for that particular club he/she is associated to.
-Fee should not be added for an inactive club the person is associated too.<p>
+Fee should not be added for an inactive club the person is associated too.</p>
      
 	<li>Show the List of the members</li>
 	<p>Title: list of members.</p>
