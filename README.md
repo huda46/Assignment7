@@ -1,7 +1,7 @@
 # Assignment7
 ## Clients
 
-<h3>Group 3<h3>
+ Group 3
 <p> Nour elhouda Benaida</p>
 <p> George Elias</p>
 
