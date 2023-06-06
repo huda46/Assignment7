@@ -34,7 +34,7 @@ To encourage our students and employees for an overall wellbeing we provide a pl
 BTU-WellnessClub
 
 ## Domain Name
-BTU-sports
+BTU-WellnessClub
 
 # List of Information management tasks
 <ul>
