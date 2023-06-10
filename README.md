@@ -7,8 +7,9 @@
 <li> George Elias</li>
 </ul>
 
-# Table of Contents
-	- [Introduction](#introduction)
+## Table of Contents
+
+- [Introduction](#introduction)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
