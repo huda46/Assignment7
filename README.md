@@ -8,6 +8,10 @@
 </ul>
 
 # Table of Contents
+	1. Description and activities(#description-and-activities)
+        2. Activities(#activities)
+	3. Purpose and Titles(#purpose-and-titles)
+	4. List of Information management tasks(#list-of-information-management-tasks)
 The BTU Wellness Club 
 # Description and activities
 
