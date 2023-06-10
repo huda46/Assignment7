@@ -9,10 +9,10 @@
 
 ## Table of Contents
 
-- [Description and activities](#description-and-activities)
-- [Activities](#activities)
-- [Purpose and Titles](#purpose-and-titles)
-- [List of Information management tasks](#list-of-information-management-tasks)
+[Description and activities](#description-and-activities)
+[Activities](#activities)
+[Purpose and Titles](#purpose-and-titles)
+[List of Information management tasks](#list-of-information-management-tasks)
 
 
 The BTU Wellness Club 
