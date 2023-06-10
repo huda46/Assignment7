@@ -8,6 +8,12 @@
 </ul>
 
 # Table of Contents
+	- [Introduction](#introduction)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
 	[Description and activities](#description-and-activities)
         [Activities](#activities)
 	[Purpose and Titles](#purpose-and-titles)
