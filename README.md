@@ -100,3 +100,55 @@ Fee should not be added for an inactive club the person is associated too.</p>
 	<p>Description: Deleting the schedule of the club for once and for all.</p>
 </ul>
 
+# Requirements document first version
+
+<table>
+  <tr>
+    <th>Original version</th>
+    <th>Elaborated/improved version</th>
+  </tr>
+  <tr>
+    <td>Create a new record for each new member that joins one of the sports in the club</td>
+    <td>A person can be added as a club member only when he is enroled in a least one club</td>
+  </tr>
+  <tr>
+    <td>Member type {student, employee, guest},  role {trainer, player}</td>
+    <td>A trainer can be of member type student, an emplyee or a guest</td>
+  </tr>
+  <tr>
+    <td>Table Club status « active/ inactive »</td>
+    <td>A club has the status « active » when it contains a least one trainer</td>
+  </tr>
+  <tr>
+    <td>Table Club status « active/ inactive »</td>
+    <td>A club has the status « inactive » when it doesn´t contain any trainer</td>
+  </tr>
+  <tr>
+    <td>Table Club status « active/ inactive »</td>
+    <td>Members can only join in the club, when it is active or beta-registered, </td>
+  </tr>
+  <tr>
+    <td>Student, Employee and Guest have different fees associated to the club they enrolled in</td>
+    <td>Elaborated Fee suggestions:Student: 5€, Employee: 10€, Guest: 15€ /Student: 7€, Employee: 10€, Guest: 20€</td>
+  </tr>
+  <tr>
+    <td>If member is a trainer there is no fee for that particular club he/she is associated to</td>
+    <td>There is no fees for trainers </td>
+  </tr>
+  <tr>
+    <td>Fee should not be added for an inactive club the person is associated too</td>
+    <td>A club that has a status « inactive » has no fees</td>
+  </tr>	
+  <tr>
+    <td>Create a new schedule for each club</td>
+    <td>A shedule of a club X can be created only when the club exists and has the status « active »</td>
+  </tr>	
+  <tr>
+    <td>A club contains trainer</td>
+    <td>One club can have one or many trainers</td>
+  </tr>	
+  <tr>
+    <td>A club member has role « trainer »</td>
+    <td>One trainer can supervise one or many clubs</td>
+  </tr>	
+</table>
