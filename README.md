@@ -100,20 +100,36 @@ Fee should not be added for an inactive club the person is associated too.</p>
 	<p>Description: Deleting the schedule of the club for once and for all.</p>
 </ul>
 
-# Requirements document first version
+# Requirements document 
 
 <table>
   <tr>
     <th>Original version</th>
     <th>Elaborated/improved version</th>
-  </tr>
-  <tr>
+ </tr>
+ <tr>
+    <td>Table member</td>
+    <td>rename table member into person</td>
+ </tr>
+ <tr>
+    <td>A person has a role « trainer/ player »</td>
+    <td>The property role is deleted, the distinction between admins, trainers, and participants will be in the table club</td>
+ </tr>	
+ <tr>	
     <td>Create a new record for each new member that joins one of the sports in the club</td>
     <td>A person can be added as a club member only when he is enroled in a least one club</td>
-  </tr>
+ </tr>
+ <tr>
+    <td>Table person, type {student, employee, guest}</td>
+    <td>A trainer can be of any person type student, an emplyee or a guest</td>
+ </tr>
   <tr>
-    <td>Member type {student, employee, guest},  role {trainer, player}</td>
-    <td>A trainer can be of member type student, an emplyee or a guest</td>
+    <td>>Table club, trainer</td>
+    <td>One club can have one or many trainers</td>
+  </tr>	
+ <tr>
+    <td>Table club, trainer</td>
+    <td>A club trainer can be a member in onother club</td>
   </tr>
   <tr>
     <td>Table Club status is « active »</td>
@@ -154,14 +170,10 @@ Fee should not be added for an inactive club the person is associated too.</p>
   </tr>	
   <tr>
     <td>Create a new schedule for each club</td>
-    <td>A shedule of a club X can be created only when the club exists and has the status « active »</td>
-  </tr>	
+    <td>The club is mandatory to add a new schedule</td>
+  </tr>
   <tr>
-    <td>A club contains trainer</td>
-    <td>One club can have one or many trainers</td>
-  </tr>	
-  <tr>
-    <td>A club member has role « trainer »</td>
-    <td>One trainer can supervise one or many clubs</td>
+    <td>Create a new schedule for each club</td>
+    <td>A shedule of a club X can be created only when the club exists</td>
   </tr>	
 </table>
