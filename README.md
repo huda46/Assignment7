@@ -108,15 +108,15 @@ Fee should not be added for an inactive club the person is associated too.</p>
     <th>Elaborated/improved version</th>
  </tr>
  <tr>
-    <td>Table member</td>
+    <td>Table Member</td>
     <td>rename table member into person</td>
  </tr>
  <tr>
-    <td>Table member</td>
+    <td>Table Member</td>
     <td>add a new table named: member to make the difference between participants and administration staff</td>
  </tr>
  <tr>
-    <td>Table staff</td>
+    <td>Table Staff</td>
     <td>add a new table named: stuff to make the difference between participants and administration staff</td>
  </tr>
  <tr>
@@ -128,56 +128,52 @@ Fee should not be added for an inactive club the person is associated too.</p>
     <td>A person can be added as a club member only when he is enroled in a least one club</td>
  </tr>
  <tr>
-    <td>Table person, type {student, employee, guest}</td>
+    <td>Table Person, type {student, employee, guest}</td>
     <td>A trainer can be of any person type student, an emplyee or a guest</td>
  </tr>
   <tr>
-    <td>Table club, trainer</td>
+    <td>Table Club, trainer</td>
     <td>One club can have one or many trainers</td>
   </tr>	
  <tr>
-    <td>Table club, trainer</td>
+    <td>Table Club, trainer</td>
     <td>A club trainer can be a member in onother club</td>
   </tr>
   <tr>
-    <td>Table Club status is « active »</td>
+    <td>Table Club, status: active</td>
     <td>rename status into « open »</td>
   </tr>
   <tr>
-    <td>Table Club status has only 2 options « open/ inactive »</td>
+    <td>Table Club, status has only 2 options « open/ inactive »</td>
     <td>Add two new states:  full and beta-registered</td>
   </tr>
   <tr>
   <tr>
-    <td>Table Club status has one new option: full</td>
+    <td>Table Club, status has one new option: full</td>
     <td>Option full:  the registration is closed and all participants will be billed</td>
   </tr>
   <tr>
-    <td>Table Club status has one new option: beta-registered</td>
+    <td>Table Club, status has one new option: beta-registered</td>
     <td>Option beta-registered: club members need not pay (be billed) it's free</td>
   </tr>
   <tr>
-    <td>Table Club status</td>
+    <td>Table Club, status</td>
     <td>Members can only join the club, when it is open or beta-registered</td>
   </tr>
   <tr>
-    <td>Table Club status</td>
+    <td>Table Club, status</td>
     <td>Members can´t join a club that is inactive or full</td>
   </tr>
   <tr>
-    <td>Table Club chairs</td>
+    <td>Table Club, chairs</td>
     <td>The chairs could be of person type: student, employees, or guest</td>
   </tr>
   <tr>
-    <td>Table Club fee should not be added for an inactive club the person is associated too</td>
-    <td>A club that has a status « inactive » has no fees</td>
+    <td>Table Club, status: complete</td>
+    <td>The fee is added to the member profile only when the associated club status is complete</td>
   </tr>	
   <tr>
-    <td>Table Club status: beta-registered</td>
-    <td>A club that has a status « beta-registered » has no fees</td>
-  </tr>	
-  <tr>
-    <td>Student, Employee and Guest have different fees associated to the club they enrolled in</td>
+    <td>Students, employees and guests have different fees associated to the club they enrolled in</td>
     <td>Students have a fee depending on the club fees. Everyone else (guests and employees) will pay the student fee plus a fix amount</td>
   </tr>
   <tr>
@@ -193,7 +189,7 @@ Fee should not be added for an inactive club the person is associated too.</p>
     <td>A shedule of a club X can be created only when the club exists</td>
   </tr>
   <tr>
-    <td>Table Club- Table member</td>
+    <td>Table Club, Table Member</td>
     <td>added a memberOfClub property</td>
   </tr>
 </table>
