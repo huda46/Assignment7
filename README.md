@@ -112,6 +112,14 @@ Fee should not be added for an inactive club the person is associated too.</p>
     <td>rename table member into person</td>
  </tr>
  <tr>
+    <td>Table member</td>
+    <td>add a new table named: member to make the difference between participants and administration staff</td>
+ </tr>
+ <tr>
+    <td>Table staff</td>
+    <td>add a new table named: stuff to make the difference between participants and administration staff</td>
+ </tr>
+ <tr>
     <td>A person has a role « trainer/ player »</td>
     <td>The property role is deleted, the distinction between admins, trainers, and participants will be in the table club</td>
  </tr>	
@@ -124,7 +132,7 @@ Fee should not be added for an inactive club the person is associated too.</p>
     <td>A trainer can be of any person type student, an emplyee or a guest</td>
  </tr>
   <tr>
-    <td>>Table club, trainer</td>
+    <td>Table club, trainer</td>
     <td>One club can have one or many trainers</td>
   </tr>	
  <tr>
@@ -157,17 +165,25 @@ Fee should not be added for an inactive club the person is associated too.</p>
     <td>Members can´t join a club that is inactive or full</td>
   </tr>
   <tr>
+    <td>Table Club chairs</td>
+    <td>The chairs could be of person type: student, employees, or guest</td>
+  </tr>
+  <tr>
+    <td>Table Club fee should not be added for an inactive club the person is associated too</td>
+    <td>A club that has a status « inactive » has no fees</td>
+  </tr>	
+  <tr>
+    <td>Table Club status: beta-registered</td>
+    <td>A club that has a status « beta-registered » has no fees</td>
+  </tr>	
+  <tr>
     <td>Student, Employee and Guest have different fees associated to the club they enrolled in</td>
-    <td>Elaborated Fee suggestions:Student: 5€, Employee: 10€, Guest: 15€ /Student: 7€, Employee: 10€, Guest: 20€</td>
+    <td>Students have a fee depending on the club fees. Everyone else (guests and employees) will pay the student fee plus a fix amount</td>
   </tr>
   <tr>
     <td>If member is a trainer there is no fee for that particular club he/she is associated to</td>
     <td>There is no fees for trainers </td>
   </tr>
-  <tr>
-    <td>Fee should not be added for an inactive club the person is associated too</td>
-    <td>A club that has a status « inactive » has no fees</td>
-  </tr>	
   <tr>
     <td>Create a new schedule for each club</td>
     <td>The club is mandatory to add a new schedule</td>
@@ -175,5 +191,9 @@ Fee should not be added for an inactive club the person is associated too.</p>
   <tr>
     <td>Create a new schedule for each club</td>
     <td>A shedule of a club X can be created only when the club exists</td>
-  </tr>	
+  </tr>
+  <tr>
+    <td>Table Club- Table member</td>
+    <td>added a memberOfClub property</td>
+  </tr>
 </table>
