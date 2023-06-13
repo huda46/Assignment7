@@ -116,16 +116,29 @@ Fee should not be added for an inactive club the person is associated too.</p>
     <td>A trainer can be of member type student, an emplyee or a guest</td>
   </tr>
   <tr>
-    <td>Table Club status « active/ inactive »</td>
-    <td>A club has the status « active » when it contains a least one trainer</td>
+    <td>Table Club status is « active »</td>
+    <td>rename status into « open »</td>
   </tr>
   <tr>
-    <td>Table Club status « active/ inactive »</td>
-    <td>A club has the status « inactive » when it doesn´t contain any trainer</td>
+    <td>Table Club status has only 2 options « open/ inactive »</td>
+    <td>Add two new states:  full and beta-registered</td>
   </tr>
   <tr>
-    <td>Table Club status « active/ inactive »</td>
-    <td>Members can only join in the club, when it is active or beta-registered, </td>
+  <tr>
+    <td>Table Club status has one new option: full</td>
+    <td>Option full:  the registration is closed and all participants will be billed</td>
+  </tr>
+  <tr>
+    <td>Table Club status has one new option: beta-registered</td>
+    <td>Option beta-registered: club members need not pay (be billed) it's free</td>
+  </tr>
+  <tr>
+    <td>Table Club status</td>
+    <td>Members can only join the club, when it is open or beta-registered</td>
+  </tr>
+  <tr>
+    <td>Table Club status</td>
+    <td>Members can´t join a club that is inactive or full</td>
   </tr>
   <tr>
     <td>Student, Employee and Guest have different fees associated to the club they enrolled in</td>
