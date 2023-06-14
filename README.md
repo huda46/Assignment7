@@ -6,13 +6,7 @@
 <li> Nour elhouda Benaida</li>
 <li> George Elias</li>
 </ul>
-Developers
 
-<H5>Group 2<H5>
-<ul>
-<li>Dustin Troppa</li>
-<li>Rania Ouaja</li>
-</ul>
 
 ## Table of Contents
 
@@ -199,4 +193,13 @@ Fee should not be added for an inactive club the person is associated too.</p>
     <td>Table Club, Table Member</td>
     <td>added a memberOfClub property</td>
   </tr>
+
+
+ Developers
+
+<H5>Group 2<H5>
+<ul>
+<li>Dustin Troppa</li>
+<li>Rania Ouaja</li>
+</ul>
 </table>
