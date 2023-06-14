@@ -6,6 +6,13 @@
 <li> Nour elhouda Benaida</li>
 <li> George Elias</li>
 </ul>
+## Developers
+
+<H5>Group 2<H5>
+<ul>
+<li>Dustin Troppa</li>
+<li>Rania Ouaja</li>
+</ul>
 
 ## Table of Contents
 
