@@ -193,6 +193,9 @@ Fee should not be added for an inactive club the person is associated too.</p>
     <td>Table Club, Table Member</td>
     <td>added a memberOfClub property</td>
   </tr>
+</table>
+
+
 
 
  Developers
@@ -202,4 +205,3 @@ Fee should not be added for an inactive club the person is associated too.</p>
 <li>Dustin Troppa</li>
 <li>Rania Ouaja</li>
 </ul>
-</table>
