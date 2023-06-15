@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-06-14T18:01:20.857Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="juNWnQKm7yLYHckoewur" version="21.3.8" type="device">
+<mxfile host="app.diagrams.net" modified="2023-06-15T10:51:42.097Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="ROTNBRc-FPRviDuTwYis" version="21.4.0" type="device">
   <diagram name="Seite-1" id="PuUvwu1YvjgNKgVuXKM4">
     <mxGraphModel dx="2261" dy="1876" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -31,7 +31,7 @@
         <mxCell id="9dghq6FsNL-RzNGUjoit-10" value="startDate" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="9dghq6FsNL-RzNGUjoit-9" vertex="1">
           <mxGeometry y="26" width="140" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="nvKo09IDnFG-mJRPMklA-1" value="endDate" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="9dghq6FsNL-RzNGUjoit-9">
+        <mxCell id="nvKo09IDnFG-mJRPMklA-1" value="endDate" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="9dghq6FsNL-RzNGUjoit-9" vertex="1">
           <mxGeometry y="52" width="140" height="26" as="geometry" />
         </mxCell>
         <mxCell id="9dghq6FsNL-RzNGUjoit-11" value="daysInWeek" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="9dghq6FsNL-RzNGUjoit-9" vertex="1">
@@ -90,7 +90,7 @@
         <mxCell id="9dghq6FsNL-RzNGUjoit-32" value="clubId" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="40" y="354" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="e8esufQxgk4ulArJOHBm-1" value="&lt;div style=&quot;&quot;&gt;&lt;div&gt;«invariant»&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&amp;nbsp;- Members can only join, when the club status is active or in the beta-phase&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&amp;nbsp;- A person can&#39;t be a trainer and a member of the same club&lt;/div&gt;&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="e8esufQxgk4ulArJOHBm-1" value="&lt;div style=&quot;&quot;&gt;&lt;div&gt;«invariant»&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&amp;nbsp;- Members can only join, when the club status is open or in the beta-phase&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&amp;nbsp;- A person can&#39;t be a trainer and a member of the same club&lt;/div&gt;&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="210" y="264" width="370" height="90" as="geometry" />
         </mxCell>
         <mxCell id="e8esufQxgk4ulArJOHBm-3" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.3;exitDx=0;exitDy=0;endArrow=none;endFill=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=8 8;" parent="1" source="e8esufQxgk4ulArJOHBm-1" target="9dghq6FsNL-RzNGUjoit-7" edge="1">
@@ -99,7 +99,7 @@
             <mxPoint x="650" y="260" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e8esufQxgk4ulArJOHBm-4" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;«invariant»&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp;-&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;When you are a member of a club with status beta-registered, then you don&#39;t have a fee to pay.&lt;/span&gt;&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="e8esufQxgk4ulArJOHBm-4" value="&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;«invariant»&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp;-&amp;nbsp;&lt;/span&gt;When you are a member of a club with status&amp;nbsp;beta-phase&lt;span style=&quot;background-color: initial;&quot;&gt;, then you don&#39;t have a fee to pay.&lt;/span&gt;&lt;/div&gt;" style="shape=note;size=20;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="320" y="20" width="370" height="65" as="geometry" />
         </mxCell>
         <mxCell id="e8esufQxgk4ulArJOHBm-5" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.003;exitY=0.646;exitDx=0;exitDy=0;endArrow=none;endFill=0;exitPerimeter=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;dashed=1;dashPattern=8 8;" parent="1" source="e8esufQxgk4ulArJOHBm-4" target="9dghq6FsNL-RzNGUjoit-1" edge="1">
