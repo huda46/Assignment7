@@ -195,10 +195,16 @@ Fee should not be added for an inactive club the person is associated too.</p>
   </tr>
 </table>
 
+# Domain Model
+![plot](./domain_information_model.png)
+
+
+# Design Model
+![plot](./information_design_model.png)
 
 
 
- <H5>Developers</H5>H5>
+# Developers
 
 <H6>Group 2<H6>
 <ul>
