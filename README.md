@@ -198,10 +198,17 @@ Fee should not be added for an inactive club the person is associated too.</p>
 
 
 
- Developers
+ <H5>Developers</H5>H5>
 
-<H5>Group 2<H5>
+<H6>Group 2<H6>
 <ul>
 <li>Dustin Troppa</li>
 <li>Rania Ouaja</li>
+</ul>
+<H7>Work division:<H7>
+<ul>
+<li> Requirements document: Rania Ouaja</li>
+<li> Domain information model: Dustin Troppa</li>
+<li> Domain information model corrected: Rania Ouaja</li>
+<li> Design information model: Dustin Troppa</li>
 </ul>
