@@ -130,7 +130,7 @@ Fee should not be added for an inactive club the person is associated too.</p>
  </tr>
  <tr>
     <td>Table Person, type {student, employee, guest}</td>
-    <td>A trainer can be of any person type student, an emplyee or a guest</td>
+    <td>A trainer can be of any person type student, an employee or a guest</td>
  </tr>
   <tr>
     <td>Table Club, trainer</td>
@@ -138,7 +138,7 @@ Fee should not be added for an inactive club the person is associated too.</p>
   </tr>	
  <tr>
     <td>Table Club, trainer</td>
-    <td>A club trainer can be a member in onother club</td>
+    <td>A club trainer can be a member in another club</td>
   </tr>
   <tr>
     <td>Table Club, status: active</td>
@@ -146,7 +146,7 @@ Fee should not be added for an inactive club the person is associated too.</p>
   </tr>
   <tr>
     <td>Table Club, status has only 2 options « open/ inactive »</td>
-    <td>Add two new states:  full and beta-registered</td>
+    <td>Add two new states:  full and beta-phase</td>
   </tr>
   <tr>
   <tr>
@@ -155,7 +155,7 @@ Fee should not be added for an inactive club the person is associated too.</p>
   </tr>
   <tr>
     <td>Table Club, status has one new option: beta-registered</td>
-    <td>Option beta-registered: club members need not pay (be billed) it's free</td>
+    <td>Option beta-phase: club members need not pay (be billed) it's free</td>
   </tr>
   <tr>
     <td>Table Club, status</td>
