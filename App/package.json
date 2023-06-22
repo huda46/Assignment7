@@ -12,6 +12,7 @@
     "minimal"
   ],
   "dependencies": {
-    "firebase": "^9.22.2"
+    "firebase": "^9.8.1",
+    "firebase-firestore-lite": "^1.0.3"
   }
 }
