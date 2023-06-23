@@ -211,10 +211,17 @@ Fee should not be added for an inactive club the person is associated too.</p>
 <li>Dustin Troppa</li>
 <li>Rania Ouaja</li>
 </ul>
-<H7>Work division:<H7>
+<H7>Work division for assignment 7B:<H7>
 <ul>
-<li> Requirements document: Rania Ouaja</li>
-<li> Domain information model: Dustin Troppa</li>
-<li> Domain information model corrected: Rania Ouaja</li>
-<li> Design information model: Dustin Troppa</li>
+<li>Requirements document: Rania Ouaja</li>
+<li>Domain information model: Dustin Troppa</li>
+<li>Domain information model corrected: Rania Ouaja</li>
+<li>Design information model: Dustin Troppa</li>
+</ul>
+
+<H8>Work division for assignment 7C-1:<H8>
+<ul>
+<li>Firestore Configuration & setup: Rania Ouaja & Dustin Troppa</li>
+<li>first version class implementations: Rania Ouaja</li>
+<li>add enumeration & fix bugs/errors: Dustin Troppa</li>
 </ul>
