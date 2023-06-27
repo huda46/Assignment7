@@ -4,9 +4,23 @@
   <meta charset="UTF-8"/>
   <title>Assignment 7C-1: BTU-WellnessClub Application</title>
   <meta name="description" content="BTU-WellnessClub Application + Firebase."/>
+  <style>
+
+    .generateTestData {
+      margin-top: 1em;
+    }
+
+    a.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+      cursor: default;
+    }
+  </style>
   <script type="module">
-     import Person from "./js/m/Person.mjs"
+    import {handleAuthentication} from "./js/v/accessControl.mjs"
+    import Person from "./js/m/Person.mjs"
      
+    handleAuthentication();
     window.addEventListener("load", function () {
       const clearButton = document.getElementById("clearData"),
         generateTestDataButtons = document.querySelectorAll("button.generateTestData");
@@ -19,16 +33,31 @@
   </script>
 </head>
 <body>
-<main>
-  <h1>BTU-WellnessClubApp</h1>
+  <header>
+    <div id="login-management"></div>
+    <h1>BTU-WellnessClubApp</h1>
+  </header>
+  <main>
   <div class="subheading">A Web App built with Plain JS and Firebase</div>
   <menu>
-    <li><a href="createPerson.html">Create</a> a new person record</li>
-    <li><a href="retrieveAndListAllPersons.html">Retrieve</a> and list all person records</li>
-    <li><a href="updatePerson.html">Update</a> a person record</li>
-    <li><a href="deletePerson.html">Delete</a> a person record</li>
-    <li style="margin-top: 1em"><button class="generateTestData" type="button">Generate test data</button></li>
-    <li><button id="clearData" type="button">Clear database</button></li>
+    <li role="menuitem">
+      <a href="createPerson.html" class="disabled">Create</a> a new person record
+    </li>
+    <li role="menuitem">
+      <a href="retrieveAndListAllPersons.html">Retrieve</a> and list all person records
+    </li>
+    <li role="menuitem">
+      <a href="updatePerson.html" class="disabled">Update</a> a person record
+    </li>
+    <li role="menuitem">
+      <a href="deletePerson.html" class="disabled">Delete</a> a person record
+    </li>
+    <li  role="menuitem">
+      <button class="generateTestData" type="button" disabled="disabled">Generate test data</button>
+    </li>
+    <li role="menuitem">
+      <button id="clearData" type="button" disabled="disabled">Clear database</button>
+    </li>
   </menu>
 </main>
 <footer>
