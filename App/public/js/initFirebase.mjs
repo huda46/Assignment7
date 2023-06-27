@@ -3,10 +3,10 @@
  * @author Gerd Wagner
  * @author Juan-Francisco Reyes
  */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+import { initializeApp, getApp, getApps } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore-lite.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
 
-// TODO: Replace the following with your web app's Firebase project configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCh-YP8dhCfdvxSVnwtpMvIKpp4jiGEmtA",
   authDomain: "btu-wellness-club-app.firebaseapp.com",
@@ -15,9 +15,11 @@ const firebaseConfig = {
   messagingSenderId: "1070286283053",
   appId: "1:1070286283053:web:53e0d43e65eb1f28dcb3a4"
 };
-// Initialize a Firebase App object
-initializeApp( firebaseConfig);
+// Initialize a Firebase App object only if not already initialized
+const app = (!getApss().length) ? initializeApp( firebaseConfig): getApp();
+// Initialize Firebase Authentication
+const auth = getAuth( app);
 // Initialize Cloud Firestore interface
 const fsDb = getFirestore();
 
-export { fsDb };
+export { auth, fsDb };
