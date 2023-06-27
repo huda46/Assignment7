@@ -106,3 +106,5 @@ async function handleSignOut() {
     console.error(`${e.constructor.name}: ${e.message}`);
   }
 }
+
+export { handleAuthentication };

@@ -16,7 +16,7 @@ const firebaseConfig = {
   appId: "1:1070286283053:web:53e0d43e65eb1f28dcb3a4"
 };
 // Initialize a Firebase App object only if not already initialized
-const app = (!getApss().length) ? initializeApp( firebaseConfig): getApp();
+const app = (!getApps().length) ? initializeApp( firebaseConfig): getApp();
 // Initialize Firebase Authentication
 const auth = getAuth( app);
 // Initialize Cloud Firestore interface

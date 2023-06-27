@@ -1,3 +1,7 @@
+import { auth } from "../initFirebase.mjs"
+import { applyActionCode, confirmPasswordReset, signInWithEmailAndPassword,
+  verifyPasswordResetCode } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
+
 const mode = getParameterByName("mode");
 const actionCode = getParameterByName("oobCode");
 const [sectionVeriEmailEl, sectionRstPswEl]
