@@ -4,12 +4,53 @@
   <meta charset="UTF-8"/>
   <title>BTU-WellnessClub Application: Delete</title>
   <script src="js/v/deletePerson.mjs" type="module"></script>
+  <link rel="icon" href="../../Logo.png"/>
+  <style>
+  
+  .split {
+    height: 50%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+    .left {
+      left: 5;
+      top: 10%;
+  }
+  
+    .right {
+      right: 0;
+  }
+  
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 45%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+  }
+  header {
+    color: #7b3f5f;
+    font-family:'Times New Roman', Times, serif;
+  }
+  
+    .centered img {
+      width: 350px;
+      border-radius: 50%;
+  }
+
+  </style>
 </head>
 <body>
 <header>
   <h1>Delete a person record</h1>
 </header>
 <main>
+  <div class="split left">
   <form id="Person">
     <div>
       <label>Select the person you want to delete:
@@ -22,10 +63,12 @@
       <button name="commit" type="button">Delete</button>
     </div>
   </form>
-</main>
-<br>
-<footer>
   <a href="index.html">« Back to main menu</a>
-</footer>
+</div>
+</main>
+<div class="split right">
+  <div class="centered">
+    <img src="../../Logo.png" alt="logo"> </div>
+</div>
 </body>
 </html>

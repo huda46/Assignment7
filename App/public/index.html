@@ -3,8 +3,46 @@
 <head>
   <meta charset="UTF-8"/>
   <title>Assignment 7C-1: BTU-WellnessClub Application</title>
-  <meta name="description" content="BTU-WellnessClub Application + Firebase."/>
+  <meta name="description" content="BTU-WellnessClub Application"/>
+  <link rel="icon" href="../../Logo.png"/>
   <style>
+
+.split {
+  height: 50%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+  .left {
+    left: 5;
+    top: 10%;
+}
+
+  .right {
+    right: 20%;
+}
+
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+  .centered img {
+    width: 350px;
+    border-radius: 50%;
+}
+header {
+  color: #7b3f5f;
+  font-family:'Times New Roman', Times, serif;
+}
+
 
     .generateTestData {
       margin-top: 1em;
@@ -38,32 +76,32 @@
     <h1>BTU-WellnessClubApp</h1>
   </header>
   <main>
-  <div class="subheading">A Web App built with Plain JS and Firebase</div>
   <menu>
+    <div class="split left">
     <li role="menuitem">
       <a href="createPerson.html" class="disabled">Create</a> a new person record
-    </li>
+    </li></br>
     <li role="menuitem">
       <a href="retrieveAndListAllPersons.html">Retrieve</a> and list all person records
-    </li>
+    </li></br>
     <li role="menuitem">
       <a href="updatePerson.html" class="disabled">Update</a> a person record
-    </li>
+    </li></br>
     <li role="menuitem">
       <a href="deletePerson.html" class="disabled">Delete</a> a person record
-    </li>
+    </li></br>
     <li  role="menuitem">
       <button class="generateTestData" type="button" disabled="disabled">Generate test data</button>
-    </li>
+    </li></br>
     <li role="menuitem">
       <button id="clearData" type="button" disabled="disabled">Clear database</button>
-    </li>
+    </li></br>
+  </div>
   </menu>
 </main>
-<footer>
-  <hr/>
-  Developers: Team 2 <br/>
-  Client: Team 3
-</footer>
+<div class="split right">
+  <div class="centered">
+    <img src="../../Logo.png" alt="logo"> </div>
+  </div>
 </body>
 </html>
