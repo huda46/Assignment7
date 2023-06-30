@@ -4,49 +4,48 @@
   <meta charset="UTF-8"/>
   <title>BTU-WellnessClub Application: Create</title>
   <script src="js/v/createPerson.mjs" type="module"></script>
-  <link rel="icon" href="../../Logo.png"/>
-<style>
+  <link rel="icon" href="../Logo.png"/>
+  <style>
+    .split {
+      height: 50%;
+      width: 50%;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      overflow-x: hidden;
+      padding-top: 20px;
+    }
 
-.split {
-  height: 50%;
-  width: 50%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
-}
+    .left {
+      left: 5;
+      top: 10%;
+    }
 
-  .left {
-    left: 5;
-    top: 10%;
-}
+    .right {
+      right: 0;
+    }
 
-  .right {
-    right: 0;
-}
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 45%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    header {
+      color: #7b3f5f;
+      font-family:'Times New Roman', Times, serif;
+    }
 
-  .centered {
-    position: absolute;
-    top: 50%;
-    left: 45%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-header {
-  color: #7b3f5f;
-  font-family:'Times New Roman', Times, serif;
-}
-
-  .centered img {
-    width: 350px;
-    border-radius: 50%;
-}
-
-</style>
+    .centered img {
+      width: 350px;
+      border-radius: 50%;
+    }
+  </style>
 </head>
 <body>
 <header>
+  <div id="login-management"></div>
   <h1>Create a new person record</h1>
 </header>
 <main>
@@ -66,7 +65,7 @@ header {
 </main>
 <div class="split right">
   <div class="centered">
-    <img src="../../Logo.png" alt="logo"> </div>
+    <img src="../Logo.png" alt="logo"> </div>
 </div>
 </body>
 </html>

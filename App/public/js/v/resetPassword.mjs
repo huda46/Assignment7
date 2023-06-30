@@ -3,10 +3,8 @@ import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.8.1
 
 const formEl = document.forms["Password"],
   resetBtn = formEl["commit"];
-console.log("Why");
 
 resetBtn.addEventListener("click", async function () {
-  console.log("Whyyyyyyy");
   const email = formEl["email"].value;
   if (email) {
     try {

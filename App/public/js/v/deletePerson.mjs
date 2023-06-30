@@ -2,6 +2,12 @@
  Import classes and data types
  ***************************************************************/
 import Person from "../m/Person.mjs";
+import { handleAuthentication } from "./accessControl.mjs";
+
+/***************************************************************
+ Setup and handle UI Authentication
+ ***************************************************************/
+ handleAuthentication();
 
 /***************************************************************
  Load data

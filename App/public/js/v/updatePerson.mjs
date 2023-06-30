@@ -4,6 +4,12 @@
 import Person from "../m/Person.mjs";
 import { PersonTypeEL } from "../m/Person.mjs";
 import { fillSelectWithOptions } from "../../lib/util.mjs"; 
+import { handleAuthentication } from "./accessControl.mjs";
+
+/***************************************************************
+ Setup and handle UI Authentication
+ ***************************************************************/
+ handleAuthentication();
 
 /***************************************************************
  Load data
