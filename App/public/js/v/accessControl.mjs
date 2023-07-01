@@ -19,7 +19,9 @@ function handleAuthentication() {
           }
         }
       }
-      else signInAnonymously( auth); // otherwise, upgrade to "anonymous"
+      else {
+        signInAnonymously( auth); // otherwise, upgrade to "anonymous"
+      }
     });
   } catch (e) {
     console.error(`Error with user authentication: ${e}`);
