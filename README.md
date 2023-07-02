@@ -225,3 +225,15 @@ Fee should not be added for an inactive club the person is associated too.</p>
 <li>first version class implementations: Rania Ouaja</li>
 <li>add enumeration & fix bugs/errors: Dustin Troppa</li>
 </ul>
+
+<H9>Work division for assignment 7C-2:<H9>
+<ul>
+<li>Initialize Firebase Authentication: Rania Ouaja & Dustin Troppa</li>
+<li>Prepare UI for Authentication and Authorization: Rania Ouaja</li>
+<li>Implement the Access Control Handling Solution: Dustin Troppa</li>
+<li>Implement Sign up and Sign in: Rania Ouaja</li>
+<li>Implement User Authentication Action Handlers: Dustin Troppa</li>
+<li>Configure Security Rules: Rania Ouaja & Dustin Troppa</li>
+<li>Styling of the webpage: Rania Ouaja</li>
+<li>Debugging: Dustin Troppa</li>
+</ul>
