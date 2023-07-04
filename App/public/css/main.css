@@ -1,0 +1,46 @@
+.split {
+    height: 50%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+
+  .left {
+    left: 5;
+    top: 10%;
+  }
+
+  .right {
+    right: 20%;
+  }
+
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .centered img {
+    width: 350px;
+    border-radius: 50%;
+  }
+
+  header {
+    color: #7b3f5f;
+    font-family:'Times New Roman', Times, serif;
+  }
+
+  .generateTestData {
+    margin-top: 1em;
+  }
+
+  a.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    cursor: default;
+  }
