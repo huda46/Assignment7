@@ -1,9 +1,66 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow anyone
-    match /{document=**} {
-      allow read, write; // or allow read, write: if true;
+    /** VALIDATION FUNCTIONS **/
+    // check if id is correct
+    function checkPersonId( id) {
+      return id != null
+             && id is int
+             && id > 0;
+    }
+    // check if exist document with same ID
+    function checkPersonIdAsId( id) {
+      return !(exists(/databases/$(database)/documents/persons/$(id)));
+    }
+    // check all constraints for name
+    function checkName( name) {
+      return name != null
+             && name is string;
+    }
+    // if present, check if it is integer
+    function checkType( type) {
+      return type != null
+             && type is int
+             && type > 0
+             && type < 4;
+    }
+    match /persons/{document=**} {
+      allow write: if request.auth.token.email_verified == true;
+      allow read: if request.auth != null;
+    }
+  }
+}
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /** VALIDATION RULES **/
+    match /{books}/{document=**} {
+      /** RULES FOR allow read WITH CONVENIENCE METHOD - LOW GRANULARITY **/
+      /** NO authentication required **/
+      allow read: if request.auth != null;
+
+      /** RULES FOR allow write WITH STANDARD METHODS - HIGH GRANULARITY **/
+      /** authentication required **/
+      //validate when create new person record
+      allow create: if request.auth.token.email_verified == true
+                       && checkPersonIdAsId( request.resource.data.personId) == true
+                       && checkPersonId( request.resource.data.personId) == true
+                       && checkName( request.resource.data.name) == true
+                       && checkType( request.resource.data.type) == true;
+
+      // validate when update person record
+      allow update: if request.auth.token.email_verified == true
+                       && (request.resource.data.diff( resource.data).affectedKeys()
+                        .hasOnly(['name', 'type']))
+                       && request.resource.data.name != null ?
+                           checkName( request.resource.data.name) : true
+                       && request.resource.data.type != null ?
+                           checkType( request.resource.data.type) : true;
+
+      // validate when delete book record
+      allow delete: if request.auth.token.email_verified == true;
     }
   }
 }
