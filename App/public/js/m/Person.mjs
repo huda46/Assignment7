@@ -1,7 +1,12 @@
 import { fsDb } from "../initFirebase.mjs";
 import Enumeration from "../../lib/Enumeration.mjs"; 
-import { collection as fsColl, deleteDoc, doc as fsDoc, getDoc, getDocs, setDoc, updateDoc }
+import { collection as fsColl, deleteDoc, doc as fsDoc, getDoc, getDocs, setDoc, updateDoc, deleteField }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore-lite.js";
+  import { isNonEmptyString, isIntegerOrIntegerString }
+  from "../../lib/util.mjs";
+import { NoConstraintViolation, MandatoryValueConstraintViolation, RangeConstraintViolation, UniquenessConstraintViolation }
+  from "../../lib/errorTypes.mjs";
+
 
 const PersonTypeEL = new Enumeration(["Student","Employee","Guest"]);
 
@@ -16,7 +21,91 @@ class Person {
     this.personId = personId;
     this.name = name;
     this.type = type;
+  };
+get personId() {
+  return this._personId;  
+};
+static checkPersonId( id) {
+  if (!id) {
+    return new NoConstraintViolation(); 
+  } else {
+    id = parseInt( id); 
+    if (isNaN( id) || !Number.isInteger( id) || id < 1) {
+      return new RangeConstraintViolation("The person ID must be a positive integer!");
+    } else {
+      return new NoConstraintViolation();
+    }
   }
+};
+static async checkPersonIdAsId( id) {
+  let validationResult = Person.checkId( id);
+  if ((validationResult instanceof NoConstraintViolation)) {
+    if (!id) {
+      validationResult = new MandatoryValueConstraintViolation(
+          "A positive integer value for the person ID is required!");
+        } else {
+          const personDocSn = await getDoc( fsDoc( fsDb, "persons", id));
+          if (personDocSn.exists()) {
+            validationResult = new UniquenessConstraintViolation(
+               "There is already a person record with this Id!");
+          } else {
+            validationResult = new NoConstraintViolation();
+          }
+        }
+      }
+      return validationResult;
+};
+set personId( d) {
+  const validationResult = Person.checkPersonId( d);
+  if (validationResult instanceof NoConstraintViolation) {
+    this._personId = d;
+  } else {
+    throw validationResult;
+  }
+};
+get name() {
+  return this._name;
+};
+static checkName( n) {
+  if (!n) {
+    return new MandatoryValueConstraintViolation("A person´s name must be provided!");
+  } else if (!isNonEmptyString( n)) {
+    return new RangeConstraintViolation("The name of person must be a non-empty string!");
+  } else {
+    return new NoConstraintViolation();
+  }
+};
+set name( n) {
+  const validationResult = Person.checkName( n);
+  if (validationResult instanceof NoConstraintViolation) {
+    this._name = n;
+  } else {
+    throw validationResult;
+  }
+};
+get type() {
+  return this._type;
+};
+static checkType ( t) {
+  if (!t) {
+    return new MandatoryValueConstraintViolation(
+      "A type must be provided!");
+  } else if (!isIntegerOrIntegerString(t) || parseInt(t) < 1 ||
+    parseInt(t) > PersonTypeEL.MAX) {
+    return new RangeConstraintViolation(
+      `Invalid value for type: ${t}`);
+  } else {
+    return new NoConstraintViolation();
+  } 
+};
+set type( t) {
+  const validationResult = Person.checkType( t);
+  if (validationResult instanceof NoConstraintViolation) {
+    this._type = t;
+  } else {
+    throw validationResult;
+  }
+};
 }
 /*********************************************************
  ***  Class-level ("static") storage management methods **
@@ -27,13 +116,23 @@ class Person {
  * @returns {Promise<void>}
  */
 Person.add = async function (slots) {
-  const personsCollRef = fsColl( fsDb, "persons"),
-    personDocRef = fsDoc(personsCollRef, slots.personId.toString()).withConverter(Person.converter);
+  let person = null;
   try {
-    await setDoc( personDocRef, slots);
-    console.log(`Person record ${slots.personId} created.`);
-  } catch( e) {
-    console.error(`Error when adding person record: ${e}`);
+    person = new Person( slots);
+    let validationResult = await Person.checkPersonIdAsId( Person.personId);
+    if (!validationResult instanceof NoConstraintViolation) throw validationResult;
+  } catch (e) {
+    console.error(`${e.constructor.name}: ${e.message}`);
+    person = null;
+  }
+  if (person) {
+    try {
+      const personDocRef = fsDoc( fsDb, "persons", person.personId).withConverter( Person.converter);
+      await setDoc( personDocRef, person);
+      console.log(`Person record "${person.personId}" created!`);
+    } catch (e) {
+      console.error(`${e.constructor.name}: ${e.message} + ${e}`);
+    }
   }
 };
 /**
@@ -42,34 +141,30 @@ Person.add = async function (slots) {
  * @returns {Promise<*>} personRecord: {array}
  */
 Person.retrieve = async function (personId) {
-  let personDocSn = null;
   try {
-    const personDocRef = fsDoc( fsDb, "persons", personId.toString()).withConverter(Person.converter);
-    personDocSn = await getDoc( personDocRef.withConverter( Person.converter));
-  } catch( e) {
-    console.error(`Error when retrieving person record: ${e}`);
-    return null;
+    const personRec = (await getDoc( fsDoc(fsDb, "persons", personId)
+      .withConverter( Person.converter))).data();
+    console.log(`Person record "${personRec.personId}" retrieved.`);
+    return personRec;
+  } catch (e) {
+    console.error(`Error retrieving person record: ${e}`);
   }
-  const personRec = personDocSn.data();
-  return personRec;
 };
 /**
  * Load all person records from Firestore
  * @returns {Promise<*>} personRecords: {array}
  */
-Person.retrieveAll = async function () {
-  let personsQrySn = null;
+Person.retrieveAll = async function (order) {
+  if (!order) order = "personId";
+  const personsCollRef = fsColl( fsDb, "persons"),
+    q = fsQuery( personsCollRef, orderBy( order));
   try {
-    const personsCollRef = fsColl( fsDb, "persons");
-    personsQrySn = await getDocs( personsCollRef.withConverter( Person.converter));
-  } catch( e) {
-    console.error(`Error when retrieving person records: ${e}`);
-    return null;
+    const personRecs = (await getDocs( q.withConverter( Person.converter))).docs.map( d => d.data());
+    console.log(`${personRecs.length} person records retrieved ${order ? "ordered by " + order : ""}`);
+    return personRecs;
+  } catch (e) {
+    console.error(`Error retrieving person records: ${e}`);
   }
-  const personDocs = personsQrySn.docs,
-    personRecs = personDocs.map( d => d.data());
-  console.log(`${personRecs.length} person records retrieved.`);
-  return personRecs;
 };
 /**
  * Update a Firestore document in the Firestore collection "persons"
@@ -77,22 +172,53 @@ Person.retrieveAll = async function () {
  * @returns {Promise<void>}
  */
 Person.update = async function (slots) {
-  const updSlots = {};
+  let noConstraintViolated = true,
+  validationResult = null,
+  personBeforeUpdate = null;
+const personDocRef = fsDoc( fsDb, "persons", slots.personId).withConverter( Person.converter),
+  updatedSlots = {};
+try {
   // retrieve up-to-date person record
-  const personRec = await Person.retrieve( slots.personId);
-  // update only those slots that have changed
-  if (personRec.name !== slots.name) updSlots.name = slots.name;
-  if (personRec.type !== slots.type) updSlots.type = slots.type;
-  if (Object.keys( updSlots).length > 0) {
-    try {
-      const personDocRef = fsDoc( fsDb, "persons", slots.personId.toString()).withConverter(Person.converter);
-      await updateDoc( personDocRef, updSlots);
-      console.log(`Person record ${slots.personId} modified.`);
-    } catch( e) {
-      console.error(`Error when updating person record: ${e}`);
-    }
+  const personDocSn = await getDoc( personDocRef);
+  personBeforeUpdate = personDocSn.data();
+} catch (e) {
+  console.error(`${e.constructor.name}: ${e.message}`);
+}
+try {
+  if (personBeforeUpdate.title !== slots.title) {
+    validationResult = Person.checkTitle( slots.title);
+    if (validationResult instanceof NoConstraintViolation) updatedSlots.title = slots.title;
+    else throw validationResult;
   }
+  if (personBeforeUpdate.year !== parseInt( slots.year)) {
+    validationResult = Person.checkYear( slots.year);
+    if (validationResult instanceof NoConstraintViolation) updatedSlots.year = parseInt( slots.year);
+    else throw validationResult;
+  }
+  if (slots.edition && personBeforeUpdate.edition !== parseInt( slots.edition)) {
+    // slots.edition has a non-empty value that is different from the old value
+    validationResult = Person.checkEdition( slots.edition);
+    if (validationResult instanceof NoConstraintViolation) updatedSlots.edition = parseInt( slots.edition);
+    else throw validationResult;
+  } else if (!slots.edition && personBeforeUpdate.edition) {
+    // slots.edition has an empty value while the old value was not empty
+    updatedSlots.edition = await updateDoc( personDocRef, {edition: deleteField()});
+  }
+} catch (e) {
+  noConstraintViolated = false;
+  console.error(`${e.constructor.name}: ${e.message}`);
+}
+if (noConstraintViolated) {
+  const updatedProperties = Object.keys(updatedSlots);
+  if (updatedProperties.length) {
+    await updateDoc(personDocRef, updatedSlots);
+    console.log(`Property(ies) "${updatedProperties.toString()}" modified for person record "${slots.personId}"`);
+  } else {
+    console.log(`No property value changed for person record "${slots.personId}"!`);
+  }
+}
 };
+
 /**
  * Delete a Firestore document from the Firestore collection "persons"
  * @param personId: {string}
@@ -100,10 +226,10 @@ Person.update = async function (slots) {
  */
 Person.destroy = async function (personId) {
   try {
-    await deleteDoc( fsDoc( fsDb, "persons", personId.toString()).withConverter(Person.converter));
-    console.log(`Person record ${personId} deleted.`);
-  } catch( e) {
-    console.error(`Error when deleting person record: ${e}`);
+    await deleteDoc( fsDoc(fsDb, "persons", personId));
+    console.log(`Person record "${personId}" deleted!`);
+  } catch (e) {
+    console.error(`Error deleting person record: ${e}`);
   }
 };
 /*******************************************
@@ -138,15 +264,18 @@ Person.generateTestData = async function () {
  * Clear database
  */
 Person.clearData = async function () {
-  if (confirm("Do you really want to delete this person?")) {
-    // retrieve all person documents from Firestore
-    const personRecs = await Person.retrieveAll();
-    // delete all documents
-    await Promise.all( personRecs.map( d => Person.destroy( d.personId)));
-    // ... and then report that they have been deleted
-    console.log(`${Object.values( personRecs).length} person records deleted.`);
-  }
-};
+    if (confirm("Do you really want to delete all person records?")) {
+      try {
+        console.log("Clearing test data...");
+        const personsCollRef = fsColl( fsDb, "persons");
+        const personsQrySn = (await getDocs( personsCollRef));
+        await Promise.all( personsQrySn.docs.map( d => Person.destroy( d.id)))
+        console.log(`${personsQrySn.docs.length} persons deleted.`);
+      } catch (e) {
+        console.error(`${e.constructor.name}: ${e.message}`);
+      }
+    }
+  };
 
 Person.converter = {
   toFirestore: function(person) {
