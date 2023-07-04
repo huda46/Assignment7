@@ -1,0 +1,52 @@
+[
+  {
+    "personId": 1,
+    "name": "Max Mustermann",
+    "type": 1
+  },
+  {
+    "personId": 2,
+    "name": "Ulrike Mustermann",
+    "type": 2
+  },
+  {
+    "personId": 3,
+    "name": "John Mustermann",
+    "type": 3
+  },
+  {
+    "personId": 4,
+    "name": "Luca Nadel",
+    "type": 1
+  },
+  {
+    "personId": 5,
+    "name": "Phillipp Ziegler",
+    "type": 3
+  },
+  {
+    "personId": 6,
+    "name": "Julia Scherer",
+    "type": 3
+  },
+  {
+    "personId": 7,
+    "name": "Katrin Bachmeier",
+    "type": 1
+  },
+  {
+    "personId": 8,
+    "name": "Leonie Beike",
+    "type": 3
+  },
+  {
+    "personId": 9,
+    "name": "Sven Maurer",
+    "type": 2
+  },
+  {
+    "personId": 10,
+    "name": "Ralph Foerster",
+    "type": 2
+  }
+]

@@ -113,38 +113,32 @@ Person.destroy = async function (personId) {
  * Create test data
  */
 Person.generateTestData = async function () {
-  let personRecs = [
-    {
-      personId: 1,
-      name: "Max Mustermann",
-      type: 1
-    },
-    {
-      personId: 2,
-      name: "Ulrike Mustermann",
-      type: 2
-    },
-    {
-      personId: 3,
-      name: "John Mustermann",
-      type: 3
-    }
-  ];
-  // save all person record/documents
-  await Promise.all( personRecs.map( d => Person.add( d)));
-  console.log(`${Object.keys( personRecs).length} person records saved.`);
+  try {
+    console.log("Generating test data...");
+    const response = await fetch("../../test-data/books.json");
+    const personRecs = await response.json();
+    await Promise.all( personRecs.map( d => Person.add( d)));
+    console.log(`${personRecs.length} persons saved.`);
+  } catch (e) {
+    console.error(`${e.constructor.name}: ${e.message}`);
+  }
 };
 /**
  * Clear database
  */
 Person.clearData = async function () {
-  if (confirm("Do you really want to delete this person?")) {
-    // retrieve all person documents from Firestore
-    const personRecs = await Person.retrieveAll();
-    // delete all documents
-    await Promise.all( personRecs.map( d => Person.destroy( d.personId)));
-    // ... and then report that they have been deleted
-    console.log(`${Object.values( personRecs).length} person records deleted.`);
+  if (confirm("Do you really want to delete all persons?")) {
+    try {
+      console.log("Clearing test data...");  
+      const personsCollRef = fsColl( fsDb, "persons");
+      const personsQrySn = (await getDocs( personsCollRef));  
+      // delete all documents
+      await Promise.all( personsQrySn.map( d => Person.destroy( d.personId)));
+      // ... and then report that they have been deleted
+      console.log(`${Object.values( personRecs).length} person records deleted.`);
+    } catch (e) {
+      console.error(`${e.constructor.name}: ${e.message}`);
+    }
   }
 };
 
