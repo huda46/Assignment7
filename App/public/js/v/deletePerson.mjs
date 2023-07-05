@@ -3,7 +3,7 @@
  ***************************************************************/
 import Person from "../m/Person.mjs";
 import { handleAuthentication } from "./accessControl.mjs";
-
+import { fillSelectWithOptions } from "../../lib/util.mjs";
 /***************************************************************
  Setup and handle UI Authentication
  ***************************************************************/
@@ -22,25 +22,20 @@ const formEl = document.forms["Person"],
   selectPersonEl = formEl["selectPerson"];
 
 /***************************************************************
- Set up select element
+ Set up (choice) widgets
  ***************************************************************/
-for (const personRec of personRecords) {
-  const optionEl = document.createElement("option");
-  optionEl.text = personRec.name;
-  optionEl.value = personRec.personId;
-  selectPersonEl.add( optionEl, null);
-}
+// set up the person selection list
+fillSelectWithOptions( personRecords, selectPersonEl, "personId", "name");
 
-/******************************************************************
- Add event listeners for the delete/submit button
- ******************************************************************/
-// set an event handler for the delete button
-deleteButton.addEventListener("click", async function () {
-  const personId = selectPersonEl.value;
-  if (!personId) return;
+/********************************************************************
+ Add further event listeners, especially for the delete/submit button
+ ********************************************************************/
+deleteButton.addEventListener("click", function () {
+  const personIdRef = selectPersonEl.value;
+  if (!personIdRef) return;
   if (confirm("Do you really want to delete this person record?")) {
-    await Person.destroy( personId);
+    Person.destroy( personIdRef);
     // remove deleted person from select options
-    selectPersonEl.remove( selectPersonEl.selectedIndex);
+    selectPersonEl.remove(selectPersonEl.selectedIndex);
   }
 });

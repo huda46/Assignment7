@@ -1,4 +1,12 @@
 /**
+ * Verifies if a value represents an integer
+ * @param {string} x
+ * @return {boolean}
+ */
+function isNonEmptyString( x) {
+  return typeof (x) === "string" && x.trim() !== "";
+}
+/**
    * Create a DOM option element
    * 
    * @param {string} val
@@ -13,6 +21,15 @@ function createOption( val, txt, classValues) {
   el.text = txt || val;
   if (classValues) el.className = classValues;
   return el;
+}
+/**
+ * Verifies if a value represents an integer or integer string
+ * @param {string} x
+ * @return {boolean}
+ */
+function isIntegerOrIntegerString( x) {
+  return typeof (x) === "number" && x.toString().search(/^-?[0-9]+$/) === 0 ||
+    typeof (x) === "string" && x.search(/^-?[0-9]+$/) === 0;
 }
 
 /**
@@ -64,6 +81,21 @@ function fillSelectWithOptions(selectEl, selectionRange, hasDefOpt, optPar ) {
     selectEl.add( optionEl);
   }
 }
+/**
+ * Show progress bar element
+ * @param {object} progressEl
+ */
+function showProgressBar (progressEl) {
+  progressEl.hidden = false;
+}
+
+/**
+ * Hide progress bar element
+ * @param {object} progressEl
+ */
+function hideProgressBar (progressEl) {
+  progressEl.hidden = true;
+}
 
 
-export { fillSelectWithOptions, createOption };
+export { isNonEmptyString, isIntegerOrIntegerString, fillSelectWithOptions, createOption , showProgressBar , hideProgressBar};

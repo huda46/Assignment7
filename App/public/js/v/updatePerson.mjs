@@ -24,25 +24,30 @@ const formEl = document.forms["Person"],
   typeEl = formEl["type"],
   selectPersonEl = formEl["selectPerson"];
 
+// Add event listeners for responsive validation
+  formEl["name"].addEventListener("input", function () {
+    formEl["name"].setCustomValidity(
+      Person.checkName( formEl["name"].value).message);
+  });
+  formEl["type"].addEventListener("input", function () {
+    formEl["type"].setCustomValidity(
+      Person.checkType( formEl["type"].value).message);
+  });
 /***************************************************************
- Set up select element
+ Set up (choice) widgets
  ***************************************************************/
-// fill select with options
-for (const personRec of personRecords) {
-  const optionEl = document.createElement("option");
-  optionEl.text = personRec.name;
-  optionEl.value = personRec.personId;
-  selectPersonEl.add( optionEl, null);
-}
+ fillSelectWithOptions(personRecords, selectPersonEl, "personId", "name");
 // when a person is selected, fill the form with its data
 selectPersonEl.addEventListener("change", async function () {
-  const personId = selectPersonEl.value;
-  if (personId) {
+  const personkey = selectPersonEl.value;
+  if (personkey) {
     // retrieve up-to-date person record
-    const personRec = await Person.retrieve( personId);
-    formEl["personId"].value = personRec.personId;
-    formEl["name"].value = personRec.name;
-    formEl["type"].value = personRec.type;
+    const personRecord = await Person.retrieve( personkey);
+    for (const field of ["personId", "name", "type"]) {
+      formEl[field].value = personRecord[field] !== undefined ? personRecord[field] : "";
+      // delete custom validation error message which may have been set before
+      formEl[field].setCustomValidity("");
+    }
   } else {
     formEl.reset();
   }
@@ -51,20 +56,33 @@ selectPersonEl.addEventListener("change", async function () {
 // set up the type selection list
 fillSelectWithOptions( typeEl, PersonTypeEL.labels, true);
 
-/******************************************************************
- Add event listeners for the update/submit button
- ******************************************************************/
-// set an event handler for the update button
-updateButton.addEventListener("click", async function () {
+updateButton.addEventListener("click", function () {
+  const formEl = document.forms["Person"],
+    selectPersonEl = formEl["selectPerson"],
+    personIdRef = selectPersonEl.value;
+  if (!personIdRef) return;
   const slots = {
     personId: formEl["personId"].value,
     name: formEl["name"].value,
     type: formEl["type"].value
-  },
-    personIdRef = selectPersonEl.value;
-  if (!personIdRef) return;
-  await Person.update( slots);
-  // update the selection list option element
-  selectPersonEl.options[selectPersonEl.selectedIndex].text = slots.name;
-  formEl.reset();
+  };
+  // set error messages in case of constraint violations
+  formEl["name"].addEventListener("input", function () {
+    formEl["name"].setCustomValidity(
+      Person.checkName( slots.name).message);
+  });
+  formEl["type"].addEventListener("input", function () {
+    formEl["type"].setCustomValidity(
+      Person.checkType( slots.type).message);
+  });
+  if (formEl.checkValidity()) {
+    Person.update( slots);
+    // update the selection list option
+    selectPersonEl.options[selectPersonEl.selectedIndex].text = slots.name;
+    formEl.reset();
+  }
+});
+// neutralize the submit event
+formEl.addEventListener("submit", function (e) {
+  e.preventDefault();
 });
