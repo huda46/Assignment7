@@ -43,7 +43,7 @@ function isIntegerOrIntegerString( x) {
  * @param {object} optPar [optional]  An optional parameter record including
  *     optPar.displayProp and optPar.selection
  */
-function fillSelectWithOptions(selectEl, selectionRange, hasDefOpt, optPar ) {
+function fillSelectWithOptions2(selectEl, selectionRange, hasDefOpt, optPar ) {
   // create option elements from object property values
   const options = Array.isArray( selectionRange) ? selectionRange :
   Object.keys( selectionRange);
@@ -77,6 +77,30 @@ function fillSelectWithOptions(selectEl, selectionRange, hasDefOpt, optPar ) {
         // flag the option element with this value as selected
         optionEl.selected = true;
       }      
+    }
+    selectEl.add( optionEl);
+  }
+}
+function fillSelectWithOptions( selectEl, selectionRange, defaultSelection, optPar) {
+  // create option elements from array key and values
+  const options = selectionRange.entries();
+  // delete old contents
+  selectEl.innerHTML = "";
+  // create "no selection yet" entry
+  if (!selectEl.multiple && !defaultSelection) {
+    selectEl.add( createOption(""," --- "));
+  }
+  //
+  for (const [index, o] of options) {
+    const key = index + 1;
+    const optionEl = createOption(
+      optPar ? (o[optPar.valueProp] ? o[optPar.valueProp] : key) : key,
+      optPar ? (o[optPar.displayProp] ? o[optPar.displayProp] : o) : o
+    );
+    if (selectEl.multiple && optPar && optPar.selection &&
+      optPar.selection.includes(key)) {
+      // flag the option element with this value as selected
+      optionEl.selected = true;
     }
     selectEl.add( optionEl);
   }

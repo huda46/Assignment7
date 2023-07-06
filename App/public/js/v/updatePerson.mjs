@@ -9,7 +9,7 @@ import { handleAuthentication } from "./accessControl.mjs";
 /***************************************************************
  Setup and handle UI Authentication
  ***************************************************************/
- handleAuthentication();
+handleAuthentication();
 
 /***************************************************************
  Load data
@@ -41,7 +41,8 @@ let cancelListener = null;
 /***************************************************************
  Set up (choice) widgets
  ***************************************************************/
-fillSelectWithOptions(selectPersonEl, personRecords, "personId", "name");
+fillSelectWithOptions(selectPersonEl, personRecords, false, {valueProp:"personId",
+   displayProp:"name"});
 
 // when a person is selected, fill the form with its data
 selectPersonEl.addEventListener("change", async function () {
