@@ -30,7 +30,8 @@ let cancelListener = null;
  Set up (choice) widgets
  ***************************************************************/
 // set up the person selection list
-fillSelectWithOptions( selectPersonEl, personRecords, "personId", "name");
+fillSelectWithOptions( selectPersonEl, personRecords, false, {valueProp:"personId",
+displayProp:"name"});
 
 /*******************************************************************
  Setup listener on the selected person record synchronising DB with UI

@@ -16,8 +16,9 @@ import { showProgressBar, hideProgressBar } from "../../lib/util.mjs";
  Declare variables for accessing UI elements
  ***************************************************************/
 const formEl = document.forms["Person"],
+  typeEl = formEl["type"],
   createButton = formEl["commit"];
-  progressEl = document.querySelector("progress");
+  //progressEl = document.querySelector("progress");
 
 // set up the type selection list
 fillSelectWithOptions( typeEl, PersonTypeEL.labels, true);
@@ -42,7 +43,7 @@ createButton.addEventListener("click", async function () {
   type: formEl["type"].value
   };
   // check constraints and set error messages
-  showProgressBar( progressEl);
+  //showProgressBar( progressEl);
   formEl["personId"].setCustomValidity(( await Person.checkPersonId( slots.personId)).message);
   formEl["name"].setCustomValidity( Person.checkName( slots.name).message);
   formEl["type"].setCustomValidity( Person.checkType( slots.type).message);
@@ -50,7 +51,7 @@ createButton.addEventListener("click", async function () {
   await Person.add( slots);
   formEl.reset();
   }
-  hideProgressBar( progressEl);
+  //hideProgressBar( progressEl);
 });
 // neutralize the submit event
 formEl.addEventListener("submit", function (e) {
