@@ -1,11 +1,11 @@
 import { fsDb } from "../initFirebase.mjs";
 import Enumeration from "../../lib/Enumeration.mjs"; 
-import { collection as fsColl, deleteDoc, doc as fsDoc, getDoc, getDocs, setDoc, updateDoc, deleteField }
+import { collection as fsColl, deleteDoc, doc as fsDoc, getDoc, getDocs, setDoc, 
+  orderBy, updateDoc, deleteField, query as fsQuery }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore-lite.js";
-  import { isNonEmptyString, isIntegerOrIntegerString }
-  from "../../lib/util.mjs";
-import { NoConstraintViolation, MandatoryValueConstraintViolation, RangeConstraintViolation, UniquenessConstraintViolation }
-  from "../../lib/errorTypes.mjs";
+import { isNonEmptyString, isIntegerOrIntegerString } from "../../lib/util.mjs";
+import { NoConstraintViolation, MandatoryValueConstraintViolation, 
+  RangeConstraintViolation, UniquenessConstraintViolation } from "../../lib/errorTypes.mjs";
 
 
 const PersonTypeEL = new Enumeration(["Student","Employee","Guest"]);
@@ -38,7 +38,7 @@ static checkPersonId( id) {
   }
 };
 static async checkPersonIdAsId( id) {
-  let validationResult = Person.checkId( id);
+  let validationResult = Person.checkPersonId( id);
   if ((validationResult instanceof NoConstraintViolation)) {
     if (!id) {
       validationResult = new MandatoryValueConstraintViolation(
@@ -259,9 +259,9 @@ Person.clearData = async function () {
       const personsCollRef = fsColl( fsDb, "persons");
       const personsQrySn = (await getDocs( personsCollRef));  
       // delete all documents
-      await Promise.all( personsQrySn.map( d => Person.destroy( d.personId)));
+      await Promise.all( personsQrySn.docs.map( d => Person.destroy( d.personId)));
       // ... and then report that they have been deleted
-      console.log(`${Object.values( personRecs).length} person records deleted.`);
+      console.log(`${personsQrySn.docs.length} person records deleted.`);
     } catch (e) {
       console.error(`${e.constructor.name}: ${e.message}`);
     }
