@@ -24,6 +24,11 @@ const formEl = document.forms["Person"],
   typeEl = formEl["type"],
   selectPersonEl = formEl["selectPerson"];
 
+/***************************************************************
+ Declare variable to cancel observer, DB-UI sync
+ ***************************************************************/
+let cancelListener = null;
+
 // Add event listeners for responsive validation
   formEl["name"].addEventListener("input", function () {
     formEl["name"].setCustomValidity(
@@ -36,7 +41,8 @@ const formEl = document.forms["Person"],
 /***************************************************************
  Set up (choice) widgets
  ***************************************************************/
- fillSelectWithOptions(personRecords, selectPersonEl, "personId", "name");
+fillSelectWithOptions(personRecords, selectPersonEl, "personId", "name");
+
 // when a person is selected, fill the form with its data
 selectPersonEl.addEventListener("change", async function () {
   const personkey = selectPersonEl.value;
@@ -46,7 +52,10 @@ selectPersonEl.addEventListener("change", async function () {
     for (const field of ["personId", "name", "type"]) {
       formEl[field].value = personRecord[field] !== undefined ? personRecord[field] : "";
       // delete custom validation error message which may have been set before
-      formEl[field].setCustomValidity("");
+      formEl[field].setCustomValidity("");    // cancel record listener if a previous listener exists
+      if (cancelListener) cancelListener();
+      // add listener to selected person, returning the function to cancel listener
+      cancelListener = await Person.observeChanges( personkey);
     }
   } else {
     formEl.reset();
@@ -76,6 +85,8 @@ updateButton.addEventListener("click", function () {
       Person.checkType( slots.type).message);
   });
   if (formEl.checkValidity()) {
+    // cancel DB-UI sync listener
+    if (cancelListener) cancelListener();
     Person.update( slots);
     // update the selection list option
     selectPersonEl.options[selectPersonEl.selectedIndex].text = slots.name;
@@ -85,4 +96,8 @@ updateButton.addEventListener("click", function () {
 // neutralize the submit event
 formEl.addEventListener("submit", function (e) {
   e.preventDefault();
+});
+// set event to cancel DB listener when the browser window/tab is closed
+window.addEventListener("beforeunload", function () {
+  if (cancelListener) cancelListener();
 });
