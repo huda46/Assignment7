@@ -8,7 +8,7 @@ import { showProgressBar, hideProgressBar } from "../../lib/util.mjs";
 
  handleAuthentication();
 
- const selectOrderEl = document.querySelector("main>div>div>label>select");
+ const selectOrderEl = document.querySelector("main>div>div>div>label>select");
  const tableBodyEl = document.querySelector("table#persons>tbody"),
    progressEl = document.querySelector("progress");
 

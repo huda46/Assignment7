@@ -41,7 +41,7 @@ let cancelListener = null;
 /***************************************************************
  Set up (choice) widgets
  ***************************************************************/
-fillSelectWithOptions(personRecords, selectPersonEl, "personId", "name");
+fillSelectWithOptions(selectPersonEl, personRecords, "personId", "name");
 
 // when a person is selected, fill the form with its data
 selectPersonEl.addEventListener("change", async function () {
