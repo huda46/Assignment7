@@ -7,7 +7,7 @@ import { fillSelectWithOptions } from "../../lib/util.mjs";
 /***************************************************************
  Setup and handle UI Authentication
  ***************************************************************/
- handleAuthentication();
+handleAuthentication();
 
 /***************************************************************
  Load data
@@ -54,6 +54,8 @@ deleteButton.addEventListener("click", function () {
   const personIdRef = selectPersonEl.value;
   if (!personIdRef) return;
   if (confirm("Do you really want to delete this person record?")) {
+    // cancel DB-UI sync listener
+    if (cancelListener) cancelListener();
     Person.destroy( personIdRef);
     // remove deleted person from select options
     selectPersonEl.remove(selectPersonEl.selectedIndex);

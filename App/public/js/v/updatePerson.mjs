@@ -1,8 +1,7 @@
 /***************************************************************
  Import classes and data types
  ***************************************************************/
-import Person from "../m/Person.mjs";
-import { PersonTypeEL } from "../m/Person.mjs";
+import Person, { PersonTypeEL } from "../m/Person.mjs";
 import { fillSelectWithOptions } from "../../lib/util.mjs"; 
 import { handleAuthentication } from "./accessControl.mjs";
 
@@ -30,14 +29,15 @@ const formEl = document.forms["Person"],
 let cancelListener = null;
 
 // Add event listeners for responsive validation
-  formEl["name"].addEventListener("input", function () {
-    formEl["name"].setCustomValidity(
-      Person.checkName( formEl["name"].value).message);
-  });
-  formEl["type"].addEventListener("input", function () {
-    formEl["type"].setCustomValidity(
-      Person.checkType( formEl["type"].value).message);
-  });
+formEl["name"].addEventListener("input", function () {
+  formEl["name"].setCustomValidity(
+    Person.checkName( formEl["name"].value).message);
+});
+
+typeEl.addEventListener("change", function () {
+  typeEl.setCustomValidity(
+    Person.checkType( typeEl.value).message);
+});
 /***************************************************************
  Set up (choice) widgets
  ***************************************************************/
@@ -54,10 +54,12 @@ selectPersonEl.addEventListener("change", async function () {
       formEl[field].value = personRecord[field] !== undefined ? personRecord[field] : "";
       // delete custom validation error message which may have been set before
       formEl[field].setCustomValidity("");    // cancel record listener if a previous listener exists
-      if (cancelListener) cancelListener();
-      // add listener to selected person, returning the function to cancel listener
-      cancelListener = await Person.observeChanges( personkey);
     }
+
+    // cancel record listener if a previous listener exists
+    if (cancelListener) cancelListener();
+    // add listener to selected person, returning the function to cancel listener
+    cancelListener = await Person.observeChanges( personkey);
   } else {
     formEl.reset();
   }

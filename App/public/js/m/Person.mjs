@@ -44,13 +44,11 @@ class Person {
         validationResult = new MandatoryValueConstraintViolation(
             "A positive integer value for the person ID is required!");
       } else {
-        console.log(typeof id.toString());
         const personDocSn = await getDoc( fsDoc( fsDb, "persons", id.toString()));
         if (personDocSn.exists()) {
           validationResult = new UniquenessConstraintViolation(
             "There is already a person record with this Id!");
         } else {
-          console.log(personDocSn);
           validationResult = new NoConstraintViolation();
         }
       }
@@ -123,7 +121,9 @@ Person.add = async function (slots) {
   try {
     person = new Person( slots);
     let validationResult = await Person.checkPersonIdAsId( person.personId);
-    if (!validationResult instanceof NoConstraintViolation) throw validationResult;
+    if (!(validationResult instanceof NoConstraintViolation)) {
+      throw validationResult;
+    }
   } catch (e) {
     console.error(`${e.constructor.name}: ${e.message}`);
     person = null;
@@ -204,9 +204,12 @@ try {
 }
 if (noConstraintViolated) {
   const updatedProperties = Object.keys(updatedSlots);
-  if (updatedProperties.length) {
+  if (updatedProperties.length === 1) {
     await updateDoc(personDocRef, updatedSlots);
-    console.log(`Property(ies) "${updatedProperties.toString()}" modified for person record "${slots.personId}"`);
+    console.log(`Property ${updatedProperties.toString()} modified for person record "${slots.personId}"`);
+  } else if (updatedProperties.length) {
+    await updateDoc(personDocRef, updatedSlots);
+    console.log(`Properties ${updatedProperties.toString()} modified for person record "${slots.personId}"`);
   } else {
     console.log(`No property value changed for person record "${slots.personId}"!`);
   }
@@ -248,18 +251,17 @@ Person.generateTestData = async function () {
  */
 Person.clearData = async function () {
   if (confirm("Do you really want to delete all persons?")) {
-    //try {
-    console.log("Clearing test data...");  
-    console.log(fsDb);
-    const personsCollRef = fsColl( fsDb, "persons");
-    const personsQrySn = (await getDocs( personsCollRef));  
-    // delete all documents
-    await Promise.all( personsQrySn.docs.map( d => Person.destroy( d.id)));
-    // ... and then report that they have been deleted
-    console.log(`${personsQrySn.docs.length} person records deleted.`);
-    // } catch (e) {
-    //   console.error(`${e.constructor.name}: ${e.message}`);
-    // }
+    try {
+      console.log("Clearing test data...");
+      const personsCollRef = fsColl( fsDb, "persons");
+      const personsQrySn = (await getDocs( personsCollRef));  
+      // delete all documents
+      await Promise.all( personsQrySn.docs.map( d => Person.destroy( d.id)));
+      // ... and then report that they have been deleted
+      console.log(`${personsQrySn.docs.length} person records deleted.`);
+    } catch (e) {
+      console.error(`${e.constructor.name}: ${e.message}`);
+    }
   }
 };
 

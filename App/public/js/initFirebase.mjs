@@ -23,6 +23,6 @@ const app = (!getApps().length) ? initializeApp( firebaseConfig ) : getApp();
 // Initialize Firebase Authentication
 const auth = getAuth( app);
 // Initialize Cloud Firestore interface
-const fsDb = getFirestore(app);
+const fsDb = getFirestore();
 
 export { auth, fsDb };
