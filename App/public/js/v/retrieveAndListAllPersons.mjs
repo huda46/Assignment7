@@ -31,7 +31,7 @@ async function retrieveAndListAllPersons( order) {
     let row = tableBodyEl.insertRow();
     row.insertCell(-1).textContent = p.personId;
     row.insertCell(-1).textContent = p.name;
-    row.insertCell(-1).textContent = PersonTypeEL.labels[p.type-1];//to verify please!
+    row.insertCell(-1).textContent = PersonTypeEL.labels[p.type-1];
   }
   hideProgressBar( progressEl);
 }

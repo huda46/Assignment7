@@ -5,13 +5,13 @@
   <title>Assignment 7C-1: BTU-WellnessClub Application</title>
   <meta name="description" content="BTU-WellnessClub Application"/>
   <link rel="icon" href="./Logo.png"/>
+  <link rel="stylesheet" href="css/normalize.min.css"/>
   <link rel="stylesheet" href="css/main.css"/>
   <script type="module">
     import {handleAuthentication} from "./js/v/accessControl.mjs"
     import Person from "./js/m/Person.mjs"
     
     handleAuthentication();
-    window.addEventListener("load", function () {
       const clearButton = document.getElementById("clearData"),
         generateTestDataButtons = document.querySelectorAll("button.generateTestData");
       // set event handlers for the buttons "clearData" and "generateTestData"
@@ -19,37 +19,35 @@
       for (const btn of generateTestDataButtons) {
         btn.addEventListener("click", Person.generateTestData);
       }
-    });
   </script>
 </head>
 <body>
   <header>
     <div id="login-management"></div>
+    <div class="wrapper clearfix">
+      <div class="title">
     <h1>BTU-WellnessClubApp</h1>
+  </div>
   </header>
   <main>
-  <menu>
     <div class="split left">
-    <li role="menuitem">
-      <a href="createPerson.html" class="disabled">Create</a> a new person record
-    </li></br>
-    <li role="menuitem">
-      <a href="retrieveAndListAllPersons.html">Retrieve</a> and list all person records
-    </li></br>
-    <li role="menuitem">
-      <a href="updatePerson.html" class="disabled">Update</a> a person record
-    </li></br>
-    <li role="menuitem">
-      <a href="deletePerson.html" class="disabled">Delete</a> a person record
-    </li></br>
-    <li  role="menuitem">
-      <button class="generateTestData" type="button" disabled="disabled">Generate test data</button>
-    </li></br>
-    <li role="menuitem">
-      <button id="clearData" type="button" disabled="disabled">Clear database</button>
-    </li></br>
+    <div class="two-col-menu">
+      <menu class="crud">
+        <li role="menuitem"><a href="createPerson.html" class="disabled">Create a new person record</a></li>
+        <li role="menuitem"><a href="retrieveAndListAllPersons.html">Retrieve and list all person records</a></li>
+        <li role="menuitem"><a href="updatePerson.html" class="disabled">Update a person record</a></li>
+        <li role="menuitem"><a href="deletePerson.html" class="disabled">Delete a person record</a></li>
+      </menu>
+      <menu>
+        <li role="menuitem">
+          <button class="generateTestData" type="button" disabled="disabled">Generate test data</button>
+        </li>
+        <li role="menuitem">
+          <button id="clearData" type="button" disabled="disabled">Clear database</button>
+        </li>
+      </menu>
+    </div>
   </div>
-  </menu>
 </main>
 <div class="split right">
   <div class="centered">

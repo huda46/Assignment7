@@ -5,14 +5,28 @@
   <title>BTU-WellnessClub Application: Create</title>
   <script src="js/v/createPerson.mjs" type="module"></script>
   <link rel="icon" href="./Logo.png"/>
+  <link rel="stylesheet" href="css/normalize.min.css"/>
   <link rel="stylesheet" href="css/main.css"/>
 </head>
 <body>
 <header>
   <div id="login-management"></div>
+  <div class="wrapper clearfix">
+    <div class="title">
   <h1>Create a new person record</h1>
+</div>
+<nav>
+  <ul>
+    <li><a href="createPerson.html">C</a></li>
+    <li><a href="retrieveAndListAllPersons.html">R</a></li>
+    <li><a href="updatePerson.html">U</a></li>
+    <li><a href="deletePerson.html">D</a></li>
+  </ul>
+</nav>
+</div>
 </header>
 <main>
+<div class="wrapper clearfix">
 <div class="split left">
   <form id="Person">
     <div><label>PersonID: <input name="personId"/></label></div></br>
@@ -25,6 +39,7 @@
     </div>
   </form>
   <a href="index.html">« Back to main menu</a>
+</div>
 </div>
 </main>
 <div class="split right">
