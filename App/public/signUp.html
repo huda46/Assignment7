@@ -5,7 +5,7 @@
   <title>Assignment 7C-1: BTU-WellnessClub Application - SignUp</title>
   <script src="js/v/signUp.mjs" type="module"></script>
   <link rel="icon" href="./Logo.png"/>
-  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/SignIn-Up.css"/>
 </head>
 <body>
 <header>
@@ -13,9 +13,12 @@
   <h1>Create an account</h1>
 </header>
 <main>
-  <div class="split left">
-    <h2>Sign up to create an account and use all options.</h2>
+  <div class="container">
+    <h2>Sign up to create an account!</h2>
   <form id="Auth">
+    <div class="imgcontainer">
+      <img src="./Logo.png" alt="Logo" class="logo">
+    </div>
     <div>
       <label>Email: <input name="email" type="email"/></label>
     </div>
@@ -29,13 +32,8 @@
   <p>
     Or <a href="signIn.html" title="Sign in">sign in</a> if you already have an account.
   </p>
-  <a href="index.html">« Back to main menu</a>
+  <button type="button" onclick="window.location.href = 'index.html';" class="back">Back to main menu</button>
 </div>
 </main>
-<div class="split right">
-  <div class="centered">
-    <img src="./Logo.png" alt="logo"> 
-  </div>
-</div>
 </body>
 </html>
