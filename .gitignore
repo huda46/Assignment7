@@ -2,10 +2,12 @@
 .vscode
 .vs
 
-/App/.firebaserc
-/App/.github/
-/App/firebase.json
-/App/firestore-debug.json
-/App/firestore-debug.log
-/App/node_modules/
-/App/ui-debug.log
+App/.firebaserc
+App/.github/
+App/firebase.json
+App/firestore-debug.json
+App/firestore-debug.log
+App/firebase-debug.log
+App/node_modules/
+App/ui-debug.log
+App/.firebase/

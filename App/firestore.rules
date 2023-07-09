@@ -15,7 +15,8 @@ service cloud.firestore {
     // check all constraints for name
     function checkName( name) {
       return name != null
-             && name is string;
+             && name is string
+             && name.trim() != "";
     }
     // if present, check if it is integer
     function checkType( type) {
