@@ -244,6 +244,6 @@ Fee should not be added for an inactive club the person is associated too.</p>
 <li>adjust Enumeration & fix some related errors: Dustin Troppa & Rania Ouaja</li>
 <li>Implement Check validity constraints for the CDRUD: Rania Ouaja</li>
 <li>add Browsershimps and synchronisation: Dustin Troppa</li>
-<li>Adjust UI elements and Styling of the webpage: Rania Ouaja</li>
+<li>Adjust UI elements: the view code and Styling of the webpage: Rania Ouaja</li>
 <li>Debugging: Dustin Troppa</li>
 </ul>
