@@ -17,8 +17,8 @@ import { showProgressBar, hideProgressBar } from "../../lib/util.mjs";
  ***************************************************************/
 const formEl = document.forms["Person"],
   typeEl = formEl["type"],
-  createButton = formEl["commit"];
-  //progressEl = document.querySelector("progress");
+  createButton = formEl["commit"],
+  progressEl = document.querySelector("progress");
 
 // set up the type selection list
 fillSelectWithOptions( typeEl, PersonTypeEL.labels, true);
@@ -36,22 +36,22 @@ formEl["type"].addEventListener("input", function () {
  Add event listeners for the create/submit button
  ******************************************************************/
 createButton.addEventListener("click", async function () {
-  const formEl = document.forms["Person"],
-  slots = {
-  personId: formEl["personId"].value,
-  name: formEl["name"].value,
-  type: formEl["type"].value
+  const formEl = document.forms["Person"];
+  const slots = {
+    personId: formEl["personId"].value,
+    name: formEl["name"].value,
+    type: formEl["type"].value
   };
   // check constraints and set error messages
-  //showProgressBar( progressEl);
-  formEl["personId"].setCustomValidity(( await Person.checkPersonId( slots.personId)).message);
+  showProgressBar( progressEl);
+  formEl["personId"].setCustomValidity(( await Person.checkPersonIdAsId( slots.personId)).message);
   formEl["name"].setCustomValidity( Person.checkName( slots.name).message);
   formEl["type"].setCustomValidity( Person.checkType( slots.type).message);
-  if (formEl.checkValidity()) {
-  await Person.add( slots);
-  formEl.reset();
+  if (formEl.reportValidity()) {
+    await Person.add( slots);
+    formEl.reset();
   }
-  //hideProgressBar( progressEl);
+  hideProgressBar( progressEl);
 });
 // neutralize the submit event
 formEl.addEventListener("submit", function (e) {

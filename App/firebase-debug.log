@@ -1,0 +1,76 @@
+[debug] [2023-07-09T11:54:19.845Z] ----------------------------------------------------------------------
+[debug] [2023-07-09T11:54:19.847Z] Command:       D:\Programme\NVM\node.exe D:\Programme\NVM\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2023-07-09T11:54:19.848Z] CLI Version:   12.4.0
+[debug] [2023-07-09T11:54:19.848Z] Platform:      win32
+[debug] [2023-07-09T11:54:19.848Z] Node Version:  v18.16.0
+[debug] [2023-07-09T11:54:19.849Z] Time:          Sun Jul 09 2023 13:54:19 GMT+0200 (Mitteleuropäische Sommerzeit)
+[debug] [2023-07-09T11:54:19.849Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-07-09T11:54:19.960Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-07-09T11:54:19.960Z] > authorizing via signed-in user (webappwellnessclub@gmail.com)
+[debug] [2023-07-09T11:54:20.081Z] java version "11.0.10" 2021-01-19 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.10+8-LTS-162)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.10+8-LTS-162, mixed mode)
+
+[debug] [2023-07-09T11:54:20.108Z] Parsed Java major version: 11
+[info] i  emulators: Starting emulators: firestore, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: firestore, hosting"}}
+[debug] [2023-07-09T11:54:20.123Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-07-09T11:54:20.123Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-07-09T11:54:20.123Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-07-09T11:54:20.123Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2023-07-09T11:54:20.123Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2023-07-09T11:54:20.139Z] [hub] writing locator at C:\Users\dusti\AppData\Local\Temp\hub-btu-wellness-club-app.json
+[debug] [2023-07-09T11:54:20.153Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-07-09T11:54:20.153Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2023-07-09T11:54:20.153Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\dusti\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.17.4.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","btu-wellness-club-app","--rules","D:\\BTU\\Semester 10\\Web Applications\\WellnessClubApp\\App\\firestore.rules","--single_project_mode",true],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\dusti\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.17.4.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"btu-wellness-club-app\",\"--rules\",\"D:\\\\BTU\\\\Semester 10\\\\Web Applications\\\\WellnessClubApp\\\\App\\\\firestore.rules\",\"--single_project_mode\",true],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2023-07-09T11:54:21.712Z] > refreshing access token with scopes: []
+[debug] [2023-07-09T11:54:21.714Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-07-09T11:54:21.714Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-07-09T11:54:21.920Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-07-09T11:54:21.921Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-07-09T11:54:21.940Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/btu-wellness-club-app/sites 
+[debug] [2023-07-09T11:54:22.900Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/btu-wellness-club-app/sites 200
+[debug] [2023-07-09T11:54:22.900Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/btu-wellness-club-app/sites {"sites":[{"name":"projects/btu-wellness-club-app/sites/btu-wellness-club-app","defaultUrl":"https://btu-wellness-club-app.web.app","appId":"1:1070286283053:web:53e0d43e65eb1f28dcb3a4","type":"DEFAULT_SITE"}]}
+[debug] [2023-07-09T11:54:22.900Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/btu-wellness-club-app/webApps/1:1070286283053:web:53e0d43e65eb1f28dcb3a4/config [none]
+[debug] [2023-07-09T11:54:23.901Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/btu-wellness-club-app/webApps/1:1070286283053:web:53e0d43e65eb1f28dcb3a4/config 200
+[debug] [2023-07-09T11:54:23.901Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/btu-wellness-club-app/webApps/1:1070286283053:web:53e0d43e65eb1f28dcb3a4/config {"projectId":"btu-wellness-club-app","appId":"1:1070286283053:web:53e0d43e65eb1f28dcb3a4","storageBucket":"btu-wellness-club-app.appspot.com","apiKey":"AIzaSyCh-YP8dhCfdvxSVnwtpMvIKpp4jiGEmtA","authDomain":"btu-wellness-club-app.firebaseapp.com","messagingSenderId":"1070286283053"}
+[debug] [2023-07-09T11:54:23.911Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/btu-wellness-club-app [none]
+[debug] [2023-07-09T11:54:24.186Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/btu-wellness-club-app 200
+[debug] [2023-07-09T11:54:24.186Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/btu-wellness-club-app {"projectId":"btu-wellness-club-app","projectNumber":"1070286283053","displayName":"BTU Wellness Club App","name":"projects/btu-wellness-club-app","resources":{"hostingSite":"btu-wellness-club-app"},"state":"ACTIVE","etag":"1_b5cb7389-256c-4bce-9eac-d11b63bb78ff"}
+[info] i  hosting[btu-wellness-club-app]: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] +  hosting[btu-wellness-club-app]: Local server: http://127.0.0.1:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://127.0.0.1:5000\u001b[22m\u001b[24m"}}
+[debug] [2023-07-09T11:54:24.210Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2023-07-09T11:54:24.210Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2023-07-09T11:54:24.210Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\dusti\\.cache\\firebase\\emulators\\ui-v1.11.6\\server\\server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\dusti\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.11.6\\\\server\\\\server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2023-07-09T11:54:24.330Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2023-07-09T11:54:24.330Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Firestore │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Hosting   │ 127.0.0.1:5000 │ n/a                             │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500, 9150
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[info] i  hosting: 127.0.0.1 - - [09/Jul/2023:11:54:51 +0000] "GET /createPerson.html HTTP/1.1" 200 - "http://127.0.0.1:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [09/Jul/2023:11:54:51 +0000] \"GET /createPerson.html HTTP/1.1\" 200 - \"http://127.0.0.1:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\""}}
+[info] i  hosting: 127.0.0.1 - - [09/Jul/2023:11:56:47 +0000] "GET /css/main.css HTTP/1.1" 200 632 "http://127.0.0.1:5000/index.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [09/Jul/2023:11:56:47 +0000] \"GET /css/main.css HTTP/1.1\" 200 632 \"http://127.0.0.1:5000/index.html\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\""}}
+[info] i  hosting: 127.0.0.1 - - [09/Jul/2023:11:56:48 +0000] "GET /index.html HTTP/1.1" 200 - "http://127.0.0.1:5000/createPerson.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [09/Jul/2023:11:56:48 +0000] \"GET /index.html HTTP/1.1\" 200 - \"http://127.0.0.1:5000/createPerson.html\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\""}}
+[info] i  hosting: 127.0.0.1 - - [09/Jul/2023:11:56:49 +0000] "GET /js/v/createPerson.mjs HTTP/1.1" 200 - "http://127.0.0.1:5000/createPerson.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [09/Jul/2023:11:56:49 +0000] \"GET /js/v/createPerson.mjs HTTP/1.1\" 200 - \"http://127.0.0.1:5000/createPerson.html\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\""}}
+[info] i  hosting: 127.0.0.1 - - [09/Jul/2023:11:56:51 +0000] "GET /createPerson.html HTTP/1.1" 200 - "http://127.0.0.1:5000/index.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [09/Jul/2023:11:56:51 +0000] \"GET /createPerson.html HTTP/1.1\" 200 - \"http://127.0.0.1:5000/index.html\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\""}}
+[info] i  hosting: 127.0.0.1 - - [09/Jul/2023:12:00:45 +0000] "GET /js/v/createPerson.mjs HTTP/1.1" 200 - "http://127.0.0.1:5000/createPerson.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [09/Jul/2023:12:00:45 +0000] \"GET /js/v/createPerson.mjs HTTP/1.1\" 200 - \"http://127.0.0.1:5000/createPerson.html\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0\""}}
+[debug] [2023-07-09T12:01:54.239Z] Received signal SIGHUP 1

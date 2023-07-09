@@ -79,15 +79,9 @@ updateButton.addEventListener("click", function () {
     type: formEl["type"].value
   };
   // set error messages in case of constraint violations
-  formEl["name"].addEventListener("input", function () {
-    formEl["name"].setCustomValidity(
-      Person.checkName( slots.name).message);
-  });
-  formEl["type"].addEventListener("input", function () {
-    formEl["type"].setCustomValidity(
-      Person.checkType( slots.type).message);
-  });
-  if (formEl.checkValidity()) {
+  formEl["name"].setCustomValidity(Person.checkName(slots.name).message);
+  formEl["type"].setCustomValidity(Person.checkType(slots.type).message);
+  if (formEl.reportValidity()) {
     // cancel DB-UI sync listener
     if (cancelListener) cancelListener();
     Person.update( slots);
