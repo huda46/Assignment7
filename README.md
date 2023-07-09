@@ -237,3 +237,13 @@ Fee should not be added for an inactive club the person is associated too.</p>
 <li>Styling of the webpage: Rania Ouaja</li>
 <li>Debugging: Dustin Troppa</li>
 </ul>
+<H9>Work division for assignment 7C-3:<H9>
+<ul>
+<li>Implement Check validity constraints for the class Book: Rania Ouaja</li>
+<li>add Firestore security rules, person.json & generate TestData : Dustin Troppa</li>
+<li>adjust Enumeration & fix some related errors: Dustin Troppa & Rania Ouaja</li>
+<li>Implement Check validity constraints for the CDRUD: Rania Ouaja</li>
+<li>add Browsershimps and synchronisation: Dustin Troppa</li>
+<li>Adjust UI elements and Styling of the webpage: Rania Ouaja</li>
+<li>Debugging: Dustin Troppa</li>
+</ul>
