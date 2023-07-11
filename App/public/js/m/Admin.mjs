@@ -12,7 +12,7 @@ import { NoConstraintViolation, MandatoryValueConstraintViolation,
  * @constructor
  * @param {{personId: number, name: string, type: PersonTypeEL}} slots - Object creation slots.
  */
-class Staff extends Person {
+class Admin extends Person {
   // record parameter with the ES6 syntax for function parameter destructuring
   constructor({personId, name, type}) {
     super({personId, name, type});
@@ -26,10 +26,10 @@ class Staff extends Person {
  * @param slots: {object}
  * @returns {Promise<void>}
  */
-Staff.add = async function (slots) {
+Admin.add = async function (slots) {
   let staff = null;
   try {
-    staff = new Staff( slots);
+    staff = new Admin( slots);
     let validationResult = await Person.checkPersonIdAsId( staff.personId);
     if (!(validationResult instanceof NoConstraintViolation)) {
       throw validationResult;
@@ -40,9 +40,9 @@ Staff.add = async function (slots) {
   }
   if (staff) {
     try {
-      const staffDocRef = fsDoc( fsDb, "staffs", staff.personId.toString()).withConverter( Staff.converter);
+      const staffDocRef = fsDoc( fsDb, "staffs", staff.personId.toString()).withConverter( Admin.converter);
       await setDoc( staffDocRef, staff);
-      console.log(`Staff record "${staff.personId}" created!`);
+      console.log(`Admin record "${staff.personId}" created!`);
     } catch (e) {
       console.error(`${e.constructor.name}: ${e.message} + ${e}`);
     }
@@ -53,11 +53,11 @@ Staff.add = async function (slots) {
  * @param personId: {object}
  * @returns {Promise<*>} staffRecord: {array}
  */
-Staff.retrieve = async function (personId) {
+Admin.retrieve = async function (personId) {
   try {
     const staffRec = (await getDoc( fsDoc(fsDb, "staffs", personId.toString())
-      .withConverter( Staff.converter))).data();
-    console.log(`Staff record "${staffRec.personId}" retrieved.`);
+      .withConverter( Admin.converter))).data();
+    console.log(`Admin record "${staffRec.personId}" retrieved.`);
     return staffRec;
   } catch (e) {
     console.error(`Error retrieving staff record: ${e}`);
@@ -67,12 +67,12 @@ Staff.retrieve = async function (personId) {
  * Load all staff records from Firestore
  * @returns {Promise<*>} staffRecords: {array}
  */
-Staff.retrieveAll = async function (order) {
+Admin.retrieveAll = async function (order) {
   if (!order) order = "personId";
   const staffsCollRef = fsColl( fsDb, "staffs"),
     q = fsQuery( staffsCollRef, orderBy( order));
   try {
-    const staffRecs = (await getDocs( q.withConverter( Staff.converter))).docs.map( d => d.data());
+    const staffRecs = (await getDocs( q.withConverter( Admin.converter))).docs.map( d => d.data());
     console.log(`${staffRecs.length} staff records retrieved ${order ? "ordered by " + order : ""}`);
     return staffRecs;
   } catch (e) {
@@ -84,11 +84,11 @@ Staff.retrieveAll = async function (order) {
  * @param slots: {object}
  * @returns {Promise<void>}
  */
-Staff.update = async function (slots) {
+Admin.update = async function (slots) {
   let noConstraintViolated = true,
   validationResult = null,
   staffBeforeUpdate = null;
-const staffDocRef = fsDoc( fsDb, "staffs", slots.personId.toString()).withConverter( Staff.converter),
+const staffDocRef = fsDoc( fsDb, "staffs", slots.personId.toString()).withConverter( Admin.converter),
   updatedSlots = {};
 try {
   // retrieve up-to-date staff record
@@ -131,10 +131,10 @@ if (noConstraintViolated) {
  * @param personId: {string}
  * @returns {Promise<void>}
  */
-Staff.destroy = async function (personId) {
+Admin.destroy = async function (personId) {
   try {
     await deleteDoc( fsDoc(fsDb, "staffs", personId.toString()));
-    console.log(`Staff record "${personId}" deleted!`);
+    console.log(`Admin record "${personId}" deleted!`);
   } catch (e) {
     console.error(`Error deleting staff record: ${e}`);
   }
@@ -145,12 +145,12 @@ Staff.destroy = async function (personId) {
 /**
  * Create test data
  */
-Staff.generateTestData = async function () {
+Admin.generateTestData = async function () {
   try {
     console.log("Generating test data...");
     const response = await fetch("../../test-data/staffs.json");
     const staffRecs = await response.json();
-    await Promise.all( staffRecs.map( d => Staff.add( d)));
+    await Promise.all( staffRecs.map( d => Admin.add( d)));
     console.log(`${staffRecs.length} staffs saved.`);
   } catch (e) {
     console.error(`${e.constructor.name}: ${e.message}`);
@@ -159,14 +159,14 @@ Staff.generateTestData = async function () {
 /**
  * Clear database
  */
-Staff.clearData = async function () {
+Admin.clearData = async function () {
   if (confirm("Do you really want to delete all staffs?")) {
     try {
       console.log("Clearing test data...");
       const staffsCollRef = fsColl( fsDb, "staffs");
       const staffsQrySn = (await getDocs( staffsCollRef));  
       // delete all documents
-      await Promise.all( staffsQrySn.docs.map( d => Staff.destroy( d.id)));
+      await Promise.all( staffsQrySn.docs.map( d => Admin.destroy( d.id)));
       // ... and then report that they have been deleted
       console.log(`${staffsQrySn.docs.length} staff records deleted.`);
     } catch (e) {
@@ -175,7 +175,7 @@ Staff.clearData = async function () {
   }
 };
 
-Staff.converter = {
+Admin.converter = {
   toFirestore: function(staff) {
     return {
       staffId: staff.personId,
@@ -185,14 +185,14 @@ Staff.converter = {
   },
   fromFirestore: function(snapshot, options) {
     const data = snapshot.data( options);
-    return new Staff( data);
+    return new Admin( data);
   }
 };
 
-Staff.observeChanges = async function (id) {
+Admin.observeChanges = async function (id) {
   try {
     // listen document changes, returning a snapshot (snapshot) on every change
-    const staffDocRef = fsDoc( fsDb, "staffs", id.toString()).withConverter( Staff.converter);
+    const staffDocRef = fsDoc( fsDb, "staffs", id.toString()).withConverter( Admin.converter);
     const staffRec = (await getDoc( staffDocRef)).data();
     return onSnapshot( staffDocRef, function (snapshot) {
       // create object with original document data
@@ -210,4 +210,4 @@ Staff.observeChanges = async function (id) {
   }
 };
 
-export default Staff;
+export default Admin;
