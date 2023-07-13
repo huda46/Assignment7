@@ -9,10 +9,15 @@
 </head>
 <body>
 <header>
+  <div id="login-management"></div>
+  <div class="wrapper clearfix">
   <div id="message" hidden="hidden"></div>
+    <div class="title">
   <h1>Create an account</h1>
+    </div>
 </header>
 <main>
+  <div class="wrapper clearfix">
   <div class="container">
     <h2>Sign up to create an account!</h2>
   <form id="Auth">
@@ -20,19 +25,27 @@
       <img src="./Logo.png" alt="Logo" class="logo">
     </div>
     <div>
+      <label>Name: <input name="username" placeholder="enter your name"/></label>
+    </div>
+    <div><label>Type: 
+      <select name="type"></select>
+    </label></div>
+    <div>
       <label>Email: <input name="email" type="email"/></label>
     </div>
     <div>
       <label>Password: <input name="password" type="password" placeholder="6+ characters"/></label>
     </div>
     <div>
-      <button type="button" name="signUp">Sign up</button>
+      <button name="commit" type="button">Create</button></br>
+      <progress hidden="hidden" max="100">%</progress>
     </div>
   </form>
   <p>
     Or <a href="signIn.html" title="Sign in">sign in</a> if you already have an account.
   </p>
   <button type="button" onclick="window.location.href = 'index.html';" class="back">Back to main menu</button>
+</div>
 </div>
 </main>
 </body>
