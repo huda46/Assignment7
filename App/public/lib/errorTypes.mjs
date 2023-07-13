@@ -61,6 +61,13 @@ class FrozenValueConstraintViolation extends Error {
   }
 }
 
+class PatternConstraintViolation extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "PatternConstraintViolation";
+  }
+}
+
 export { NoConstraintViolation, 
   MandatoryValueConstraintViolation, 
   RangeConstraintViolation,
@@ -69,4 +76,5 @@ export { NoConstraintViolation,
   IntervalConstraintViolation,
   ReferentialIntegrityConstraintViolation,
   FrozenValueConstraintViolation,
+  PatternConstraintViolation,
   ConstraintViolation};

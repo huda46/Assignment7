@@ -14,10 +14,9 @@ import { NoConstraintViolation, MandatoryValueConstraintViolation,
  */
 class Member extends Person {
   // record parameter with the ES6 syntax for function parameter destructuring
-  constructor({personId, name, type}) {
-    this.personId = personId;
-    this.name = name;
-    this.type = type;
+  constructor({personId, name, type, clubIdRefs}) {
+    super({personId, name, type});
+    this.clubIdRefs = clubIdRefs;
   };
 }
 /*********************************************************

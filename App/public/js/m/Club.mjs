@@ -1,11 +1,13 @@
 import { fsDb } from "../initFirebase.mjs";
+import Staff from "./Staff.mjs";
+import Member from "./Member.mjs";
 import Enumeration from "../../lib/Enumeration.mjs";
 import { collection as fsColl, deleteDoc, doc as fsDoc, getDoc, getDocs, onSnapshot,
   setDoc, orderBy, updateDoc, deleteField, query as fsQuery }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
 import { isNonEmptyString, isIntegerOrIntegerString } from "../../lib/util.mjs";
-import { NoConstraintViolation, MandatoryValueConstraintViolation, 
-  RangeConstraintViolation, UniquenessConstraintViolation } from "../../lib/errorTypes.mjs";
+import { NoConstraintViolation, MandatoryValueConstraintViolation, PatternConstraintViolation,
+  RangeConstraintViolation, UniquenessConstraintViolation, ReferentialIntegrityConstraintViolation } from "../../lib/errorTypes.mjs";
 
 const WeekDaysEL = new Enumeration(["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]);
 const StatusEL = new Enumeration(["Open","Inactive","Full","Beta Phase"]);
@@ -17,13 +19,16 @@ const StatusEL = new Enumeration(["Open","Inactive","Full","Beta Phase"]);
  */
 class Club {
   // record parameter with the ES6 syntax for function parameter destructuring
-  constructor({clubId, name, status, fee, description, contactInformation: contactInfo, startDate, endDate, daysInWeek, time, location}) {
+  constructor({clubId, name, trainerIdRefs, chair_id, status, fee, description, contactInfo, clubMemberIdRefs, startDate, endDate, daysInWeek, time, location}) {
     this.clubId = clubId;
     this.name = name;
     this.status = status;
+    this.trainerIdRefs = trainerIdRefs;
+    this.chair_id = chair_id;
     this.fee = fee;
     this.description = description;
     this.contactInfo = contactInfo;
+    this.clubMemberIdRefs = clubMemberIdRefs;
     this.startDate = startDate;
     this.endDate = endDate;
     this.daysInWeek = daysInWeek;
@@ -41,6 +46,12 @@ class Club {
   get status() {
     return this._status;
   };
+  get trainerIdRefs() {
+    return this._trainerIdRefs;
+  };
+  get chair_id() {
+    return this._chair_id;
+  };
   get fee() {
     return this._fee;  
   };
@@ -49,6 +60,9 @@ class Club {
   };
   get contactInfo() {
     return this._contactInfo;  
+  };
+  get clubMemberIdRefs() {
+    return this._clubMemberIdRefs;  
   };
   get startDate() {
     return this._startDate;  
@@ -92,6 +106,18 @@ class Club {
       throw validationResult;
     }
   };
+  addTrainer( t) {
+    this._trainerIdRefs.push( t);
+  };
+  removeTrainer( t) {
+    this._trainerIdRefs = this._trainerIdRefs.filter( d => d.id !== t.id);
+  }
+  set trainerIdRefs( tid) {
+    this._trainerIdRefs = tid;
+  };
+  set chair_id( cid) {
+    this._chair_id = cid;
+  };
   set fee( f) {
     const validationResult = Club.checkFee( f);
     if (validationResult instanceof NoConstraintViolation) {
@@ -115,6 +141,15 @@ class Club {
     } else {
       throw validationResult;
     }
+  };
+  addMember( m) {
+    this._clubMemberIdRefs.push( m);
+  };
+  removeMember( m) {
+    this._clubMemberIdRefs = this._clubMemberIdRefs.filter( d => d.id !== m.id);
+  }
+  set clubMemberIdRefs( mid) {
+    this._clubMemberIdRefs = mid;
   };
   set startDate( sd) {
     const validationResult = Club.checkStartDate( sd);
@@ -189,47 +224,67 @@ class Club {
     }
     return validationResult;
   };
+  static async checkClubIdAsIdRef( id) {
+    let validationResult = Club.checkClubId( id);
+    if (validationResult instanceof NoConstraintViolation) {
+      if (!id) {
+        validationResult = new MandatoryValueConstraintViolation(
+            "A positive integer value for the club ID is required!");
+      } else {
+        const clubDocSn = await getDoc( fsDoc( fsDb, "clubs", id.toString()));
+        if (!clubDocSn.exists()) {
+          validationResult = new ReferentialIntegrityConstraintViolation(
+            "There is no club with this name!");
+        } else validationResult = new NoConstraintViolation();
+      }
+    }
+    return validationResult;
+  };
   static checkName( name) {
     if (!name) {
-      return new MandatoryValueConstraintViolation("A person´s name must be provided!");
+      return new MandatoryValueConstraintViolation("A club´s name must be provided!");
     } else if (!isNonEmptyString( name)) {
-      return new RangeConstraintViolation("The name of person must be a non-empty string!");
+      return new RangeConstraintViolation("The name of club must be a non-empty string!");
     } else {
       return new NoConstraintViolation();
     }
   };
   static checkStatus( status) {
     if (!status) {
-      return new MandatoryValueConstraintViolation("A person´s name must be provided!");
-    } else if (!isNonEmptyString( status)) {
-      return new RangeConstraintViolation("The name of person must be a non-empty string!");
+      return new MandatoryValueConstraintViolation("A status must be provided!");
+    } else if (!isIntegerOrIntegerString(status) || parseInt(status) < 1 ||
+        parseInt(status) > StatusEL.MAX) {
+      return new RangeConstraintViolation(`Invalid value for type: ${t}`);
     } else {
       return new NoConstraintViolation();
     }
   };
   static checkFee( fee) {
     if (!fee) {
-      return new MandatoryValueConstraintViolation("A person´s name must be provided!");
-    } else if (!isNonEmptyString( fee)) {
-      return new RangeConstraintViolation("The name of person must be a non-empty string!");
-    } else {
       return new NoConstraintViolation();
+    } else {
+      fee = parseInt( fee); 
+      if (isNaN( fee) || !Number.isInteger( fee) || fee < 1) {
+        return new RangeConstraintViolation("The fee must be a positive integer!");
+      } else {
+        return new NoConstraintViolation();
+      }
     }
   };
   static checkDescription( description) {
     if (!description) {
-      return new MandatoryValueConstraintViolation("A person´s name must be provided!");
+      return new NoConstraintViolation();
     } else if (!isNonEmptyString( description)) {
-      return new RangeConstraintViolation("The name of person must be a non-empty string!");
+      return new RangeConstraintViolation("The description must be a string!");
     } else {
       return new NoConstraintViolation();
     }
   };
   static checkContactInfo( contactInfo) {
     if (!contactInfo) {
-      return new MandatoryValueConstraintViolation("A person´s name must be provided!");
+      return new NoConstraintViolation();
     } else if (!isNonEmptyString( contactInfo)) {
-      return new RangeConstraintViolation("The name of person must be a non-empty string!");
+      return new RangeConstraintViolation("The contact information must be a string!");
     } else {
       return new NoConstraintViolation();
     }
@@ -256,29 +311,51 @@ class Club {
       "The endDate is not well formed");
     } else return new NoConstraintViolation();
   };
-  static checkDaysInWeek( days) {
-    if (!days) {
-      return new MandatoryValueConstraintViolation("A person´s name must be provided!");
-    } else if (!isNonEmptyString( days)) {
-      return new RangeConstraintViolation("The name of person must be a non-empty string!");
+  static checkDayInWeek( day) {
+    if (day == undefined) {
+      return new MandatoryValueConstraintViolation("No day provided!");
+    } else if (!isIntegerOrIntegerString(day) || parseInt(day) < 1 ||
+        parseInt(day) > WeekDaysEL.MAX) {
+      return new RangeConstraintViolation("The name of club must be a non-empty string!");
     } else {
       return new NoConstraintViolation();
     }
   };
-  static checkTime( time) {
-    if (!time) {
-      return new MandatoryValueConstraintViolation("A person´s name must be provided!");
-    } else if (!isNonEmptyString( time)) {
-      return new RangeConstraintViolation("The name of person must be a non-empty string!");
+  static checkDaysInWeek( days) {
+    if (!days || (Array.isArray( days) &&
+        days.length === 0)) {
+      return new MandatoryValueConstraintViolation("At least one day must be provided!");
+    } else if (!Array.isArray( days)) {
+      return new RangeConstraintViolation(
+        "The value of days must be an array!");
+    } else {
+      for (let i of days.keys()) {
+        const validationResult = Club.checkDayInWeek( days[i]);
+        if (!(validationResult instanceof NoConstraintViolation)) {
+          return validationResult;
+        }
+      }
+      return new NoConstraintViolation();
+    }
+  };
+  static checkTime( timeString) {
+    const newDate = new Date(timeString);
+    if (!timeString) {
+      return new MandatoryValueConstraintViolation("A time must be provided!");
+    } else if (!isNonEmptyString( timeString)) {
+      return new RangeConstraintViolation("The time must be a non-empty string!");
+    } else if (isNaN(newDate) || !/\b\d{2}:\d{2}\b/.test(newDateString)) {
+      return new RangeConstraintViolation(
+          "The time must be a real date in the form HH:MM!");
     } else {
       return new NoConstraintViolation();
     }
   };
   static checkLocation( loc) {
     if (!loc) {
-      return new MandatoryValueConstraintViolation("A person´s name must be provided!");
+      return new MandatoryValueConstraintViolation("A address must be provided!");
     } else if (!isNonEmptyString( loc)) {
-      return new RangeConstraintViolation("The name of person must be a non-empty string!");
+      return new RangeConstraintViolation("The address must be a non-empty string!");
     } else {
       return new NoConstraintViolation();
     }
@@ -297,16 +374,28 @@ Club.add = async function (slots) {
   try {
     club = new Club( slots);
     let validationResult = await Club.checkClubIdAsId( club.clubId);
-    if (!(validationResult instanceof NoConstraintViolation)) {
-      throw validationResult;
+    if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+    validationResult = await Staff.checkPersonIdAsIdRef( club.chair_id);
+    if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+    for (const a of club.trainerIdRefs) {
+      const validationResult = await Staff.checkPersonIdAsIdRef( String(a.id));
+      if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+    }
+    for (const a of club.clubMemberIdRefs) {
+      const validationResult = await Member.checkPersonIdAsIdRef( String(a.id));
+      if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
     }
   } catch (e) {
     console.error(`${e.constructor.name}: ${e.message}`);
     club = null;
   }
   if (club) {
+    const clubDocRef = fsDoc( fsDb, "clubs", club.clubId.toString()).withConverter( Club.converter);
     try {
-      const clubDocRef = fsDoc( fsDb, "clubs", club.clubId.toString()).withConverter( Club.converter);
+      const batch = writeBatch( fsDb);
+      await batch.set( clubDocRef, club);
+
+      
       await setDoc( clubDocRef, club);
       console.log(`Club record "${club.clubId}" created!`);
     } catch (e) {

@@ -16,6 +16,7 @@ class Staff extends Person {
   // record parameter with the ES6 syntax for function parameter destructuring
   constructor({personId, name, type}) {
     super({personId, name, type});
+    this.managingClubs = [];
   }
 }
 /*********************************************************
