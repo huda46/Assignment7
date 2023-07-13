@@ -2,7 +2,7 @@ import { fsDb } from "../initFirebase.mjs";
 import Staff from "./Staff.mjs";
 import Member from "./Member.mjs";
 import Enumeration from "../../lib/Enumeration.mjs";
-import { collection as fsColl, deleteDoc, doc as fsDoc, getDoc, getDocs, onSnapshot,
+import { collection as fsColl, deleteDoc, doc as fsDoc, Timestamp, getDoc, getDocs, onSnapshot,
   setDoc, orderBy, updateDoc, deleteField, query as fsQuery }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
 import { isNonEmptyString, isIntegerOrIntegerString } from "../../lib/util.mjs";
@@ -390,13 +390,19 @@ Club.add = async function (slots) {
     club = null;
   }
   if (club) {
-    const clubDocRef = fsDoc( fsDb, "clubs", club.clubId.toString()).withConverter( Club.converter);
+    const clubDocRef = fsDoc( fsDb, "clubs", club.clubId.toString())
+        .withConverter( Club.converter),
+      membersCollRef = fsColl( fsDb, "members")
+        .withConverter( Member.converter);
+    const clubInverseRef = {personId: club.personId, name: club.name};
     try {
       const batch = writeBatch( fsDb);
       await batch.set( clubDocRef, club);
-
-      
-      await setDoc( clubDocRef, club);
+      await Promise.all( club.clubMemberIdRefs.map( a => {
+        const memberDocRef = fsDoc( membersCollRef, String( a.id));
+        batch.update( memberDocRef, {listOfClubs: arrayUnion( clubInverseRef)});
+      }));
+      batch.commit();
       console.log(`Club record "${club.clubId}" created!`);
     } catch (e) {
       console.error(`${e.constructor.name}: ${e.message} + ${e}`);
@@ -419,16 +425,24 @@ Club.retrieve = async function (clubId) {
   }
 };
 /**
- * Load all club records from Firestore
+ * Load a block of club records from Firestore
  * @returns {Promise<*>} clubRecords: {array}
  */
-Club.retrieveAll = async function (order) {
-  if (!order) order = "clubId";
-  const clubsCollRef = fsColl( fsDb, "clubs"),
-    q = fsQuery( clubsCollRef, orderBy( order));
+Club.retrieveBlock = async function (params) {
   try {
-    const clubRecs = (await getDocs( q.withConverter( Club.converter))).docs.map( d => d.data());
-    console.log(`${clubRecs.length} club records retrieved ${order ? "ordered by " + order : ""}`);
+    let clubsCollRef = fsColl( fsDb, "clubs");
+    // set limit and order in query
+    clubsCollRef = fsQuery( clubsCollRef, limit( 11));
+    if (params.order) clubsCollRef = fsQuery( clubsCollRef, orderBy( params.order));
+    // set pagination "startAt" cursor
+    if (params.cursor) {
+      if (params.order === "startDate")
+        clubsCollRef = fsQuery( clubsCollRef, startAt( Timestamp
+          .fromDate( new Date( params.cursor))));
+      else clubsCollRef = fsQuery( clubsCollRef, startAt( params.cursor));
+    }
+    const clubRecs = (await getDocs( clubsCollRef.withConverter( Club.converter))).docs.map( d => d.data());
+    console.log(`${clubRecs.length} club records retrieved ${params.order ? "ordered by " + params.order : ""}`);
     return clubRecs;
   } catch (e) {
     console.error(`Error retrieving club records: ${e}`);
@@ -436,88 +450,162 @@ Club.retrieveAll = async function (order) {
 };
 /**
  * Update a Firestore document in the Firestore collection "clubs"
- * @param slots: {object}
  * @returns {Promise<void>}
  */
-Club.update = async function (slots) {
+Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsToRemove, chair_id, status, fee, description, contactInfo, clubMemberIdRefsToAdd, clubMemberIdRefsToRemove, startDate, endDate, daysInWeek, time, location}) {
   let noConstraintViolated = true,
-  validationResult = null,
-  clubBeforeUpdate = null;
-  const clubDocRef = fsDoc( fsDb, "clubs", slots.clubId.toString()).withConverter( Club.converter),
+    validationResult = null,
+    clubBeforeUpdate = null;
+  const clubDocRef = fsDoc( fsDb, "clubs", clubId.toString()).withConverter( Club.converter),
     updatedSlots = {};
   try {
     // retrieve up-to-date club record
-    const clubDocSn = await getDoc( clubDocRef);
-    clubBeforeUpdate = clubDocSn.data();
+    clubBeforeUpdate = await getDoc( clubDocRef).data();
   } catch (e) {
     console.error(`${e.constructor.name}: ${e.message}`);
   }
-  try {
-    if (clubBeforeUpdate.name !== slots.name) {
-      validationResult = Club.checkName( slots.name);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.name = slots.name;
-      else throw validationResult;
+  if (clubBeforeUpdate) {
+    if (trainerIdRefsToAdd) for (const trainerIdRef of trainerIdRefsToAdd)
+      clubBeforeUpdate.addTrainer( trainerIdRef);
+    if (trainerIdRefsToRemove) for (const trainerIdRef of trainerIdRefsToRemove)
+      clubBeforeUpdate.removeTrainer( trainerIdRef);
+    if (trainerIdRefsToAdd || trainerIdRefsToRemove)
+      updatedSlots.trainerIdRefs = clubBeforeUpdate.trainerIdRefs;
+
+    if (clubMemberIdRefsToAdd) for (const memberIdRef of clubMemberIdRefsToAdd)
+      clubBeforeUpdate.addMember( memberIdRef);
+    if (clubMemberIdRefsToRemove) for (const memberIdRef of clubMemberIdRefsToRemove)
+      clubBeforeUpdate.removeMember( memberIdRef);
+    if (clubMemberIdRefsToAdd || clubMemberIdRefsToRemove)
+      updatedSlots.clubMemberIdRefs = clubBeforeUpdate.clubMemberIdRefs;
+
+    if (chair_id && clubBeforeUpdate.chair_id !== chair_id) {
+      updatedSlots.chair_id = chair_id;
+    } else if (!chair_id && clubBeforeUpdate.chair_id !== undefined) {
+      updatedSlots.chair_id = deleteField();
     }
-    if (clubBeforeUpdate.status !== parseInt( slots.status)) {
-      validationResult = Club.checkStatus( slots.status);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.status = slots.status;
-      else throw validationResult;
+
+    if (clubBeforeUpdate.name !== name) updatedSlots.name = name;
+    if (clubBeforeUpdate.status !== parseInt( status)) updatedSlots.status = status;
+    if (clubBeforeUpdate.fee !== fee) updatedSlots.fee = fee;
+    if (clubBeforeUpdate.description !== description) updatedSlots.description = description;
+    if (clubBeforeUpdate.contactInfo !== contactInfo) updatedSlots.contactInfo = contactInfo;
+    if (clubBeforeUpdate.startDate !== startDate)
+      updatedSlots.startDate = Timestamp.fromDate(new Date(startDate));
+    if (clubBeforeUpdate.endDate !== endDate) 
+      updatedSlots.endDate = Timestamp.fromDate(new Date(endDate));
+    if (clubBeforeUpdate.daysInWeek !== daysInWeek) updatedSlots.daysInWeek = daysInWeek;
+    if (clubBeforeUpdate.time !== time) 
+      updatedSlots.time = Timestamp.fromDate(new Date(time));
+    if (clubBeforeUpdate.location !== location) updatedSlots.location = location;
+  }  
+  // if there are updates, run checkers while updating master object (club)
+  // in a batch write transaction
+  const updatedProperties = Object.keys(updatedSlots);
+  if (updatedProperties.length) {
+    try {
+      const memberCollRef = fsColl( fsDb, "members")
+          .withConverter( Member.converter);
+      // initialize (before and after update) inverse ID references
+      const inverseRefBefore = {personId: personId, name: clubBeforeUpdate.name};
+      const inverseRefAfter = {personId: personId, name: name};
+      const batch = writeBatch( fsDb); // initiate batch write
+
+      if (updatedSlots.status) {
+        validationResult = Club.checkStatus( status);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      if (updatedSlots.chair_id) {
+        validationResult = await Staff.checkPersonIdAsIdRef( chair_id);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      if (trainerIdRefsToAdd) {
+        await Promise.all(trainerIdRefsToAdd.map( async a => {
+          validationResult = await Staff.checkPersonIdAsIdRef( a.id);
+          if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+        }));
+      }
+      if (updatedSlots.fee) {
+        validationResult = Club.checkFee( fee);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      if (updatedSlots.description) {
+        validationResult = Club.checkDescription( description);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      if (updatedSlots.contactInfo) {
+        validationResult = Club.checkContactInfo( contactInfo);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      if (updatedSlots.startDate) {
+        validationResult = Club.checkStartDate( startDate);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      if (updatedSlots.endDate) {
+        validationResult = Club.checkEndDate( endDate);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      if (updatedSlots.daysInWeek) {
+        validationResult = Club.checkDaysInWeek( daysInWeek);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      if (updatedSlots.time) {
+        validationResult = Club.checkTime( time);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      if (updatedSlots.location) {
+        validationResult = Club.checkLocation( location);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      }
+      // remove old derived inverse references properties from slave
+      // objects (member) Member::listOfClubs
+      if (clubMemberIdRefsToRemove) {
+        await Promise.all(clubMemberIdRefsToRemove.map( a => {
+          const memberDocRef = fsDoc(memberCollRef, String( a.id));
+          batch.update(memberDocRef, {listOfClubs: arrayRemove( inverseRefBefore)});
+        }));
+      }
+      // add new derived inverse references properties from slave objects
+      // (members) Member::listOfClubs, while checking constraint violations
+      if (clubMemberIdRefsToAdd) {
+        await Promise.all(clubMemberIdRefsToAdd.map( async a => {
+          const memberDocRef = fsDoc(memberCollRef, String( a.id));
+          validationResult = await Member.checkPersonIdAsIdRef( a.id);
+          console.log("happend error ?");
+          if (!validationResult instanceof NoConstraintViolation) throw validationResult;
+          batch.update(memberDocRef, {listOfClubs: arrayUnion( inverseRefAfter)});
+        }));
+      }
+      // if name changes, update name in ID references (array of maps) in
+      // unchanged member objects
+      if (updatedSlots.name) {
+        validationResult = Club.checkName( name);
+        if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+        const NoChangedMemberIdRefs = clubMemberIdRefsToAdd ?
+          clubBeforeUpdate.clubMemberIdRefs.filter(d => !clubMemberIdRefsToAdd.includes(d))
+          : clubBeforeUpdate.clubMemberIdRefs;
+        await Promise.all(NoChangedMemberIdRefs.map( a => {
+          const memberDocRef = fsDoc(memberCollRef, String( a.id));
+          batch.update(memberDocRef, {listOfClubs: arrayRemove( inverseRefBefore)});
+        }));
+        await Promise.all(NoChangedMemberIdRefs.map( a => {
+          const memberDocRef = fsDoc(memberCollRef, String( a.id));
+          batch.update(memberDocRef, {listOfClubs: arrayUnion( inverseRefAfter)});
+        }));
+      }
+
+      batch.update(clubDocRef, updatedSlots);
+      batch.commit(); // commit batch write
+    } catch (e) {
+      console.error(`${e.constructor.name}: ${e.message}`);
     }
-    if (clubBeforeUpdate.fee !== slots.fee) {
-      validationResult = Club.checkFee( slots.fee);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.fee = slots.fee;
-      else throw validationResult;
-    }
-    if (clubBeforeUpdate.description !== slots.description) {
-      validationResult = Club.checkDescription( slots.description);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.description = slots.description;
-      else throw validationResult;
-    }
-    if (clubBeforeUpdate.contactInfo !== slots.contactInfo) {
-      validationResult = Club.checkContactInfo( slots.contactInfo);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.contactInfo = slots.contactInfo;
-      else throw validationResult;
-    }
-    if (clubBeforeUpdate.startDate !== slots.startDate) {
-      validationResult = Club.checkStartDate( slots.startDate);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.startDate = slots.startDate;
-      else throw validationResult;
-    }
-    if (clubBeforeUpdate.endDate !== slots.endDate) {
-      validationResult = Club.checkEndDate( slots.endDate);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.endDate = slots.endDate;
-      else throw validationResult;
-    }
-    if (clubBeforeUpdate.daysInWeek !== slots.daysInWeek) {
-      validationResult = Club.checkDaysInWeek( slots.daysInWeek);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.daysInWeek = slots.daysInWeek;
-      else throw validationResult;
-    }
-    if (clubBeforeUpdate.time !== slots.time) {
-      validationResult = Club.checkTime( slots.time);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.time = slots.time;
-      else throw validationResult;
-    }
-    if (clubBeforeUpdate.location !== slots.location) {
-      validationResult = Club.checkLocation( slots.location);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.location = slots.location;
-      else throw validationResult;
-    }
-  } catch (e) {
-    noConstraintViolated = false;
-    console.error(`${e.constructor.name}: ${e.message}`);
-  }
-  if (noConstraintViolated) {
-    const updatedProperties = Object.keys(updatedSlots);
     if (updatedProperties.length === 1) {
-      await updateDoc(clubDocRef, updatedSlots);
-      console.log(`Property ${updatedProperties.toString()} modified for club record "${slots.clubId}"`);
+      console.log(`Property ${updatedProperties.toString()} modified for club record "${clubId}"`);
     } else if (updatedProperties.length) {
-      await updateDoc(clubDocRef, updatedSlots);
-      console.log(`Properties ${updatedProperties.toString()} modified for club record "${slots.clubId}"`);
-    } else {
-      console.log(`No property value changed for club record "${slots.clubId}"!`);
+      console.log(`Properties ${updatedProperties.toString()} modified for club record "${clubId}"`);
     }
+  } else {
+    console.log(`No property value changed for club record "${clubId}"!`);
   }
 };
 
@@ -527,67 +615,68 @@ Club.update = async function (slots) {
  * @returns {Promise<void>}
  */
 Club.destroy = async function (clubId) {
+  const clubDocRef = fsDoc( fsDb, "clubs", clubId.toString())
+      .withConverter( Club.converter),
+    membersCollRef = fsColl( fsDb, "members")
+      .withConverter( Member.converter);
   try {
-    await deleteDoc( fsDoc(fsDb, "clubs", clubId.toString()));
+    // delete master class object (club) while updating derived inverse
+    // properties in objects from slave classes (authors and publishers)
+    const clubRec = (await getDoc( clubDocRef
+      .withConverter( Club.converter))).data();
+    const inverseRef = {clubId: clubRec.clubId, name: clubRec.name};
+    const batch = writeBatch( fsDb); // initiate batch write object
+    // delete derived inverse reference properties, Member::/listOfClubs
+    await Promise.all( clubRec.clubMemberIdRefs.map( aId => {
+      const authorDocRef = fsDoc( membersCollRef, String( aId.id));
+      batch.update( authorDocRef, {listOfClubs: arrayRemove( inverseRef)});
+    }));
+    batch.delete( clubDocRef); // create club record (master)
+    batch.commit(); // commit batch write
     console.log(`Club record "${clubId}" deleted!`);
   } catch (e) {
     console.error(`Error deleting club record: ${e}`);
   }
 };
-/*******************************************
- *** Auxiliary methods for testing **********
- ********************************************/
-/**
- * Create test data
- */
-Club.generateTestData = async function () {
-  try {
-    console.log("Generating test data...");
-    const response = await fetch("../../test-data/clubs.json");
-    const clubRecs = await response.json();
-    await Promise.all( clubRecs.map( d => Club.add( d)));
-    console.log(`${clubRecs.length} clubs saved.`);
-  } catch (e) {
-    console.error(`${e.constructor.name}: ${e.message}`);
-  }
-};
-/**
- * Clear database
- */
-Club.clearData = async function () {
-  if (confirm("Do you really want to delete all clubs?")) {
-    try {
-      console.log("Clearing test data...");
-      const clubsCollRef = fsColl( fsDb, "clubs");
-      const clubsQrySn = (await getDocs( clubsCollRef));  
-      // delete all documents
-      await Promise.all( clubsQrySn.docs.map( d => Club.destroy( d.id)));
-      // ... and then report that they have been deleted
-      console.log(`${clubsQrySn.docs.length} club records deleted.`);
-    } catch (e) {
-      console.error(`${e.constructor.name}: ${e.message}`);
-    }
-  }
-};
 
 Club.converter = {
   toFirestore: function(club) {
-    return {
+    const data =  {
       clubId: club.clubId,
       name: club.name,
       status: parseInt( club.status),
+      trainerIdRef: club.trainerIdRef,
       fee: club.fee,
       description: club.description,
       contactInfo: club.contactInfo,
-      startDate: club.startDate,
-      endDate: club.endDate,
+      memberIdRef: club.memberIdRef,
+      startDate: Timestamp.fromDate( new Date(club.startDate)),
+      endDate: Timestamp.fromDate( new Date(club.endDate)),
       daysInWeek: club.daysInWeek,
-      time: club.time,
+      time: Timestamp.fromDate( new Date(club.time)),
       location: club.location
     };
+    if (club.chair_id) data.chair_id = club.chair_id;
+    return data;
   },
   fromFirestore: function(snapshot, options) {
-    const data = snapshot.data( options);
+    const club = snapshot.data( options),
+      data = {
+        clubId: club.clubId,
+        name: club.name,
+        status: parseInt( club.status),
+        trainerIdRef: club.trainerIdRef,
+        fee: club.fee,
+        description: club.description,
+        contactInfo: club.contactInfo,
+        memberIdRef: club.memberIdRef,
+        startDate: date2IsoDateString( club.startDate.toDate()),
+        endDate: date2IsoDateString( club.endDate.toDate()),
+        daysInWeek: club.daysInWeek,
+        time: date2IsoDateString( club.time.toDate()),
+        location: club.location
+      };
+    if (club.chair_id) data.chair_id = club.chair_id;
     return new Club( data);
   }
 };
