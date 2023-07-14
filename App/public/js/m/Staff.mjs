@@ -12,8 +12,8 @@ import { NoConstraintViolation } from "../../lib/errorTypes.mjs";
  */
 class Staff extends Person {
   // record parameter with the ES6 syntax for function parameter destructuring
-  constructor({personId, name, type}) {
-    super({personId, name, type});
+  constructor({personId, firstname, lastname, type}) {
+    super({personId, firstname, lastname, type});
   }
   get managingClubs() {
     return this._managingClubs;
@@ -24,7 +24,8 @@ Staff.converter = {
   toFirestore: function(staff) {
     return {
       staffId: staff.personId,
-      name: staff.name,
+      firstname: staff.firstname,
+      lastname: staff.lastname,
       type: parseInt( staff.type)
     };
   },
@@ -115,9 +116,14 @@ try {
   console.error(`${e.constructor.name}: ${e.message}`);
 }
 try {
-  if (staffBeforeUpdate.name !== slots.name) {
-    validationResult = Person.checkName( slots.name);
-    if (validationResult instanceof NoConstraintViolation) updatedSlots.name = slots.name;
+  if (staffBeforeUpdate.firstname !== slots.firstname) {
+    validationResult = Person.checkName( slots.firstname);
+    if (validationResult instanceof NoConstraintViolation) updatedSlots.firstname = slots.firstname;
+    else throw validationResult;
+  }
+  if (staffBeforeUpdate.lastname !== slots.lastname) {
+    validationResult = Person.checkName( slots.lastname);
+    if (validationResult instanceof NoConstraintViolation) updatedSlots.lastname = slots.lastname;
     else throw validationResult;
   }
   if (staffBeforeUpdate.type !== parseInt( slots.type)) {

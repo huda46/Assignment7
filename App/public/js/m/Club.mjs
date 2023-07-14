@@ -437,7 +437,7 @@ Club.add = async function (slots) {
         .withConverter( Club.converter),
       membersCollRef = fsColl( fsDb, "members")
         .withConverter( Member.converter);
-    const clubInverseRef = {personId: club.personId, name: club.name};
+    const clubInverseRef = {clubId: club.clubId, name: club.name};
     try {
       const batch = writeBatch( fsDb);
       await batch.set( clubDocRef, club);
@@ -550,8 +550,8 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
       const memberCollRef = fsColl( fsDb, "members")
           .withConverter( Member.converter);
       // initialize (before and after update) inverse ID references
-      const inverseRefBefore = {personId: personId, name: clubBeforeUpdate.name};
-      const inverseRefAfter = {personId: personId, name: name};
+      const inverseRefBefore = {personId: personId, lastname: clubBeforeUpdate.lastname};
+      const inverseRefAfter = {personId: personId, lastname: lastname};
       const batch = writeBatch( fsDb); // initiate batch write
 
       if (updatedSlots.status) {
