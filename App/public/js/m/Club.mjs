@@ -2,10 +2,10 @@ import { fsDb } from "../initFirebase.mjs";
 import Staff from "./Staff.mjs";
 import Member from "./Member.mjs";
 import Enumeration from "../../lib/Enumeration.mjs";
-import { collection as fsColl, deleteDoc, doc as fsDoc, Timestamp, getDoc, getDocs, onSnapshot,
-  setDoc, orderBy, updateDoc, deleteField, query as fsQuery }
+import { collection as fsColl, doc as fsDoc, Timestamp, getDoc, getDocs, onSnapshot,
+  orderBy, deleteField, query as fsQuery, startAt, limit, writeBatch, arrayUnion, arrayRemove }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
-import { isNonEmptyString, isIntegerOrIntegerString } from "../../lib/util.mjs";
+import { isNonEmptyString, isIntegerOrIntegerString, date2IsoDateString } from "../../lib/util.mjs";
 import { NoConstraintViolation, MandatoryValueConstraintViolation, PatternConstraintViolation,
   RangeConstraintViolation, UniquenessConstraintViolation, ReferentialIntegrityConstraintViolation } from "../../lib/errorTypes.mjs";
 
@@ -361,6 +361,49 @@ class Club {
     }
   };
 }
+
+Club.converter = {
+  toFirestore: function(club) {
+    const data =  {
+      clubId: club.clubId,
+      name: club.name,
+      status: parseInt( club.status),
+      trainerIdRef: club.trainerIdRef,
+      fee: club.fee,
+      description: club.description,
+      contactInfo: club.contactInfo,
+      memberIdRef: club.memberIdRef,
+      startDate: Timestamp.fromDate( new Date(club.startDate)),
+      endDate: Timestamp.fromDate( new Date(club.endDate)),
+      daysInWeek: club.daysInWeek,
+      time: Timestamp.fromDate( new Date(club.time)),
+      location: club.location
+    };
+    if (club.chair_id) data.chair_id = club.chair_id;
+    return data;
+  },
+  fromFirestore: function(snapshot, options) {
+    const club = snapshot.data( options),
+      data = {
+        clubId: club.clubId,
+        name: club.name,
+        status: parseInt( club.status),
+        trainerIdRef: club.trainerIdRef,
+        fee: club.fee,
+        description: club.description,
+        contactInfo: club.contactInfo,
+        memberIdRef: club.memberIdRef,
+        startDate: date2IsoDateString( club.startDate.toDate()),
+        endDate: date2IsoDateString( club.endDate.toDate()),
+        daysInWeek: club.daysInWeek,
+        time: date2IsoDateString( club.time.toDate()),
+        location: club.location
+      };
+    if (club.chair_id) data.chair_id = club.chair_id;
+    return new Club( data);
+  }
+};
+
 /*********************************************************
  ***  Class-level ("static") storage management methods **
  *********************************************************/
@@ -636,69 +679,6 @@ Club.destroy = async function (clubId) {
     console.log(`Club record "${clubId}" deleted!`);
   } catch (e) {
     console.error(`Error deleting club record: ${e}`);
-  }
-};
-
-Club.converter = {
-  toFirestore: function(club) {
-    const data =  {
-      clubId: club.clubId,
-      name: club.name,
-      status: parseInt( club.status),
-      trainerIdRef: club.trainerIdRef,
-      fee: club.fee,
-      description: club.description,
-      contactInfo: club.contactInfo,
-      memberIdRef: club.memberIdRef,
-      startDate: Timestamp.fromDate( new Date(club.startDate)),
-      endDate: Timestamp.fromDate( new Date(club.endDate)),
-      daysInWeek: club.daysInWeek,
-      time: Timestamp.fromDate( new Date(club.time)),
-      location: club.location
-    };
-    if (club.chair_id) data.chair_id = club.chair_id;
-    return data;
-  },
-  fromFirestore: function(snapshot, options) {
-    const club = snapshot.data( options),
-      data = {
-        clubId: club.clubId,
-        name: club.name,
-        status: parseInt( club.status),
-        trainerIdRef: club.trainerIdRef,
-        fee: club.fee,
-        description: club.description,
-        contactInfo: club.contactInfo,
-        memberIdRef: club.memberIdRef,
-        startDate: date2IsoDateString( club.startDate.toDate()),
-        endDate: date2IsoDateString( club.endDate.toDate()),
-        daysInWeek: club.daysInWeek,
-        time: date2IsoDateString( club.time.toDate()),
-        location: club.location
-      };
-    if (club.chair_id) data.chair_id = club.chair_id;
-    return new Club( data);
-  }
-};
-
-Club.observeChanges = async function (id) {
-  try {
-    // listen document changes, returning a snapshot (snapshot) on every change
-    const clubDocRef = fsDoc( fsDb, "clubs", id.toString()).withConverter( Club.converter);
-    const clubRec = (await getDoc( clubDocRef)).data();
-    return onSnapshot( clubDocRef, function (snapshot) {
-      // create object with original document data
-      const originalData = { itemName: "club", description: `${clubRec.name} (ClubId: ${clubRec.clubId })`};
-      if (!snapshot.data()) { // removed: if snapshot has not data
-        originalData.type = "REMOVED";
-        createModalFromChange( originalData); // invoke modal window reporting change of original data
-      } else if (JSON.stringify( clubRec) !== JSON.stringify( snapshot.data())) {
-        originalData.type = "MODIFIED";
-        createModalFromChange( originalData); // invoke modal window reporting change of original data
-      }
-    });
-  } catch (e) {
-    console.error(`${e.constructor.name} : ${e.message}`);
   }
 };
 
