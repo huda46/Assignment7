@@ -16,7 +16,20 @@
 .right {
   right: 20%;
 }
-
+table {
+  border-collapse:collapse;
+  margin: 1em 0;
+}
+table.full-width {
+  width: 100%;
+}
+table, td, th {
+  border: 1px solid black;
+  padding: 5px;
+}
+table th {
+  background: #f3f3f3;
+}
 .centered {
   position: absolute;
   top: 50%;

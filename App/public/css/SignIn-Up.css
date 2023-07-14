@@ -1,7 +1,7 @@
 body {font-family: 'Times New Roman', Times, serif, Helvetica, sans-serif;}
-input[type=email], input[type=password] {
+input[type=personId], input[type=name], input[type=type], input[type=email], input[type=password] {
   width: 50%;
-  padding: 12px 20px;
+  padding: 8px 20px;
   margin: 6px 0;
   display: inline-block;
   border: 1px solid #ccc;
@@ -14,7 +14,7 @@ h1{
 }
 h2{
   text-align: center;
-  color: #7b3f5f;
+  color: #090909;
 }
 h3{
   text-align: center;

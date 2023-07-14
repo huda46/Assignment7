@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Manage Data of Clubs</title>
+  <script src="js/v/retrieveAndListAllPersons.mjs" type="module"></script>
+  <link rel="icon" href="./Logo.png"/>
+  <link rel="stylesheet" href="css/normalize.min.css"/>
+  <link rel="stylesheet" href="css/crud.css"/>
+</head>
+<body>
+  <!-- not finish yet!  -->
+<header>
+  <div id="login-management"></div>
+  <div class="wrapper clearfix">
+    <div class="title">
+  <h1>Manage the data of club</h1>
+</div>
+</div>
+</header>
+<main>
+  <div class="split left">
+  <div class="wrapper clearfix">
+    
+    <div>
+      <label>Ordered by:
+        <select>
+          <option value="personId">ClubId</option>
+          <option value="name">Name</option>
+          <option value="type">Status</option>
+        </select>
+      </label>
+      <span>
+        <button type="button" id="previousPage">« Previous</button>
+        <button type="button" id="nextPage">Next »</button>
+      </span>
+    </div>
+    <div>
+      <label>Add a new club:
+          <button type="button" onclick="window.location.href = 'createClub.html';" >add club</button>
+        </label>
+      </label>
+    </div>
+    <progress hidden="hidden" max="100">%</progress>
+  <table id="persons">
+    <thead>
+    <tr>
+      <th>ClubID</th>
+      <th>Club name</th>
+      <th>Type</th>
+      <th >Club details</th>
+      <th>add member/s</th> <!-- a button for add member will be added  -->
+      <!-- update and delete for each row of club will be added  -->
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <button type="button" onclick="window.location.href = 'menu.html';" class="back">Back to menu</button>
+</div>
+</div>
+</main>
+</body>
+</html>

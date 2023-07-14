@@ -26,7 +26,7 @@
     <div id="login-management">
     <div class="wrapper clearfix">
       <div class="title">
-    <h1>BTU-WellnessClubApp</h1>
+    <h1>Welcome to main menu</h1>
   </div>
   </header>
   <main>
@@ -36,18 +36,26 @@
       </div>
     <div class="two-col-menu">
       <menu class="crud">
-        <li role="menuitem"><a href="createPerson.html" class="disabled">Create a new person record</a></li>
-        <li role="menuitem"><a href="retrieveAndListAllPersons.html">Retrieve & list all person records</a></li>
-        <li role="menuitem"><a href="updatePerson.html" class="disabled">Update a person record</a></li>
-        <li role="menuitem"><a href="deletePerson.html" class="disabled">Delete a person record</a></li>
+        <div role="menuitem">
+          <p>Now you can see all the clubs and join your favourite one/s!</p>
+          <button type="button" onclick="window.location.href = 'retrieveAndListAllClubs.html';">Join a club</button>
+        </div>
+        <div role="menuitem">
+          <p>Manage the data of clubs "Only for chairs"</p>
+          <button type="button" onclick="window.location.href = 'manageDataClub.html';">Manage Data Club</button>
+        </div>
+        <div role="menuitem">
+          <p>Manage the data of Members "Only for chairs"</p>
+          <button type="button" onclick="window.location.href = 'manageDataMember.html';">Manage Data Members</button>
+        </div>
       </menu>
       <menu>
-        <li role="menuitem">
+        <div role="menuitem">
           <button class="generateTestData" type="button" disabled="disabled">Test data</button>
-        </li>
-        <li role="menuitem">
+        </div>
+        <div role="menuitem">
           <button id="clearData" type="button" disabled="disabled">Clear database</button>
-        </li>
+        </div>
       </menu>
     </div>
     </div>
