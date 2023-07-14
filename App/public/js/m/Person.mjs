@@ -52,6 +52,22 @@ class Person {
     }
     return validationResult;
   };
+  static async checkPersonIdAsIdRef( id) {
+    let validationResult = Person.checkPersonId( id);
+    if (validationResult instanceof NoConstraintViolation) {
+      if (!id) {
+        validationResult = new MandatoryValueConstraintViolation(
+            "A positive integer value for the person ID is required!");
+      } else {
+        const personDocSn = await getDoc( fsDoc( fsDb, "persons", id.toString()));
+        if (!personDocSn.exists()) {
+          validationResult = new ReferentialIntegrityConstraintViolation(
+            "There is no person with this name!");
+        } else validationResult = new NoConstraintViolation();
+      }
+    }
+    return validationResult;
+  };
   set personId( d) {
     d = parseInt(d);
     const validationResult = Person.checkPersonId( d);

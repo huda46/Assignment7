@@ -1,11 +1,9 @@
 import { fsDb } from "../initFirebase.mjs";
 import Person from "../m/Person.mjs";
-import { collection as fsColl, deleteDoc, doc as fsDoc, getDoc, getDocs, onSnapshot,
+import { collection as fsColl, doc as fsDoc, getDoc, getDocs, where, writeBatch,
   setDoc, orderBy, updateDoc, deleteField, query as fsQuery }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
-import { isNonEmptyString, isIntegerOrIntegerString, createModalFromChange } from "../../lib/util.mjs";
-import { NoConstraintViolation, MandatoryValueConstraintViolation, 
-  RangeConstraintViolation, UniquenessConstraintViolation } from "../../lib/errorTypes.mjs";
+import { NoConstraintViolation } from "../../lib/errorTypes.mjs";
 
 /**
  * Constructor function for the class Person
@@ -17,9 +15,28 @@ class Staff extends Person {
   constructor({personId, name, type}) {
     super({personId, name, type});
   }
+  get managingClubs() {
+    return this._managingClubs;
+  }
 }
+
+Staff.converter = {
+  toFirestore: function(staff) {
+    return {
+      staffId: staff.personId,
+      name: staff.name,
+      type: parseInt( staff.type)
+    };
+  },
+  fromFirestore: function(snapshot, options) {
+    const data = snapshot.data( options),
+      staff = new Staff( data);
+    staff._managingClubs = data.managingClubs;
+    return staff;
+  }
+};
 /*********************************************************
- ***  ClasStaffs-level ("static") storage management methods **
+ ***  Class-level ("static") storage management methods **
  *********************************************************/
 /**
  * Create a Firestore document in the Firestore collection "staffs"
@@ -132,81 +149,24 @@ if (noConstraintViolated) {
  * @returns {Promise<void>}
  */
 Staff.destroy = async function (personId) {
+  const clubsCollRef = fsColl( fsDb, "clubs"),
+    q = fsQuery( clubsCollRef, where("chair_id", "==", personId)),
+    staffDocRef = fsDoc( fsColl( fsDb, "staffs"), personId);
   try {
-    await deleteDoc( fsDoc(fsDb, "staffs", personId.toString()));
+    const clubQrySns = (await getDocs( q)),
+      batch = writeBatch( fsDb); // initiate batch write
+    // iterate ID references (foreign keys) of master class objects (books) and
+    // update derived inverse reference property
+    await Promise.all( clubQrySns.docs.map( d => {
+      batch.update( fsDoc( clubsCollRef, d.id), {
+        chair_id: deleteField()
+      });
+    }));
+    batch.delete( staffDocRef); // delete publisher record
+    batch.commit(); // finish batch write
     console.log(`Staff record "${personId}" deleted!`);
   } catch (e) {
     console.error(`Error deleting staff record: ${e}`);
-  }
-};
-/*******************************************
- *** Auxiliary methods for testing **********
- ********************************************/
-/**
- * Create test data
- */
-Staff.generateTestData = async function () {
-  try {
-    console.log("Generating test data...");
-    const response = await fetch("../../test-data/staffs.json");
-    const staffRecs = await response.json();
-    await Promise.all( staffRecs.map( d => Staff.add( d)));
-    console.log(`${staffRecs.length} staffs saved.`);
-  } catch (e) {
-    console.error(`${e.constructor.name}: ${e.message}`);
-  }
-};
-/**
- * Clear database
- */
-Staff.clearData = async function () {
-  if (confirm("Do you really want to delete all staffs?")) {
-    try {
-      console.log("Clearing test data...");
-      const staffsCollRef = fsColl( fsDb, "staffs");
-      const staffsQrySn = (await getDocs( staffsCollRef));  
-      // delete all documents
-      await Promise.all( staffsQrySn.docs.map( d => Staff.destroy( d.id)));
-      // ... and then report that they have been deleted
-      console.log(`${staffsQrySn.docs.length} staff records deleted.`);
-    } catch (e) {
-      console.error(`${e.constructor.name}: ${e.message}`);
-    }
-  }
-};
-
-Staff.converter = {
-  toFirestore: function(staff) {
-    return {
-      staffId: staff.personId,
-      name: staff.name,
-      type: parseInt( staff.type)
-    };
-  },
-  fromFirestore: function(snapshot, options) {
-    const data = snapshot.data( options);
-    return new Staff( data);
-  }
-};
-
-Staff.observeChanges = async function (id) {
-  try {
-    // listen document changes, returning a snapshot (snapshot) on every change
-    const staffDocRef = fsDoc( fsDb, "staffs", id.toString()).withConverter( Staff.converter);
-    const staffRec = (await getDoc( staffDocRef)).data();
-    return onSnapshot( staffDocRef, function (snapshot) {
-      // create object with original document data
-      const originalData = { itemName: "staff", description: `${staffRec.name} (PersonId: ${staffRec.personId })`};
-      if (!snapshot.data()) { // removed: if snapshot has not data
-        originalData.type = "REMOVED";
-        createModalFromChange( originalData); // invoke modal window reporting change of original data
-      } else if (JSON.stringify( staffRec) !== JSON.stringify( snapshot.data())) {
-        originalData.type = "MODIFIED";
-        createModalFromChange( originalData); // invoke modal window reporting change of original data
-      }
-    });
-  } catch (e) {
-    console.error(`${e.constructor.name} : ${e.message}`);
   }
 };
 
