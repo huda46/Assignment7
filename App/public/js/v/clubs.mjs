@@ -339,7 +339,7 @@ if (deleteFormEl.checkValidity()) {
   });
 }
 
-console.log("testBranch-old branch is broken")
+
 
 
 /**********************************************
