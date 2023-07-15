@@ -26,16 +26,22 @@
     <div class="imgcontainer">
       <img src="./Logo.png" alt="Logo" class="logo">
     </div>
-    <div><label>Name: <input name="name" type="name"/></label></div>
-    <div><label>Profession: 
+    <div class="field">
+      <label>First Name: <input type="text" name="name"/></label>
+    </div>
+    <div class="field">
+      <label>Last Name: <input type="text" name="name"/></label>
+    </div> 
+    <div>
+      <label>Profession: 
       <select name="type" type="type"></select>
-    </label></div></br>
+    </label>
+    </div></br>
     <div>
-    <div>
-      <label>Email: <input name="email" type="email"/></label>
+      <label>Email: <input type="text" name="email" placeholder="enter yur email"/></label>
     </div>
     <div>
-      <label>Password: <input name="password" type="password" placeholder="6+ characters"/></label>
+      <label>Password: <input type="text" name="password" placeholder="6+ characters"/></label>
     </div>
       <button name="commit" type="button">Create</button></br>
       <progress hidden="hidden" max="100">%</progress>
