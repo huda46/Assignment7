@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>BTU-WellnessClub - manage account</title>
+  <meta name="description" content="BTU-WellnessClub Application"/>
+  <link rel="icon" href="./Logo.png"/>
+  <link rel="stylesheet" href="css/normalize.min.css"/>
+  <link rel="stylesheet" href="css/signIn-Up.css"/>
+  <script src="js/v/members.mjs" type="module"></script>
+</head>
+<body>
+<header>
+  <div id="login-management">
+  <div class="wrapper clearfix">
+    <div class="title">
+  <h1>BTU-WellnessClubApp</h1>
+  </div>
+</header>
+<main>
+  <div class="wrapper clearfix">
+    <div class="container">
+      <div class="imgcontainer">
+        <img src="./Logo.png" alt="Logo" class="logo">
+      </div>
+    <h2>Update your account data</h2>
+    <form id="Update">
+      <div class="field">
+        <label>ID: <input type="text" name="memberId"/></label>
+      </div>
+      <div class="field">
+        <label>First Name: <input type="text" name="name"/></label>
+      </div>
+      <div class="field">
+        <label>Last Name: <input type="text" name="name"/></label>
+      </div>
+      <div><label>Profession: 
+        <select name="type"></select>
+      </label></div>
+      <div class="button-group">
+        <button type="submit" name="commit">Update your data</button>
+        <progress hidden="hidden" max="100">%</progress>
+      </div>
+    </form>
+    <h2>Delete your account</h2>
+    <form id="Delete">
+      <div class="field">
+        <label>ID: <input type="text" name="memberId"/></label>
+      </div>
+      <div class="button-group">
+        <button type="submit" name="commit">Delete your account</button>
+        <progress hidden="hidden" max="100">%</progress>
+      </div>
+    </form>
+  <button type="button" onclick="window.location.href = 'menu.html';" class="back">Back to main menu</button>
+  </div>
+  </div>
+</main>
+</body>
+</html>
