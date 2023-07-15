@@ -42,7 +42,25 @@ table th {
   width: 320px;
   border-radius: 50%;
 }
+button {
+  text-align: center;
+  background-color: #ccd7cd;
+  color: white;
+  padding: 5px 15px;
+  margin: 6px 0;
+  border: none;
+  cursor: pointer;
+  width: auto;
+}
 
+button:hover {
+  opacity: 0.8;
+}
+.back {
+  width: auto;
+  padding: 8px 15px;
+  background-color: #7b3f5f;
+}
 header {
   color: #7b3f5f;
   font-family:'Times New Roman', Times, serif;

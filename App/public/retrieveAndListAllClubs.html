@@ -19,9 +19,7 @@
 </div>
 </header>
 <main>
-  <div class="split left">
   <div class="wrapper clearfix">
-    
     <div>
       <label>Ordered by:
         <select>
@@ -45,11 +43,22 @@
       <th value="type">Club details</th>
       <th value="type">join club</th>
     </tr>
-    </thead>
-    <tbody></tbody>
+<!-- this row is added to test the view of UI table  -->
+    <tr>
+      <th></th>
+      <td></td>
+      <td></td>
+        <td>
+          <button type="button" class="details">details</button>
+        </td>
+        <td>
+          <button type="button" class="join">join</button>
+        </td>
+    </tr>
+  </thead>
+<tbody>
   </table>
-  <button onclick="history.back()">Back to menu</button>
-</div>
+  <button onclick="history.back()" class="back">Back to menu</button>
 </div>
 </main>
 </body>

@@ -27,7 +27,7 @@ const firstnameEl = formUpEl["firstname"],
 // set up the type selection list
 fillSelectWithOptions( typeEl, PersonTypeEL.labels, true);
 
-// TODO dont know yet where I get the memberId from
+// TODO: get memberId is todo! (no solution yet)
 const userId = auth.currentUser.uid;
 console.log(`the current user id is ${userId}`);
 if (formUpEl["clubId"].checkValidity() && formUpEl["clubId"].value) {
@@ -93,7 +93,7 @@ commitBtn.addEventListener("click", async function () {
  * Use case Delete Club
  **********************************************/
 
-// TODO dont know yet where I get the memberId from
+// TODO: get memberId! (no solution yet)
 const responseValidation = await Club.checkClubIdAsId( formDeEl["clubId"].value);
 formDeEl["clubId"].setCustomValidity( responseValidation.message);
 
