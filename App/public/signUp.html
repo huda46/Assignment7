@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>BTU-WellnessClub - SignUp</title>
+  <script src="js/v/signUp.mjs" type="module"></script>
+  <link rel="icon" href="./Logo.png"/>
+  <link rel="stylesheet" href="css/signIn-Up.css"/>
+</head>
+<body>
+<header>
+  <div id="login-management"></div>
+  <div class="wrapper clearfix">
+  <div id="message" hidden="hidden"></div>
+    <div class="title">
+  <h1>Create an account</h1>
+    </div>
+</header>
+<main>
+  <div class="wrapper clearfix">
+  <div class="container">
+    <h2>Sign up to create an account!</h2>
+  <form id="Auth">
+    <div class="imgcontainer">
+      <img src="./Logo.png" alt="Logo" class="logo">
+    </div>
+    <div>
+      <label>First Name: <input name="firstname" placeholder="enter your first name"/></label>
+    </div>
+    <div>
+      <label>Last Name: <input name="lastname" placeholder="enter your last name"/></label>
+    </div>
+    <div><label>Profession: 
+      <select name="type"></select>
+    </label></div>
+    <div>
+      <label>Email address: <input name="email" type="email"/></label>
+    </div>
+    <div>
+      <label>Password: <input name="password" type="password" placeholder="6+ characters"/></label>
+    </div>
+    <div>
+      <label>Confirm Password: <input name="confirmPass" type="password" placeholder="repeat your password"/></label>
+    </div>
+    <div>
+      <button name="signUp" type="button">Create account</button></br>
+      <progress hidden="hidden" max="100">%</progress>
+    </div>
+  </form>
+  <p>
+    Or <a href="signIn.html" title="Sign in">sign in</a> if you already have an account.
+  </p>
+  <button type="button" onclick="window.location.href = 'index.html';" class="back">Back to main menu</button>
+  </div>
+  </div>
+</main>
+</body>
+</html>

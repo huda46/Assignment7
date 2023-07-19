@@ -148,23 +148,23 @@ createFormEl["commit"].addEventListener("click", async function () {
   createFormEl["clubId"].setCustomValidity(
     (await Club.checkclubIdAsId( slots.clubId)).message);
   createFormEl["name"].setCustomValidity(
-    Club.checkName( slots.name).message);
+    (await Club.checkName( slots.name)).message);
   createFormEl["status"].setCustomValidity(
-    Club.checkStatus( slots.status).message);
+    (await Club.checkStatus( slots.status)).message);
   createFormEl["fee"].setCustomValidity(
-    Club.checkFee( slots.fee).message);
+    (await Club.checkFee( slots.fee)).message);
   createFormEl["description"].setCustomValidity(
-    Club.checkFee( slots.description).message);
+    (await Club.checkFee( slots.description)).message);
   createFormEl["contactInfo"].setCustomValidity(
-    Club.checkContactInfo( slots.contactInfo).message);
+    (await Club.checkContactInfo( slots.contactInfo)).message);
   createFormEl["startDate"].setCustomValidity(
-    Club.checkStartDate( slots.startDate).message);
+    (await Club.checkStartDate( slots.startDate)).message);
   createFormEl["endDate"].setCustomValidity(
-    Club.checkEnddate( slots.endDate).message);
+    (await Club.checkEnddate( slots.endDate)).message);
   createFormEl["daysInWeek"].setCustomValidity(
-    Club.checkDaysInWeek( slots.daysInWeek).message);
+    (await Club.checkDaysInWeek( slots.daysInWeek)).message);
   createFormEl["location"].setCustomValidity(
-    Club.checkLocation( slots.location).message);
+    (await Club.checkLocation( slots.location)).message);
   const responseValidation = await Staff.checkPersonIdAsIdRef( slots.chair_id);
   createFormEl["staff"].setCustomValidity( responseValidation.message);
   if (addedTrainersListEl.children.length) {
@@ -338,6 +338,9 @@ if (deleteFormEl.checkValidity()) {
     }
   });
 }
+
+
+
 
 /**********************************************
  * Refresh the Manage clubs Data UI

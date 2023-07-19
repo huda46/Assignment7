@@ -14,14 +14,62 @@ const PersonTypeEL = new Enumeration(["Student","Employee","Guest"]);
  */
 class Person {
   // record parameter with the ES6 syntax for function parameter destructuring
-  constructor({personId, name, type}) {
+  constructor({personId, firstname, lastname, type}) {
     this.personId = personId;
-    this.name = name;
+    this.firstname = firstname;
+    this.lastname = lastname;
     this.type = type;
   };
+
+  /************* getter functions *************/
   get personId() {
     return this._personId;  
   };
+  get firstname() {
+    return this._firstname;
+  };
+  get lastname() {
+    return this._lastname;
+  };
+  get type() {
+    return this._type;
+  };
+
+  /************* setter functions *************/
+  set personId( d) {
+    d = parseInt(d);
+    const validationResult = Person.checkPersonId( d);
+    if (validationResult instanceof NoConstraintViolation) {
+      this._personId = d;
+    } else {
+      throw validationResult;
+    }
+  };
+  set firstname( n) {
+    const validationResult = Person.checkName( n);
+    if (validationResult instanceof NoConstraintViolation) {
+      this._firstname = n;
+    } else {
+      throw validationResult;
+    }
+  };
+  set lastname( n) {
+    const validationResult = Person.checkName( n);
+    if (validationResult instanceof NoConstraintViolation) {
+      this._lastname = n;
+    } else {
+      throw validationResult;
+    }
+  };
+  set type( t) {
+    const validationResult = Person.checkType( t);
+    if (validationResult instanceof NoConstraintViolation) {
+      this._type = t;
+    } else {
+      throw validationResult;
+    }
+  };
+
   static checkPersonId( id) {
     if (!id) {
       return new NoConstraintViolation(); 
@@ -68,37 +116,14 @@ class Person {
     }
     return validationResult;
   };
-  set personId( d) {
-    d = parseInt(d);
-    const validationResult = Person.checkPersonId( d);
-    if (validationResult instanceof NoConstraintViolation) {
-      this._personId = d;
-    } else {
-      throw validationResult;
-    }
-  };
-  get name() {
-    return this._name;
-  };
   static checkName( n) {
     if (!n) {
-      return new MandatoryValueConstraintViolation("A person´s name must be provided!");
+      return new MandatoryValueConstraintViolation("A full person´s name must be provided!");
     } else if (!isNonEmptyString( n)) {
-      return new RangeConstraintViolation("The name of person must be a non-empty string!");
+      return new RangeConstraintViolation("The full name of a person must be a non-empty string!");
     } else {
       return new NoConstraintViolation();
     }
-  };
-  set name( n) {
-    const validationResult = Person.checkName( n);
-    if (validationResult instanceof NoConstraintViolation) {
-      this._name = n;
-    } else {
-      throw validationResult;
-    }
-  };
-  get type() {
-    return this._type;
   };
   static checkType ( t) {
     if (!t) {
@@ -111,14 +136,6 @@ class Person {
     } else {
       return new NoConstraintViolation();
     } 
-  };
-  set type( t) {
-    const validationResult = Person.checkType( t);
-    if (validationResult instanceof NoConstraintViolation) {
-      this._type = t;
-    } else {
-      throw validationResult;
-    }
   };
 }
 

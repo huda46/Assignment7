@@ -12,8 +12,8 @@ import { NoConstraintViolation } from "../../lib/errorTypes.mjs";
  */
 class Member extends Person {
   // record parameter with the ES6 syntax for function parameter destructuring
-  constructor({personId, name, type}) {
-    super({personId, name, type});
+  constructor({personId, firstname, lastname, type}) {
+    super({personId, firstname, lastname, type});
   };
   get listOfClubs() {
     return this._listOfClubs;
@@ -24,7 +24,8 @@ Member.converter = {
   toFirestore: function(member) {
     return {
       personId: member.personId,
-      name: member.name,
+      firstname: member.firstname,
+      lastname: member.lastname,
       type: parseInt( member.type)
     };
   },
@@ -47,11 +48,16 @@ Member.converter = {
 Member.add = async function (slots) {
   let member = null;
   try {
+    // create database entry with auto-generated id and set it as personId
+    const memberDocRef = fsDoc(fsColl( fsDb, "members"));
+    slots.personId = parseInt(memberDocRef.id);
+
     member = new Member( slots);
+    // TODO not needed anymore because of auto-generation
     let validationResult = await Member.checkPersonIdAsId( member.personId);
     if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
-    const memberDocRef = fsDoc( fsDb, "members", slots.personId.toString())
-      .withConverter( Member.converter);
+    //const memberDocRef = fsDoc( fsDb, "members", slots.personId.toString())
+      //.withConverter( Member.converter);
     await setDoc( memberDocRef, member);
     console.log(`Member with id = "${member.personId}" created!`);
   } catch (e) {
@@ -109,9 +115,14 @@ Member.update = async function (slots) {
     console.error(`${e.constructor.name}: ${e.message}`);
   }
   try {
-    if (memberBeforeUpdate.name !== slots.name) {
-      validationResult = Person.checkName( slots.name);
-      if (validationResult instanceof NoConstraintViolation) updatedSlots.name = slots.name;
+    if (memberBeforeUpdate.firstname !== slots.firstname) {
+      validationResult = Person.checkName( slots.firstname);
+      if (validationResult instanceof NoConstraintViolation) updatedSlots.firstname = slots.firstname;
+      else throw validationResult;
+    }
+    if (memberBeforeUpdate.lastname !== slots.lastname) {
+      validationResult = Person.checkName( slots.lastname);
+      if (validationResult instanceof NoConstraintViolation) updatedSlots.lastname = slots.lastname;
       else throw validationResult;
     }
     if (memberBeforeUpdate.type !== parseInt( slots.type)) {
@@ -127,8 +138,8 @@ Member.update = async function (slots) {
   if (updatedProperties.length && noConstraintViolated) {
     try {
       const memberRefBefore
-          = {id: parseInt(slots.personId), name: memberBeforeUpdate.name},
-        memberRefAfter = {id: parseInt(slots.personId), name: slots.name},
+          = {id: parseInt(slots.personId), lastname: memberBeforeUpdate.lastname},
+        memberRefAfter = {id: parseInt(slots.personId), lastname: slots.lastname},
         q = fsQuery( clubsCollRef, where("clubMemberIdRefs", "array-contains",
           memberRefBefore)),
         clubQrySns = (await getDocs(q)),
@@ -168,7 +179,7 @@ Member.destroy = async function (slots) {
   const membersCollRef = fsColl( fsDb, "members"),
     clubsCollRef = fsColl( fsDb, "clubs");
   try {
-    const memberRef = {id: parseInt( slots.personId), name: slots.name},
+    const memberRef = {id: parseInt( slots.personId), lastname: slots.lastname},
       q = fsQuery( clubsCollRef, where("clubMemberIdRefs", "array-contains", memberRef)),
       memberDocRef = fsDoc( membersCollRef, String( slots.personId)),
       clubQrySns = (await getDocs( q)),
