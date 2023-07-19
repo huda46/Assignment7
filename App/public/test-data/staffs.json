@@ -1,0 +1,92 @@
+[
+  {
+    "personId": 1,
+    "firstname": "Melanie",
+    "lastname": "Baker",
+    "type": 1
+  },
+  {
+    "personId": 2,
+    "firstname": "Lisa",
+    "lastname": "Black",
+    "type": 2
+  },
+  {
+    "personId": 3,
+    "firstname": "Justin",
+    "lastname": "Mustermann",
+    "type": 2
+  },
+  {
+    "personId": 4,
+    "firstname": "Paul",
+    "lastname": "Gray",
+    "type": 2
+  },
+  {
+    "personId": 5,
+    "firstname": "Tim",
+    "lastname": "Lee",
+    "type": 3
+  },
+  {
+    "personId": 6,
+    "firstname": "Julia",
+    "lastname": "Scherer",
+    "type": 2
+  },
+  {
+    "personId": 7,
+    "firstname": "Jessica",
+    "lastname": "Hill",
+    "type": 2
+  },
+  {
+    "personId": 8,
+    "firstname": "Alexander",
+    "lastname": "Beike",
+    "type": 1
+  },
+  {
+    "personId": 9,
+    "firstname": "Jasmine",
+    "lastname": "North",
+    "type": 2
+  },
+  {
+    "personId": 10,
+    "firstname": "Christian",
+    "lastname": "Walker",
+    "type": 2
+  },
+  {
+    "personId": 11,
+    "firstname": "Adam",
+    "lastname": "Short",
+    "type": 1
+  },
+  {
+    "personId": 12,
+    "firstname": "Hannah",
+    "lastname": "Morgan",
+    "type": 2
+  },
+  {
+    "personId": 13,
+    "firstname": "Megan",
+    "lastname": "Foerster",
+    "type": 1
+  },
+  {
+    "personId": 14,
+    "firstname": "Dan",
+    "lastname": "Jones",
+    "type": 2
+  },
+  {
+    "personId": 15,
+    "firstname": "Sam",
+    "lastname": "Davies",
+    "type": 2
+  }
+]

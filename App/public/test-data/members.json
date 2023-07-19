@@ -1,0 +1,92 @@
+[
+  {
+    "personId": 1,
+    "firstname": "Max",
+    "lastname": "Mustermann",
+    "type": 1
+  },
+  {
+    "personId": 2,
+    "firstname": "Ulrike",
+    "lastname": "Mustermann",
+    "type": 2
+  },
+  {
+    "personId": 3,
+    "firstname": "John",
+    "lastname": "Mustermann",
+    "type": 3
+  },
+  {
+    "personId": 4,
+    "firstname": "Luca",
+    "lastname": "Nadel",
+    "type": 1
+  },
+  {
+    "personId": 5,
+    "firstname": "Phillipp",
+    "lastname": "Ziegler",
+    "type": 3
+  },
+  {
+    "personId": 6,
+    "firstname": "Julia",
+    "lastname": "Scherer",
+    "type": 3
+  },
+  {
+    "personId": 7,
+    "firstname": "Katrin",
+    "lastname": "Bachmeier",
+    "type": 1
+  },
+  {
+    "personId": 8,
+    "firstname": "Leonie",
+    "lastname": "Beike",
+    "type": 3
+  },
+  {
+    "personId": 9,
+    "firstname": "Sven",
+    "lastname": "Maurer",
+    "type": 2
+  },
+  {
+    "personId": 10,
+    "firstname": "Ralph",
+    "lastname": "Foerster",
+    "type": 2
+  },
+  {
+    "personId": 11,
+    "firstname": "Kylie",
+    "lastname": "Brown",
+    "type": 1
+  },
+  {
+    "personId": 12,
+    "firstname": "David",
+    "lastname": "Black",
+    "type": 3
+  },
+  {
+    "personId": 13,
+    "firstname": "Eric",
+    "lastname": "Fisher",
+    "type": 3
+  },
+  {
+    "personId": 14,
+    "firstname": "Vanessa",
+    "lastname": "James",
+    "type": 2
+  },
+  {
+    "personId": 15,
+    "firstname": "Brian",
+    "lastname": "Carr",
+    "type": 1
+  }
+]
