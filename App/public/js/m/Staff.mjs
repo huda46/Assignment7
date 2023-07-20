@@ -3,21 +3,53 @@ import Person from "../m/Person.mjs";
 import { collection as fsColl, doc as fsDoc, getDoc, getDocs, where, writeBatch,
   setDoc, orderBy, updateDoc, deleteField, query as fsQuery }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
-import { NoConstraintViolation } from "../../lib/errorTypes.mjs";
+import { NoConstraintViolation, MandatoryValueConstraintViolation,
+   UniquenessConstraintViolation, ReferentialIntegrityConstraintViolation } from "../../lib/errorTypes.mjs";
 
 /**
  * Constructor function for the class Person
  * @constructor
- * @param {{personId: number, name: string, type: PersonTypeEL}} slots - Object creation slots.
+ * @param {{personId: string, name: string, type: PersonTypeEL}} slots - Object creation slots.
  */
 class Staff extends Person {
   // record parameter with the ES6 syntax for function parameter destructuring
   constructor({personId, firstname, lastname, type}) {
     super({personId, firstname, lastname, type});
-  }
+  };
+
   get managingClubs() {
     return this._managingClubs;
-  }
+  };
+
+  static async checkPersonIdAsId( id) {
+    let validationResult = Person.checkPersonId( id);
+    if ((validationResult instanceof NoConstraintViolation)) {
+      if (!id) {
+        validationResult = new MandatoryValueConstraintViolation(
+            "A value for the person ID must be provided!");
+      } else {
+        const personDocSn = await getDoc( fsDoc( fsDb, "staffs", id));
+        if (personDocSn.exists()) {
+          validationResult = new UniquenessConstraintViolation(
+            "There is already a person record with this Id!");
+        } else {
+          validationResult = new NoConstraintViolation();
+        }
+      }
+    }
+    return validationResult;
+  };
+  static async checkPersonIdAsIdRef( id) {
+    let constraintViolation = Person.checkPersonId( id);
+    if ((constraintViolation instanceof NoConstraintViolation) && id) {
+      const staffDocSn = await getDoc( fsDoc( fsDb, "staffs", id));
+      if (!staffDocSn.exists()) {
+        constraintViolation = new ReferentialIntegrityConstraintViolation(
+          `There is no staff record with this staff ID ${id}!`);
+      }
+    }
+    return constraintViolation;
+  };
 }
 
 Staff.converter = {
@@ -48,7 +80,7 @@ Staff.add = async function (slots) {
   let staff = null;
   try {
     staff = new Staff( slots);
-    let validationResult = await Person.checkPersonIdAsId( staff.personId);
+    let validationResult = await Staff.checkPersonIdAsId( staff.personId);
     if (!(validationResult instanceof NoConstraintViolation)) {
       throw validationResult;
     }
@@ -58,7 +90,7 @@ Staff.add = async function (slots) {
   }
   if (staff) {
     try {
-      const staffDocRef = fsDoc( fsDb, "staffs", staff.personId.toString()).withConverter( Staff.converter);
+      const staffDocRef = fsDoc( fsDb, "staffs", staff.personId).withConverter( Staff.converter);
       await setDoc( staffDocRef, staff);
       console.log(`Staff record "${staff.personId}" created!`);
     } catch (e) {
@@ -73,7 +105,7 @@ Staff.add = async function (slots) {
  */
 Staff.retrieve = async function (personId) {
   try {
-    const staffRec = (await getDoc( fsDoc(fsDb, "staffs", personId.toString())
+    const staffRec = (await getDoc( fsDoc(fsDb, "staffs", personId)
       .withConverter( Staff.converter))).data();
     console.log(`Staff record "${staffRec.personId}" retrieved.`);
     return staffRec;
@@ -106,7 +138,7 @@ Staff.update = async function (slots) {
   let noConstraintViolated = true,
   validationResult = null,
   staffBeforeUpdate = null;
-const staffDocRef = fsDoc( fsDb, "staffs", slots.personId.toString()).withConverter( Staff.converter),
+const staffDocRef = fsDoc( fsDb, "staffs", slots.personId).withConverter( Staff.converter),
   updatedSlots = {};
 try {
   // retrieve up-to-date staff record

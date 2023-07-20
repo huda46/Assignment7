@@ -3,12 +3,13 @@ import Person from "../m/Person.mjs";
 import { collection as fsColl, doc as fsDoc, getDoc, getDocs, where,
   setDoc, orderBy, updateDoc, writeBatch, arrayRemove, arrayUnion, query as fsQuery }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
-import { NoConstraintViolation } from "../../lib/errorTypes.mjs";
+import { NoConstraintViolation, MandatoryValueConstraintViolation, 
+  UniquenessConstraintViolation, ReferentialIntegrityConstraintViolation } from "../../lib/errorTypes.mjs";
 
 /**
  * Constructor function for the class Member
  * @constructor
- * @param {{personId: number, name: string, type: PersonTypeEL}} slots - Object creation slots.
+ * @param {{personId: string, name: string, type: PersonTypeEL}} slots - Object creation slots.
  */
 class Member extends Person {
   // record parameter with the ES6 syntax for function parameter destructuring
@@ -17,7 +18,36 @@ class Member extends Person {
   };
   get listOfClubs() {
     return this._listOfClubs;
-  }
+  };
+  static async checkPersonIdAsId( id) {
+    let validationResult = Person.checkPersonId( id);
+    if ((validationResult instanceof NoConstraintViolation)) {
+      if (!id) {
+        validationResult = new MandatoryValueConstraintViolation(
+            "A value for the person ID must be provided!");
+      } else {
+        const personDocSn = await getDoc( fsDoc( fsDb, "members", id));
+        if (personDocSn.exists()) {
+          validationResult = new UniquenessConstraintViolation(
+            "There is already a person record with this Id!");
+        } else {
+          validationResult = new NoConstraintViolation();
+        }
+      }
+    }
+    return validationResult;
+  };
+  static async checkPersonIdAsIdRef( id) {
+    let constraintViolation = Person.checkPersonId( id);
+    if ((constraintViolation instanceof NoConstraintViolation) && id) {
+      const memberDocSn = await getDoc( fsDoc( fsDb, "members", id));
+      if (!memberDocSn.exists()) {
+        constraintViolation = new ReferentialIntegrityConstraintViolation(
+          `There is no member record with this member ID ${id}!`);
+      }
+    }
+    return constraintViolation;
+  };
 }
 
 Member.converter = {
@@ -48,30 +78,32 @@ Member.converter = {
 Member.add = async function (slots) {
   let member = null;
   try {
-    // create database entry with auto-generated id and set it as personId
-    const memberDocRef = fsDoc(fsColl( fsDb, "members"));
-    slots.personId = parseInt(memberDocRef.id);
-
     member = new Member( slots);
-    // TODO not needed anymore because of auto-generation
     let validationResult = await Member.checkPersonIdAsId( member.personId);
     if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
-    //const memberDocRef = fsDoc( fsDb, "members", slots.personId.toString())
-      //.withConverter( Member.converter);
-    await setDoc( memberDocRef, member);
-    console.log(`Member with id = "${member.personId}" created!`);
+
   } catch (e) {
     console.error(`${e.constructor.name}: ${e.message} + ${e}`);
+    member = null;
+  }
+  if (member) {    
+    try {
+      const memberDocRef = fsDoc( fsDb, "members", slots.personId).withConverter( Member.converter);
+      await setDoc( memberDocRef, member);
+      console.log(`Member with id = "${member.personId}" created!`);
+    } catch (e) {
+      console.error(`${e.constructor.name}: ${e.message} + ${e}`);
+    }
   }
 };
 /**
  * Load a member record from Firestore
- * @param personId: {object}
+ * @param personId: {string}
  * @returns {Promise<*>} memberRecord: {array}
  */
 Member.retrieve = async function (personId) {
   try {
-    const memberRec = (await getDoc( fsDoc(fsDb, "members", personId.toString())
+    const memberRec = (await getDoc( fsDoc(fsDb, "members", personId)
       .withConverter( Member.converter))).data();
     console.log(`Member record "${memberRec.personId}" retrieved.`);
     return memberRec;
@@ -104,7 +136,7 @@ Member.update = async function (slots) {
   let noConstraintViolated = true,
   validationResult = null,
   memberBeforeUpdate = null;
-  const memberDocRef = fsDoc( fsDb, "members", slots.personId.toString()).withConverter( Member.converter),
+  const memberDocRef = fsDoc( fsDb, "members", slots.personId).withConverter( Member.converter),
     clubsCollRef = fsColl(fsDb, "clubs"),
     updatedSlots = {};
   try {

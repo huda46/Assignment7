@@ -32,7 +32,8 @@ function handleAuthorization( userStatus, currentPage, email) {
   // declare variables for current page and for accessing UI elements
   const divLoginMgmtEl = document.getElementById("login-management"),
     startPage = ["/","/index.html"],
-    authorizedPages = startPage.concat(["/retrieveAndListAllPersons.html"]);
+    startPageLoggedIn = ["/menu.html"],
+    authorizedPages = startPage.concat(["/retrieveAndListAllClubs.html", "/menu.html"]);
   switch (userStatus) {
     case "Anonymous":
       // if user is not authorized to current page, restrict access & redirect to sign up page
@@ -43,14 +44,14 @@ function handleAuthorization( userStatus, currentPage, email) {
 
     case "Registered with non-verified email":
       // if user is not authorized to current page, restrict access & redirect to start page
-      if (!authorizedPages.includes( currentPage)) window.location.pathname = "/index.html";
+      if (!authorizedPages.includes( currentPage)) window.location.pathname = "/menu.html";
       else divLoginMgmtEl.appendChild( createSignOutUI( email, true));
       console.log(`Authenticated as "${userStatus}" (${email})`);
       break;
 
     case "Registered with verified email":
       // if current page is start page grant access to the four database operations
-      if (startPage.includes( currentPage)) {
+      if (startPageLoggedIn.includes( currentPage)) {
         // declare variables for accessing UI elements
         const clearDataBtn = document.getElementById("clearData"),
           generateDataBtns = document.querySelectorAll(".generateTestData"),

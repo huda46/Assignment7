@@ -33,6 +33,20 @@ function isIntegerOrIntegerString( x) {
 }
 
 /**
+ * Convert Firestore timeStamp object to Date string in format YYYY-MM-DD
+ * @param {object} timeStamp A Firestore timeStamp object
+ */
+function date2IsoDateString(timeStamp) {
+  const dateObj = timeStamp.toDate();
+  let  y = dateObj.getFullYear(),
+    m = "" + (dateObj.getMonth() + 1),
+    d = "" + dateObj.getDate();
+  if (m.length < 2) m = "0" + m;
+  if (d.length < 2) d = "0" + d;
+  return [y, m, d].join("-");
+}
+
+/**
  * Fill a select element with option elements created from a 
  * map of objects 
  *
@@ -142,5 +156,5 @@ function createModalFromChange(change) {
   divModalWindowEl.classList.add("show-modal");
 }
 
-export { isNonEmptyString, isIntegerOrIntegerString, fillSelectWithOptions, 
+export { date2IsoDateString, isNonEmptyString, isIntegerOrIntegerString, fillSelectWithOptions, 
   createOption , showProgressBar , hideProgressBar, createModalFromChange};

@@ -5,7 +5,7 @@ import { applyActionCode, confirmPasswordReset, signInWithEmailAndPassword,
 const mode = getParameterByName("mode");
 const actionCode = getParameterByName("oobCode");
 const [sectionVeriEmailEl, sectionRstPswEl]
-  = document.querySelectorAll("main>div>section");
+  = document.querySelectorAll("main>div>div>section");
 
 switch (mode) {
   case "verifyEmail":

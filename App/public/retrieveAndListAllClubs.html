@@ -3,27 +3,26 @@
 <head>
   <meta charset="UTF-8"/>
   <title>BTU-WellnessClub Application: Retrieve and List all clubs and join</title>
-  <script src="js/v/retrieveAndListAllPersons.mjs" type="module"></script>
+  <script src="js/v/retrieveAndListAllClubs.mjs" type="module"></script>
   <link rel="icon" href="./Logo.png"/>
   <link rel="stylesheet" href="css/normalize.min.css"/>
   <link rel="stylesheet" href="css/crud.css"/>
 </head>
 <body>
-  <!-- not finish yet!  -->
 <header>
   <div id="login-management"></div>
   <div class="wrapper clearfix">
     <div class="title">
-  <h1>See all clubs and join one or more!</h1>
-</div>
-</div>
+      <h1>See all clubs and join one or more!</h1>
+    </div>
+  </div>
 </header>
 <main>
   <div class="wrapper clearfix">
     <div>
       <label>Ordered by:
         <select>
-          <option value="personId">ClubId</option>
+          <option value="clubId">ClubId</option>
           <option value="name">Name</option>
           <option value="type">Status</option>
         </select>
@@ -34,32 +33,31 @@
       </span>
     </div>
     <progress hidden="hidden" max="100">%</progress>
-  <table id="clubs">
-    <thead>
-    <tr>
-      <th>ClubID</th>
-      <th>Club name</th>
-      <th>Status</th>
-      <th value="type">Club details</th>
-      <th value="type">join club</th>
-    </tr>
-<!-- this row is added to test the view of UI table  -->
-    <tr>
-      <th></th>
-      <td></td>
-      <td></td>
+    <table id="clubs">
+      <thead>
+      <tr>
+        <th>ClubID</th>
+        <th>Club name</th>
+        <th>Status</th>
+        <th value="type">Club details</th>
+        <th value="type">join club</th>
+      </tr>
+      <tr>
+        <th></th>
+        <td></td>
+        <td></td>
         <td>
           <button type="button" class="details">details</button>
         </td>
         <td>
           <button type="button" class="join">join</button>
         </td>
-    </tr>
-  </thead>
-<tbody>
-  </table>
-  <button onclick="history.back()" class="back">Back to menu</button>
-</div>
+      </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button onclick="history.back()" class="back">Back to menu</button>
+  </div>
 </main>
 </body>
 </html>
