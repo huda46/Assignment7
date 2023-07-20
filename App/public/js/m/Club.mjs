@@ -15,7 +15,7 @@ const StatusEL = new Enumeration(["Open","Inactive","Full","Beta Phase"]);
 /**
  * Constructor function for the class Club
  * @constructor
- * @param {{clubId: number, name: string, type: ClubTypeEL}} slots - Object creation slots.
+ * @param {{clubId: number, name: string, status: StatusEL}} slots - Object creation slots.
  */
 class Club {
   // record parameter with the ES6 syntax for function parameter destructuring

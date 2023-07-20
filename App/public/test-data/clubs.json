@@ -1,0 +1,610 @@
+[
+  {
+    "clubId": 1,
+    "name": "Zumba fitness",
+    "status": 1,
+    "trainerIdRefs": [
+      {
+        "id": "15",
+        "lastname": "Brian Carr"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "42",
+        "lastname": "Vanessa James"
+      }
+    ],
+    "fee": 15,
+    "description": "Exemple description text",
+    "contactInfo": "d_zumba.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "1",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "3",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "6",
+        "lastname": "Scherer"
+      }
+    ],
+    "startDate": "2023-04-17",
+    "endDate": "2023-09-4",
+    "daysInWeek": 1,
+    "Time": "17:00",
+    "location": "SportHalle 1"
+  },
+  {
+    "clubId": 2,
+    "name": "Volleyball Club",
+    "status": 1,
+    "trainerIdRefs": [
+      {
+        "id": "16",
+        "lastname": "Julia Scherer"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "40",
+        "lastname": "David Black"
+      }
+    ],
+    "fee": 10,
+    "description": "Exemple description text",
+    "contactInfo": "Volleyball.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "9",
+        "lastname": "Maurer"
+      },
+      {
+        "id": "6",
+        "lastname": "Scherer"
+      },
+      {
+        "id": "4",
+        "lastname": "Nadel"
+      }
+    ],
+    "startDate": "2023-04-20",
+    "endDate": "2023-09-07",
+    "daysInWeek": 4,
+    "Time": "18:00",
+    "location": "SportHalle 2"
+  },
+  {
+    "clubId": 3,
+    "name": "Bachata dance Club",
+    "status": 3,
+    "trainerIdRefs": [
+      {
+        "id": "17",
+        "lastname": "Jessica Hill"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "42",
+        "lastname": "Vanessa James"
+      }
+    ],
+    "fee": 15,
+    "description": "Exemple description text",
+    "contactInfo": "d_bachata.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "5",
+        "lastname": "Ziegler"
+      },
+      {
+        "id": "6",
+        "lastname": "Scherer"
+      },
+      {
+        "id": "2",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "4",
+        "lastname": "Nadel"
+      }
+    ],
+    "startDate": "2023-04-18",
+    "endDate": "2023-09-05",
+    "daysInWeek": 2,
+    "Time": "17:30",
+    "location": "SportHalle 1"
+  },
+  {
+    "clubId": 4,
+    "name": "Fitness Club",
+    "status": 1,
+    "trainerIdRefs": [
+      {
+        "id": "18",
+        "lastname": "Alexander Beike"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "41",
+        "lastname": "Eric Fisher"
+      }
+    ],
+    "fee": 15,
+    "description": "Exemple description text",
+    "contactInfo": "fitness.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "5",
+        "lastname": "Ziegler"
+      },
+      {
+        "id": "8",
+        "lastname": "Beike"
+      },
+      {
+        "id": "9",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "4",
+        "lastname": "Nadel"
+      }
+    ],
+    "startDate": "2023-04-25",
+    "endDate": "2023-09-26",
+    "daysInWeek": "2", 
+    "Time": "15:00",
+    "location": "SportHalle 3"
+  },
+  {
+    "clubId": 5,
+    "name": "Handball Club",
+    "status": 4,
+    "trainerIdRefs": [
+      {
+        "id": "19",
+        "lastname": "Jasmine North"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "40",
+        "lastname": "David Black"
+      }
+    ],
+    "fee": 0,
+    "description": "Exemple description text",
+    "contactInfo": "handball.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "4",
+        "lastname": "Nadel"
+      },
+      {
+        "id": "8",
+        "lastname": "Beike"
+      },
+      {
+        "id": "9",
+        "lastname": "Maurer"
+      },
+      {
+        "id": "7",
+        "lastname": "Bachmeier"
+      }
+    ],
+    "startDate": "2023-05-01",
+    "endDate": "2023-09-18",
+    "daysInWeek": 1,
+    "Time": "17:00",
+    "location": "SportHalle 2"
+  },
+  {
+    "clubId": 6,
+    "name": "Gymnastics",
+    "status": 1,
+    "trainerIdRefs": [
+      {
+        "id": "20",
+        "lastname": "Christian Walker"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "43",
+        "lastname": "Brian Carr"
+      }
+    ],
+    "fee": 12,
+    "description": "Exemple description text",
+    "contactInfo": "gymnastics.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "1",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "2",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "9",
+        "lastname": "Maurer"
+      },
+      {
+        "id": "7",
+        "lastname": "Bachmeier"
+      },
+      {
+        "id": "11",
+        "lastname": "Brown"
+      }
+    ],
+    "startDate": "2023-06-08",
+    "endDate": "2023-09-28",
+    "daysInWeek": 4,
+    "Time": "14:00",
+    "location": "SportHalle 3"
+  },
+  {
+    "clubId": 7,
+    "name": "Belly dance Club",
+    "status": 2,
+    "trainerIdRefs": [
+      {
+        "id": "21",
+        "lastname": "Adam Short"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "42",
+        "lastname": "Vanessa James"
+      }
+    ],
+    "fee": 0,
+    "description": "Exemple description text",
+    "contactInfo": "d_belly.club@btu.de",
+    "clubMemberIdRefs": [],
+    "startDate": "",
+    "endDate": "",
+    "daysInWeek": "",
+    "Time": "",
+    "location": "SportHalle 1"
+  },
+  {
+    "clubId": 8,
+    "name": "Basketball club",
+    "status": 1,
+    "trainerIdRefs": [
+      {
+        "id": "22",
+        "lastname": "Hannah Morgan"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "40",
+        "lastname": "David Black"
+      }
+    ],
+    "fee": 18,
+    "description": "Exemple description text",
+    "contactInfo": "basketball.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "1",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "10",
+        "lastname": "Foerster"
+      },
+      {
+        "id": "3",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "6",
+        "lastname": "Scherer"
+      }
+    ],
+    "startDate": "2023-04-25",
+    "endDate": "2023-09-12",
+    "daysInWeek": 2,
+    "Time": "16:00",
+    "location": "SportHalle 2"
+  },
+  {
+    "clubId": 9,
+    "name": "Football Club",
+    "status": 1,
+    "trainerIdRefs": [
+      {
+        "id": "23",
+        "lastname": "Megan Foerster"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "40",
+        "lastname": "David Black"
+      }
+    ],
+    "fee": 15,
+    "description": "Exemple description text",
+    "contactInfo": "football.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "10",
+        "lastname": "Foerster"
+      },
+      {
+        "id": "11",
+        "lastname": "Brown"
+      },
+      {
+        "id": "6",
+        "lastname": "Scherer"
+      }
+    ],
+    "startDate": "2023-04-28",
+    "endDate": "2023-09-09",
+    "daysInWeek": 5,
+    "Time": "19:00",
+    "location": "SportHalle 4"
+  },
+  {
+    "clubId": 10,
+    "name": "Tennis",
+    "status": 1,
+    "trainerIdRefs": [
+      {
+        "id": 1,
+        "lastname": ""
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "41",
+        "lastname": "Eric Fisher"
+      }
+    ],
+    "fee": 20,
+    "description": "Exemple description text",
+    "contactInfo": "tennis.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "1",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "8",
+        "lastname": "Beike"
+      },
+      {
+        "id": "10",
+        "lastname": "Foerster"
+      }
+    ],
+    "startDate": "2023-04-25",
+    "endDate": "2023-09-19",
+    "daysInWeek": 2,
+    "Time": "15:00",
+    "location": "SportHalle 4"
+  },
+  {
+    "clubId": 11,
+    "name": "Table Tennis Club",
+    "status": 1,
+    "trainerIdRefs": [
+      {
+        "id": "30",
+        "lastname": "Melanie Baker"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "41",
+        "lastname": "Eric Fisher"
+      }
+    ],
+    "fee": 10,
+    "description": "Exemple description text",
+    "contactInfo": "tbtennis.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "10",
+        "lastname": "Foerster"
+      },
+      {
+        "id": "8",
+        "lastname": "Beike"
+      },
+      {
+        "id": "12",
+        "lastname": "Black"
+      }
+    ],
+    "startDate": "2023-04-27",
+    "endDate": "2023-09-21",
+    "daysInWeek": 3,
+    "Time": "10:00",
+    "location": "SportHalle 2"
+  },
+  {
+    "clubId": 12,
+    "name": "Judo",
+    "status": 3,
+    "trainerIdRefs": [
+      {
+        "id": "31",
+        "lastname": "Jad Black"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "41",
+        "lastname": "Eric Fisher"
+      }
+    ],
+    "fee": 12,
+    "description": "Exemple description text",
+    "contactInfo": "judo.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "2",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "2",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "8",
+        "lastname": "Beike"
+      },
+      {
+        "id": "12",
+        "lastname": "Black"
+      }
+    ],
+    "startDate": "2023-04-18",
+    "endDate": "2023-09-12",
+    "daysInWeek": 2,
+    "Time": "10:00",
+    "location": "SportHalle 3"
+  },
+  {
+    "clubId": 13,
+    "name": "Running Club",
+    "status": 1,
+    "trainerIdRefs": [
+      {
+        "id": "32",
+        "lastname": "Justin Mustermann"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "43",
+        "lastname": "Brian Carr"
+      }
+    ],
+    "fee": 10,
+    "description": "Exemple description text",
+    "contactInfo": "running.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "5",
+        "lastname": "Ziegler"
+      },
+      {
+        "id": "2",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "8",
+        "lastname": "Beike"
+      },
+      {
+        "id": "7",
+        "lastname": "Bachmeier"
+      }
+    ],
+    "startDate": "2023-04-25",
+    "endDate": "2023-09-18",
+    "daysInWeek": 1,
+    "Time": "16:00",
+    "location": "SportHalle 4"
+  },
+  {
+    "clubId": 14,
+    "name": "Hip-Hop dance club",
+    "status": 3,
+    "trainerIdRefs": [
+      {
+        "id": "33",
+        "lastname": "Paul Gray"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "42",
+        "lastname": "Vanessa James"
+      }
+    ],
+    "fee": 15,
+    "description": "Exemple description text",
+    "contactInfo": "d_hiphop.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "5",
+        "lastname": "Ziegler"
+      },
+      {
+        "id": "6",
+        "lastname": "Scherer"
+      },
+      {
+        "id": "2",
+        "lastname": "Mustermann"
+      },
+      {
+        "id": "4",
+        "lastname": "Nadel"
+      }
+    ],
+    "startDate": "2023-04-19",
+    "endDate": "2023-08-14",
+    "daysInWeek": 4,
+    "Time": "18:00",
+    "location": "SportHalle 1"
+  },
+  {
+    "clubId": 15,
+    "name": "Kickboxing",
+    "status": 4,
+    "trainerIdRefs": [
+      {
+        "id": "34",
+        "lastname": "Tim Lee"
+      }
+    ],
+    "chair_id": [
+      {
+        "id": "41",
+        "lastname": "Eric Fisher"
+      }
+    ],
+    "fee": 0,
+    "description": "Exemple description text",
+    "contactInfo": "kickboxing.club@btu.de",
+    "clubMemberIdRefs": [
+      {
+        "id": "9",
+        "lastname": "Maurer"
+      },
+      {
+        "id": "6",
+        "lastname": "Scherer"
+      },
+      {
+        "id": "4",
+        "lastname": "Nadel"
+      }
+    ],
+    "startDate": "2023-07-17",
+    "endDate": "2023-09-25",
+    "daysInWeek": 1,
+    "Time": "11:00",
+    "location": "SportHalle 3"
+  }
+]
