@@ -46,12 +46,11 @@ typeEl.addEventListener("input", function () {
 // manage sign up event
 signUpBtn.addEventListener("click", async function () {
   const slots = {
-    personId: 0,
+    personId: "",
     firstname: firstnameEl.value,
     lastname: lastnameEl.value,
     type: typeEl.value
   }
-  console.log(`in signUp try to get slots ${slots}`);
   firstnameEl.setCustomValidity( Member.checkName( slots.firstname).message);
   lastnameEl.setCustomValidity( Member.checkName( slots.lastname).message);
   typeEl.setCustomValidity( Member.checkType( slots.type).message);
@@ -69,12 +68,13 @@ signUpBtn.addEventListener("click", async function () {
       const userCredential = await createUserWithEmailAndPassword( auth, emailEl.value, passwordEl.value);
       // get user reference from Firebase
       const userRef = userCredential.user;
+      slots.personId = userRef.uid;
       // send verification email
       await sendEmailVerification( userRef);
       console.log (`User ${emailEl.value} became "Registered"`);
       await Member.add( slots);
       alert (`Account created ${emailEl.value}. Check your email for instructions to verify this account.`);
-      window.location.pathname = "/index.html"; // redirect user to start page
+      window.location.pathname = "/menu.html"; // redirect user to menu page
     } catch (e) {
       const divMsgEl = document.getElementById("message");
       divMsgEl.textContent = e.message;

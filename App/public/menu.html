@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Assignment 7C-1: BTU-WellnessClub Application</title>
+  <title>BTU-WellnessClub Application</title>
   <meta name="description" content="BTU-WellnessClub Application"/>
   <link rel="icon" href="./Logo.png"/>
   <link rel="stylesheet" href="css/normalize.min.css"/>
   <link rel="stylesheet" href="css/main.css"/>
   <script type="module">
-    import {handleAuthentication} from "./js/v/accessControl.mjs"
-    import Person from "./js/m/Person.mjs"
+    import { handleAuthentication } from "./js/v/accessControl.mjs";
+    import { generateTestData, clearData } from "./js/auxDataMngtOps.mjs";
     
     handleAuthentication();
       const clearButton = document.getElementById("clearData"),
@@ -17,53 +17,56 @@
       // set event handlers for the buttons "clearData" and "generateTestData"
       clearButton.addEventListener("click", Person.clearData);
       for (const btn of generateTestDataButtons) {
-        btn.addEventListener("click", Person.generateTestData);
+        btn.addEventListener("click", generateTestData);
       }
   </script>
 </head>
 <body>
   <header>
     <div id="login-management">
-    <div class="wrapper clearfix">
-      <div class="title">
-    <h1>Welcome to main menu</h1>
-  </div>
+      <div class="wrapper clearfix">
+        <div class="title">
+          <h1>Welcome to main menu</h1>
+        </div>
+      </div>
+    </div>
   </header>
   <main>
     <div class="wrapper clearfix">
-    <div class="container">
-      <div class="imgcontainer">
-        <img src="./Logo.png" alt="Logo" class="logo">
+      <div class="container">
+        <div class="imgcontainer">
+          <img src="./Logo.png" alt="Logo" class="logo">
+        </div>
+        <div class="two-col-menu">
+          <menu class="crud">
+            <div role="menuitem">
+              <p>Now you can see all the clubs and join your favourite one/s!</p>
+              <button type="button" onclick="window.location.href = 'retrieveAndListAllClubs.html';">Join a club</button>
+            </div>
+            <div role="menuitem">
+              <p>Manage your own data</p>
+              <button type="button" onclick="window.location.href = 'manageAccount.html';">Manage your data</button>
+            </div>
+            <div role="menuitem">
+              <p>Manage the data of clubs "Only for chairs available"</p>
+              <button type="button" onclick="window.location.href = 'manageDataClub.html';">Manage Data Club</button>
+            </div>
+            <div role="menuitem">
+              <p>Manage the members of the club "Only for chairs available"</p>
+              <button type="button" onclick="window.location.href = 'manageDataMember.html';">Manage Data Members</button>
+            </div>
+          </menu>
+          <menu>
+            <div role="menuitem">
+              <button class="generateTestData" type="button" disabled="disabled">Test data</button>
+            </div>
+            <div role="menuitem">
+              <button id="clearData" type="button" disabled="disabled">Clear database</button>
+            </div>
+          </menu>
+        </div>
       </div>
-    <div class="two-col-menu">
-      <menu class="crud">
-        <div role="menuitem">
-          <p>Now you can see all the clubs and join your favourite one/s!</p>
-          <button type="button" onclick="window.location.href = 'retrieveAndListAllClubs.html';">Join a club</button>
-        </div>
-        <div role="menuitem">
-          <p>Manage your own data</p>
-          <button type="button" onclick="window.location.href = 'manageAccount.html';">Manage your data</button>
-        </div>
-        <div role="menuitem">
-          <p>Manage the data of clubs "Only for chairs available"</p>
-          <button type="button" onclick="window.location.href = 'manageDataClub.html';">Manage Data Club</button>
-        </div>
-        <div role="menuitem">
-          <p>Manage the data of Members "Only for chairs available"</p>
-          <button type="button" onclick="window.location.href = 'manageDataMember.html';">Manage Data Members</button>
-        </div>
-      </menu>
-      <menu>
-        <div role="menuitem">
-          <button class="generateTestData" type="button" disabled="disabled">Test data</button>
-        </div>
-        <div role="menuitem">
-          <button id="clearData" type="button" disabled="disabled">Clear database</button>
-        </div>
-      </menu>
     </div>
-    </div>
-</main>
+  </main>
 </body>
 </html>

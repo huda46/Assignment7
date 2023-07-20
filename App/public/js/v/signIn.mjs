@@ -1,8 +1,3 @@
-/**
- * @fileOverview  View methods for the "sign in" button
- * @author Gerd Wagner
- * @author Juan-Francisco Reyes
- */
 import { auth } from "../initFirebase.mjs";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
 
@@ -16,7 +11,7 @@ signInBtn.addEventListener("click", async function () {
     try {
       // sign in user using email + password
       await signInWithEmailAndPassword( auth, email, password);
-      window.location.pathname = "/index.html"; // redirect user to start page
+      window.location.pathname = "/menu.html"; // redirect user to menu page
     } catch (e) {
       const divMsgEl = document.getElementById("message");
       divMsgEl.textContent = e.message;

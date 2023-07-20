@@ -6,59 +6,42 @@
   <meta name="description" content="BTU-WellnessClub Application"/>
   <link rel="icon" href="./Logo.png"/>
   <link rel="stylesheet" href="css/normalize.min.css"/>
-  <link rel="stylesheet" href="css/signIn-Up.css"/>
+  <link rel="stylesheet" href="css/SignIn-Up.css"/>
   <link rel="stylesheet" href="css/main.css"/>
   <script type="module">
-    import {handleAuthentication} from "./js/v/accessControl.mjs"
-    import Club from "./js/m/Club.mjs"
-    
+    import {handleAuthentication} from "./js/v/accessControl.mjs";
     handleAuthentication();
-      const clearButton = document.getElementById("clearData"),
-        generateTestDataButtons = document.querySelectorAll("button.generateTestData");
-      // set event handlers for the buttons "clearData" and "generateTestData"
-      clearButton.addEventListener("click", Club.clearData);
-      for (let btn of generateTestDataButtons) {
-        btn.addEventListener("click", Club.generateTestData);
-      }
   </script>
 </head>
 <body>
 <header>
-  <div id="login-management">
+  <div id="login-management"></div>
   <div class="wrapper clearfix">
     <div class="title">
-    <h1>Welcome to BTU-WellnessClubApp</h1>
+      <h1>Welcome to BTU-WellnessClubApp</h1>
     </div>
-  </header>
+  </div>
+</header>
   <main>
     <div class="wrapper clearfix">
-    <div class="container">
-      <div class="imgcontainer">
-        <img src="./Logo.png" alt="Logo" class="logo">
+      <div class="container">
+        <div class="imgcontainer">
+          <img src="./Logo.png" alt="Logo" class="logo">
+        </div>
+        <div class="two-col-menu">
+          <menu class="crud">
+            <div role="menuitem">
+              <p>Create an account to join a club:</p>
+              <button type="button" onclick="window.location.href = 'signUp.html'">Create an account</button>
+            </div>
+            <div role="menuitem">
+              <p>You can show the list of clubs without signIn:</p>
+              <button type="button" onclick="window.location.href = 'retrieveAndListAllClubs.html'">Show the list of all clubs</button>
+            </div>
+          </menu>
+        </div>
       </div>
-    <div class="two-col-menu">
-      <menu class="crud">
-        <div role="menuitem">
-          <p>Create an account to join a club:</p>
-          <button type="button" onclick="window.location.href = 'createAccount.html';">Create an account</button>
-        </div>
-          <div role="menuitem">
-            <p>You can show the list of clubs without signIn:</p>
-          <button type="button" onclick="window.location.href = 'retrieveAndListAllClubs.html';">Show the list of all clubs</button>
-        </div>
-        </menu>
-      <menu>
-        <div role="menuitem">
-          <p>Hier you can generate Testdata:</p>
-          <button class="generateTestData" type="button" disabled="disabled">Test data</button>
-        </div>
-        <p>Or clear the database:</p>
-        <div role="menuitem">
-          <button id="clearData" type="button" disabled="disabled">Clear database</button>
-        </div>
-      </menu>
     </div>
-    </div>
-</main>
+  </main>
 </body>
 </html>
