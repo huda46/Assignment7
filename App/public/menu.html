@@ -15,7 +15,7 @@
       const clearButton = document.getElementById("clearData"),
         generateTestDataButtons = document.querySelectorAll("button.generateTestData");
       // set event handlers for the buttons "clearData" and "generateTestData"
-      clearButton.addEventListener("click", Person.clearData);
+      clearButton.addEventListener("click", clearData);
       for (const btn of generateTestDataButtons) {
         btn.addEventListener("click", generateTestData);
       }
@@ -23,11 +23,10 @@
 </head>
 <body>
   <header>
-    <div id="login-management">
-      <div class="wrapper clearfix">
-        <div class="title">
-          <h1>Welcome to main menu</h1>
-        </div>
+    <div id="login-management"></div>
+    <div class="wrapper clearfix">
+      <div class="title">
+        <h1>Welcome to main menu</h1>
       </div>
     </div>
   </header>

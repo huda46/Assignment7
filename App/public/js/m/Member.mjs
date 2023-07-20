@@ -26,10 +26,10 @@ class Member extends Person {
         validationResult = new MandatoryValueConstraintViolation(
             "A value for the person ID must be provided!");
       } else {
-        const personDocSn = await getDoc( fsDoc( fsDb, "members", id));
-        if (personDocSn.exists()) {
+        const memberDocSn = await getDoc( fsDoc( fsDb, "members", id));
+        if (memberDocSn.exists()) {
           validationResult = new UniquenessConstraintViolation(
-            "There is already a person record with this Id!");
+            "There is already a member record with this ID!");
         } else {
           validationResult = new NoConstraintViolation();
         }
@@ -136,7 +136,7 @@ Member.update = async function (slots) {
   let noConstraintViolated = true,
   validationResult = null,
   memberBeforeUpdate = null;
-  const memberDocRef = fsDoc( fsDb, "members", slots.personId).withConverter( Member.converter),
+  const memberDocRef = fsDoc(fsDb, "members", slots.personId).withConverter( Member.converter),
     clubsCollRef = fsColl(fsDb, "clubs"),
     updatedSlots = {};
   try {

@@ -28,10 +28,10 @@ class Staff extends Person {
         validationResult = new MandatoryValueConstraintViolation(
             "A value for the person ID must be provided!");
       } else {
-        const personDocSn = await getDoc( fsDoc( fsDb, "staffs", id));
-        if (personDocSn.exists()) {
+        const staffDocSn = await getDoc( fsDoc( fsDb, "staffs", id));
+        if (staffDocSn.exists()) {
           validationResult = new UniquenessConstraintViolation(
-            "There is already a person record with this Id!");
+            "There is already a staff record with this ID!");
         } else {
           validationResult = new NoConstraintViolation();
         }

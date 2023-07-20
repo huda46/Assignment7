@@ -1,11 +1,7 @@
-/**
- * @fileOverview  Auxiliary data management procedures
- * @author Gerd Wagner
- * @author Juan-Francisco Reyes
- */
-import { fsDb } from "./initFirebase.mjs";
+import { auth, fsDb } from "./initFirebase.mjs";
 import { collection as fsColl, getDocs, orderBy }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
 import Member from "./m/Member.mjs";
 import Staff from "./m/Staff.mjs";
 import Club from "./m/Club.mjs";
@@ -44,21 +40,33 @@ async function generateTestData () {
 async function clearData () {
   try {
     if (confirm("Do you really want to delete all test data?")) {
+      // save own account, then delete everything and recreate own account
+      let savedAccountData;
+      onAuthStateChanged(auth, async function (user) {
+        if (user) {
+          const userId = user.uid;
+          savedAccountData = await Member.retrieve( userId);
+        }
+      });
+
       console.log("Clearing clubs data...");
       const clubsCollRef = fsColl( fsDb, "clubs");
       const clubQrySns = (await getDocs( clubsCollRef, orderBy( "clubId")));
-      await Promise.all( clubQrySns.docs.map( d => Club.destroy( d.id)))
+      await Promise.all( clubQrySns.docs.map( d => Club.destroy( d.data())))
       console.log(`${clubQrySns.docs.length} club data deleted.`);
       console.log("Clearing member data...");
       const membersCollRef = fsColl( fsDb, "members");
       const memberQrySns = (await getDocs( membersCollRef, orderBy( "personId")));
-      await Promise.all( memberQrySns.docs.map( d => Member.destroy( d.data())))
+      await Promise.all( memberQrySns.docs.map( d => Member.destroy( d.id)))
       console.log(`${memberQrySns.docs.length} member data deleted.`);
       console.log("Clearing staff data...");
       const staffsCollRef = fsColl( fsDb, "staffs");
       const staffQrySns = (await getDocs( staffsCollRef, orderBy( "personId")));
-      await Promise.all( staffQrySns.docs.map( d => Staff.destroy( d.data())))
+      await Promise.all( staffQrySns.docs.map( d => Staff.destroy( d.id)))
       console.log(`${staffQrySns.docs.length} staff dara deleted.`);
+
+      // recreate saved account
+      await Member.add( savedAccountData);
     }
   } catch (e) {
     console.error(`${e.constructor.name}: ${e.message}`);

@@ -1,9 +1,10 @@
 import { handleAuthentication } from "./accessControl.mjs";
 import Member from "../m/Member.mjs";
 import { PersonTypeEL } from "../m/Person.mjs";
-import { hideProgressBar, showProgressBar } from "../../lib/util.mjs";
+import { hideProgressBar, showProgressBar, fillSelectWithOptions } 
+  from "../../lib/util.mjs";
 import { auth } from "../initFirebase.mjs";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
+import { onAuthStateChanged, deleteUser } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-auth.js";
 
 handleAuthentication();
 
@@ -33,20 +34,16 @@ onAuthStateChanged(auth, async function (user) {
     commitUpBtn.disabled = responseValidation.message;
     commitDeBtn.disabled = responseValidation.message;
     memberIdEl.value = userId;
+    
+    const memberRec = await Member.retrieve( userId);
+    firstnameEl.value = memberRec.firstname;
+    lastnameEl.value = memberRec.lastname;
+    typeEl.value = memberRec.type;
   }
 });
 
 // set up the type selection list
 fillSelectWithOptions( typeEl, PersonTypeEL.labels, true);
-
-memberIdEl.addEventListener("blur", async function () {
-  if (memberIdEl.checkValidity() && memberIdEl.value) {
-    const memberRec = await Member.retrieve( memberIdEl.value);
-    firstnameEl.value = memberRec.firstname;
-    lastnameEl.value = memberRec.lastname;
-    typeEl.value = memberRec.type;
-  } else formUpEl.reset();
-});
 
 /******************************************************************
  Add event listeners for input of data
@@ -80,11 +77,9 @@ typeEl.addEventListener("input", function () {
   
   // commit the update only if all form field values are valid
   if (formUpEl.reportValidity()) {
-    showProgressBar( progressEl);
+    //showProgressBar( progressEl);
     await Member.update( slots);
-    // drop widget content
-    formUpEl.reset();
-    hideProgressBar( progressEl);
+    //hideProgressBar( progressEl);
   }
 });
 
@@ -93,11 +88,13 @@ typeEl.addEventListener("input", function () {
  **********************************************/
 
 // handle Delete button click events
-formDeEl["commit"].addEventListener("click", async function () {
+commitDeBtn.addEventListener("click", async function () {
   const memberIdRef = memberIdEl.value;
   if (!memberIdRef) return;
   if (confirm("Do you really want to delete your account?")) {
     await Member.destroy(memberIdRef);
+    const user = auth.currentUser;
+    deleteUser(user);
     alert (`Your account was successfully deleted!`);
     window.location.pathname = "/index.html"; // redirect user to start page
   }
