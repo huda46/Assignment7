@@ -9,7 +9,7 @@ import { NoConstraintViolation, MandatoryValueConstraintViolation,
 /**
  * Constructor function for the class Member
  * @constructor
- * @param {{personId: string, name: string, type: PersonTypeEL}} slots - Object creation slots.
+ * @param {{personId: string, firstname: string, lastname: string, type: PersonTypeEL}} slots - Object creation slots.
  */
 class Member extends Person {
   // record parameter with the ES6 syntax for function parameter destructuring

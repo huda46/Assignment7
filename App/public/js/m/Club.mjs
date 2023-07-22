@@ -316,7 +316,7 @@ class Club {
       return new MandatoryValueConstraintViolation("No day provided!");
     } else if (!isIntegerOrIntegerString(day) || parseInt(day) < 1 ||
         parseInt(day) > WeekDaysEL.MAX) {
-      return new RangeConstraintViolation("The name of club must be a non-empty string!");
+      return new RangeConstraintViolation("The dayInWeek must be a non-empty string!");
     } else {
       return new NoConstraintViolation();
     }
