@@ -170,16 +170,16 @@ Member.update = async function (slots) {
   if (updatedProperties.length && noConstraintViolated) {
     try {
       const memberRefBefore
-          = {id: parseInt(slots.personId), lastname: memberBeforeUpdate.lastname},
-        memberRefAfter = {id: parseInt(slots.personId), lastname: slots.lastname},
+          = {personId: slots.personId, lastname: memberBeforeUpdate.lastname},
+        memberRefAfter = {personId: slots.personId, lastname: slots.lastname},
         q = fsQuery( clubsCollRef, where("clubMemberIdRefs", "array-contains",
           memberRefBefore)),
         clubQrySns = (await getDocs(q)),
         batch = writeBatch( fsDb); // initiate batch write
-      // iterate ID references (foreign keys) of master class objects (clubs) and
+      // iterate personId references (foreign keys) of master class objects (clubs) and
       // update derived inverse reference properties, remove/add
       await Promise.all( clubQrySns.docs.map( d => {
-        const clubDocRef = fsDoc(clubsCollRef, d.id);
+        const clubDocRef = fsDoc(clubsCollRef, d.personId);
         batch.update(clubDocRef, {clubMemberIdRefs: arrayRemove( memberRefBefore)});
         batch.update(clubDocRef, {clubMemberIdRefs: arrayUnion( memberRefAfter)});
       }));
@@ -211,15 +211,15 @@ Member.destroy = async function (slots) {
   const membersCollRef = fsColl( fsDb, "members"),
     clubsCollRef = fsColl( fsDb, "clubs");
   try {
-    const memberRef = {id: parseInt( slots.personId), lastname: slots.lastname},
-      q = fsQuery( clubsCollRef, where("clubMemberIdRefs", "array-contains", memberRef)),
-      memberDocRef = fsDoc( membersCollRef, String( slots.personId)),
+    const memberRef = {personId: slots.personId, lastname: slots.lastname};
+    const q = fsQuery( clubsCollRef, where("clubMemberIdRefs", "array-contains", memberRef)),
+      memberDocRef = fsDoc( membersCollRef, slots.personId),
       clubQrySns = (await getDocs( q)),
       batch = writeBatch( fsDb); // initiate batch write
-    // iterate ID references (foreign keys) of master class objects (clubs) and
+    // iterate personId references (foreign keys) of master class objects (clubs) and
     // delete derived inverse reference properties
     await Promise.all( clubQrySns.docs.map( d => {
-      const clubDocRef = fsDoc(clubsCollRef, d.id);
+      const clubDocRef = fsDoc(clubsCollRef, d.personId);
       batch.update(clubDocRef, {clubMemberIdRefs: arrayRemove( memberRef)});
     }));
     batch.delete( memberDocRef);

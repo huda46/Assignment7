@@ -110,7 +110,7 @@ class Club {
     this._trainerIdRefs.push( t);
   };
   removeTrainer( t) {
-    this._trainerIdRefs = this._trainerIdRefs.filter( d => d.id !== t.id);
+    this._trainerIdRefs = this._trainerIdRefs.filter( d => d.personId !== t.personId);
   }
   set trainerIdRefs( tid) {
     this._trainerIdRefs = tid;
@@ -146,7 +146,7 @@ class Club {
     this._clubMemberIdRefs.push( m);
   };
   removeMember( m) {
-    this._clubMemberIdRefs = this._clubMemberIdRefs.filter( d => d.id !== m.id);
+    this._clubMemberIdRefs = this._clubMemberIdRefs.filter( d => d.personId !== m.personId);
   }
   set clubMemberIdRefs( mid) {
     this._clubMemberIdRefs = mid;
@@ -421,11 +421,11 @@ Club.add = async function (slots) {
     validationResult = await Staff.checkPersonIdAsIdRef( club.chair_id);
     if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
     for (const a of club.trainerIdRefs) {
-      const validationResult = await Staff.checkPersonIdAsIdRef( String(a.id));
+      const validationResult = await Staff.checkPersonIdAsIdRef( a.personId);
       if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
     }
     for (const a of club.clubMemberIdRefs) {
-      const validationResult = await Member.checkPersonIdAsIdRef( String(a.id));
+      const validationResult = await Member.checkPersonIdAsIdRef( a.personId);
       if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
     }
   } catch (e) {
@@ -437,12 +437,12 @@ Club.add = async function (slots) {
         .withConverter( Club.converter),
       membersCollRef = fsColl( fsDb, "members")
         .withConverter( Member.converter);
-    const clubInverseRef = {personId: club.personId, name: club.name};
+    const clubInverseRef = {clubId: club.clubId, name: club.name};
     try {
       const batch = writeBatch( fsDb);
       await batch.set( clubDocRef, club);
       await Promise.all( club.clubMemberIdRefs.map( a => {
-        const memberDocRef = fsDoc( membersCollRef, String( a.id));
+        const memberDocRef = fsDoc( membersCollRef, a.personId);
         batch.update( memberDocRef, {listOfClubs: arrayUnion( clubInverseRef)});
       }));
       batch.commit();
@@ -549,9 +549,9 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
     try {
       const memberCollRef = fsColl( fsDb, "members")
           .withConverter( Member.converter);
-      // initialize (before and after update) inverse ID references
-      const inverseRefBefore = {personId: personId, name: clubBeforeUpdate.name};
-      const inverseRefAfter = {personId: personId, name: name};
+      // initialize (before and after update) inverse personId references
+      const inverseRefBefore = {clubId: clubId, name: clubBeforeUpdate.name};
+      const inverseRefAfter = {clubId: clubId, name: name};
       const batch = writeBatch( fsDb); // initiate batch write
 
       if (updatedSlots.status) {
@@ -564,7 +564,7 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
       }
       if (trainerIdRefsToAdd) {
         await Promise.all(trainerIdRefsToAdd.map( async a => {
-          validationResult = await Staff.checkPersonIdAsIdRef( a.id);
+          validationResult = await Staff.checkPersonIdAsIdRef( a.personId);
           if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
         }));
       }
@@ -604,7 +604,7 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
       // objects (member) Member::listOfClubs
       if (clubMemberIdRefsToRemove) {
         await Promise.all(clubMemberIdRefsToRemove.map( a => {
-          const memberDocRef = fsDoc(memberCollRef, String( a.id));
+          const memberDocRef = fsDoc(memberCollRef, a.personId);
           batch.update(memberDocRef, {listOfClubs: arrayRemove( inverseRefBefore)});
         }));
       }
@@ -612,14 +612,14 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
       // (members) Member::listOfClubs, while checking constraint violations
       if (clubMemberIdRefsToAdd) {
         await Promise.all(clubMemberIdRefsToAdd.map( async a => {
-          const memberDocRef = fsDoc(memberCollRef, String( a.id));
-          validationResult = await Member.checkPersonIdAsIdRef( a.id);
+          const memberDocRef = fsDoc(memberCollRef, a.personId);
+          validationResult = await Member.checkPersonIdAsIdRef( a.personId);
           console.log("happend error ?");
           if (!validationResult instanceof NoConstraintViolation) throw validationResult;
           batch.update(memberDocRef, {listOfClubs: arrayUnion( inverseRefAfter)});
         }));
       }
-      // if name changes, update name in ID references (array of maps) in
+      // if name changes, update name in personId references (array of maps) in
       // unchanged member objects
       if (updatedSlots.name) {
         validationResult = Club.checkName( name);
@@ -628,11 +628,11 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
           clubBeforeUpdate.clubMemberIdRefs.filter(d => !clubMemberIdRefsToAdd.includes(d))
           : clubBeforeUpdate.clubMemberIdRefs;
         await Promise.all(NoChangedMemberIdRefs.map( a => {
-          const memberDocRef = fsDoc(memberCollRef, String( a.id));
+          const memberDocRef = fsDoc(memberCollRef, a.personId);
           batch.update(memberDocRef, {listOfClubs: arrayRemove( inverseRefBefore)});
         }));
         await Promise.all(NoChangedMemberIdRefs.map( a => {
-          const memberDocRef = fsDoc(memberCollRef, String( a.id));
+          const memberDocRef = fsDoc(memberCollRef, a.personId);
           batch.update(memberDocRef, {listOfClubs: arrayUnion( inverseRefAfter)});
         }));
       }
@@ -671,7 +671,7 @@ Club.destroy = async function (clubId) {
     const batch = writeBatch( fsDb); // initiate batch write object
     // delete derived inverse reference properties, Member::/listOfClubs
     await Promise.all( clubRec.clubMemberIdRefs.map( aId => {
-      const authorDocRef = fsDoc( membersCollRef, String( aId.id));
+      const authorDocRef = fsDoc( membersCollRef, aId.personId);
       batch.update( authorDocRef, {listOfClubs: arrayRemove( inverseRef)});
     }));
     batch.delete( clubDocRef); // create club record (master)
