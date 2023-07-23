@@ -683,4 +683,3 @@ Club.destroy = async function (clubId) {
 };
 
 export { StatusEL, WeekDaysEL };
-export default Club;

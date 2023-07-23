@@ -16,7 +16,6 @@ body {font-family: Arial, sans-serif, Times, serif, Helvetica, sans-serif;}
   background: #fff8f9;
   border-radius: 15px ;
 }
-
 table {
   text-align: center;
   border-collapse:collapse;
@@ -25,7 +24,6 @@ table {
 table.full-width {
   width: 100%;
 }
-
 table, td, th {
   border: 1px solid white;
   padding: 5px;
@@ -33,16 +31,25 @@ table, td, th {
 table th {
   background: #f3f3f3;
 }
-
-
+.addM {
+  background-color: rgb(40, 148, 36);
+}
+.addC {
+  background-color: rgb(40, 148, 36);
+}
+.deleteC {
+  background-color: rgb(189, 42, 42);
+}
+.deleteM {
+  background-color: rgb(189, 42, 42);
+}
 .centered img {
   width: 320px;
   border-radius: 50%;
 }
 .button-container {
   text-align: center;
-  background-color: rgb(161, 116, 143);
-  color: white;
+  color: black;
   padding: 1px 15px;
   margin: 6px 0;
   border: none;
@@ -69,7 +76,7 @@ button:hover {
 }
 header {
   color: #7b3f5f;
-  font-family:'Times New Roman', Times, serif;
+  font-family:'arial', Times, serif;
 }
 
 .generateTestData {
