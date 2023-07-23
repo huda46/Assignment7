@@ -193,10 +193,10 @@ Staff.destroy = async function (personId) {
   try {
     const clubQrySns = (await getDocs( q)),
       batch = writeBatch( fsDb); // initiate batch write
-    // iterate ID references (foreign keys) of master class objects (books) and
+    // iterate personId references (foreign keys) of master class objects (books) and
     // update derived inverse reference property
     await Promise.all( clubQrySns.docs.map( d => {
-      batch.update( fsDoc( clubsCollRef, d.id), {
+      batch.update( fsDoc( clubsCollRef, d.personId), {
         chair_id: deleteField()
       });
     }));
