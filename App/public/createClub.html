@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>BTU-WellnessClub - create a new Club</title>
+  <meta name="description" content="BTU-WellnessClub Application"/>
+  <link rel="icon" href="./Logo.png"/>
+  <link rel="stylesheet" href="css/normalize.min.css"/>
+  <link rel="stylesheet" href="css/SignIn-Up.css"/>
+  <script src="js/v/createClub.mjs" type="module"></script>
+</head>
+<body>
+<header>
+  <div id="login-management"></div>
+  <div class="wrapper clearfix">
+    <div class="title">
+      <h1>BTU-WellnessClubApp</h1>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="wrapper clearfix">
+    <div class="container">
+      <div class="imgcontainer">
+        <img src="./Logo.png" alt="Logo" class="logo">
+      </div>
+      <h2>Create your own club</h2>
+      <form id="Create">
+        <div class="field">
+          <label>ID: <input type="text" name="clubId"/></label>
+        </div>
+        <div class="field">
+          <label>Administrator: <output name="chair_id"></output></label>
+        </div>
+        <div class="field">
+          <label>Name: <input type="text" name="name"/></label>
+        </div>
+        <div><label>Status: 
+          <select name="status"></select>
+        </label></div>
+        <div class="field">
+          <label>Fee: <input type="text" name="fee"/></label>
+        </div>
+        <div class="field">
+          <label>Description: <input type="text" name="description"/></label>
+        </div>
+        <div class="field">
+          <label>Contact information: <input type="text" name="contactInfo"/></label>
+        </div>
+        <div class="field">
+          <label>Start date: <input type="date" name="startDate"/></label>
+        </div>
+        <div class="field">
+          <label>End date: <input type="date" name="endDate"/></label>
+        </div>
+        <fieldset data-bind="days">
+          <legend>On which days:</legend>
+        </fieldset>
+        <div class="field">
+          <label>Time: <input type="time" name="time"/></label>
+        </div>
+        <div class="field">
+          <label>Location: <input type="text" name="location"/></label>
+        </div>
+        <div class="MultiSelectionWidget"></div>
+        <div class="button-group">
+          <button type="submit" name="commit">create</button>
+          <progress hidden="hidden" max="100">%</progress>
+        </div>
+      </form>
+      <button onclick="history.back()" class="back">Back to menu</button>
+    </div>
+  </div>
+</main>
+</body>
+</html>

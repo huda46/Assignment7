@@ -27,6 +27,7 @@ const memberIdEl = formUpEl["memberId"],
   
 
 onAuthStateChanged(auth, async function (user) {
+  showProgressBar( progressEl);
   if (user) {
     const userId = user.uid;
     const responseValidation = await Member.checkPersonIdAsIdRef( userId);
@@ -40,6 +41,7 @@ onAuthStateChanged(auth, async function (user) {
     lastnameEl.value = memberRec.lastname;
     typeEl.value = memberRec.type;
   }
+  hideProgressBar(progressEl);
 });
 
 // set up the type selection list

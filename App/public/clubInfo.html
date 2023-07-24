@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>BTU-WellnessClub - manage account</title>
+  <meta name="description" content="BTU-WellnessClub Application"/>
+  <link rel="icon" href="./Logo.png"/>
+  <link rel="stylesheet" href="css/normalize.min.css"/>
+  <link rel="stylesheet" href="css/SignIn-Up.css"/>
+  <script src="js/v/clubInfo.mjs" type="module"></script>
+</head>
+<body>
+<header>
+  <div id="login-management"></div>
+  <div class="wrapper clearfix">
+    <div class="title">
+      <h1>BTU-WellnessClubApp</h1>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="wrapper clearfix">
+    <div class="container">
+      <div class="imgcontainer">
+        <img src="./Logo.png" alt="Logo" class="logo">
+      </div>
+      <form id="Retrieve">
+        <div class="field">
+          <output name="clubName"></output>
+        </div>
+        <div class="field">
+          <label>Status: <output name="status"></output></label>
+        </div>
+        <div class="field">
+          <label>Administrator: <output name="chair_id"></output></label>
+        </div>
+        <div class="field">
+          <label>Fee: <output name="fee"></output></label>
+        </div>
+        <div class="field">
+          <label>Description: <output name="description"></output></label>
+        </div>
+        <div class="field">
+          <label>Contact information: <output name="contactInfo"></output></label>
+        </div>
+        <div class="field">
+          <label>Start date: <output name="startDate"></output></label>
+        </div>
+        <div class="field">
+          <label>End date: <output name="endDate"></output></label>
+        </div>
+        <div class="field">
+          <label>Frequency in week: <output name="daysInWeek"></output></label>
+        </div>
+        <div class="field">
+          <label>Time: <output name="time"></output></label>
+        </div>
+        <div class="field">
+          <label>Location: <output name="location"></output></label>
+        </div>
+        <div class="field">
+          <label>Trainers:</label>
+          <table id="trainers">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Last name</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="field">
+          <label>Members:</label>
+          <table id="members">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Last name</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <progress hidden="hidden" max="100">%</progress>
+      </form>
+      <button onclick="history.back()" class="back">Back to list</button>
+    </div>
+  </div>
+</main>
+</body>
+</html>

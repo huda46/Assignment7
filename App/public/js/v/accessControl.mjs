@@ -33,7 +33,7 @@ function handleAuthorization( userStatus, currentPage, email) {
   const divLoginMgmtEl = document.getElementById("login-management"),
     startPage = ["/","/index.html"],
     startPageLoggedIn = ["/menu.html"],
-    authorizedPages = startPage.concat(["/retrieveAndListAllClubs.html", "/menu.html"]);
+    authorizedPages = startPage.concat(["/retrieveAndListAllClubs.html", "/clubInfo.html"]);
   switch (userStatus) {
     case "Anonymous":
       // if user is not authorized to current page, restrict access & redirect to sign up page
@@ -50,6 +50,7 @@ function handleAuthorization( userStatus, currentPage, email) {
       break;
 
     case "Registered with verified email":
+      if (startPage.includes( currentPage)) window.location.pathname = "/menu.html";
       // if current page is start page grant access to the four database operations
       if (startPageLoggedIn.includes( currentPage)) {
         // declare variables for accessing UI elements

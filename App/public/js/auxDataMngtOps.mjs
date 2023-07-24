@@ -52,7 +52,7 @@ async function clearData () {
       console.log("Clearing clubs data...");
       const clubsCollRef = fsColl( fsDb, "clubs");
       const clubQrySns = (await getDocs( clubsCollRef, orderBy( "clubId")));
-      await Promise.all( clubQrySns.docs.map( d => Club.destroy( d.data())))
+      await Promise.all( clubQrySns.docs.map( d => Club.destroy( d.id)))
       console.log(`${clubQrySns.docs.length} club data deleted.`);
       console.log("Clearing member data...");
       const membersCollRef = fsColl( fsDb, "members");

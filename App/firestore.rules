@@ -2,17 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     /** VALIDATION FUNCTIONS **/
-    /** Class Person **/
-    // check if id is correct
-    function checkPersonId( id) {
-      return id != null
-             && id is string
-             && id.trim() != "";
-    }
-    // check if exist document with same ID
-    function checkPersonIdAsId( id) {
-      return !(exists(/databases/$(database)/documents/persons/$(id)));
-    }
     // check all constraints for name
     function checkName( name) {
       return name != null
@@ -26,125 +15,87 @@ service cloud.firestore {
              && type > 0
              && type < 4;
     }
-    match /persons/{document=**} {
+
+    match /members/{document=**} {
       /** RULES FOR allow read WITH CONVENIENCE METHOD - LOW GRANULARITY **/
       /** NO authentication required **/
       allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
 
-      /** RULES FOR allow write WITH STANDARD METHODS - HIGH GRANULARITY **/
-      /** authentication required **/
-      //validate when create new person record
-      allow create: if request.auth.token.email_verified == true
-                       && checkPersonIdAsId( request.resource.data.personId) == true
-                       && checkPersonId( request.resource.data.personId) == true
-                       && checkName( request.resource.data.name) == true
-                       && checkType( request.resource.data.type) == true;
+      // /** RULES FOR allow write WITH STANDARD METHODS - HIGH GRANULARITY **/
+      // /** authentication required **/
+      // //validate when create new person record
+      // // is needed else if is not possible to create a new account
+      // allow create: if request.auth.token.email_verified == false;
+      //                 //  && checkPersonIdAsIdMember( request.resource.data.personId) == true
+      //                 //  && checkPersonId( request.resource.data.personId) == true
+      //                 //  && checkName( request.resource.data.firstname) == true
+      //                 //  && checkName( request.resource.data.lastname) == true
+      //                 //  && checkType( request.resource.data.type) == true;
 
-      // validate when update person record
-      allow update: if request.auth.token.email_verified == true
-                       && (request.resource.data.diff( resource.data).affectedKeys()
-                        .hasOnly(['name', 'type']))
-                       && request.resource.data.name != null ?
-                           checkName( request.resource.data.name) : true
-                       && request.resource.data.type != null ?
-                           checkType( request.resource.data.type) : true;
+      // // validate when update person record
+      // allow update: if request.auth.token.email_verified == true
+      //                  && (request.resource.data.diff( resource.data).affectedKeys()
+      //                   .hasOnly(['firstname', 'lastname', 'type']))
+      //                  && request.resource.data.name != null ?
+      //                      checkName( request.resource.data.firstname) : true
+      //                  && request.resource.data.name != null ?
+      //                      checkName( request.resource.data.lastname) : true
+      //                  && request.resource.data.type != null ?
+      //                      checkType( request.resource.data.type) : true;
+
+      // // validate when delete club record
+      // allow delete: if request.auth.token.email_verified == true;
     }
-    /** Class Staff **/
+
     // check if id is correct
     function checkPersonId( id) {
       return id != null
              && id is string
              && id.trim() != "";
     }
+
     // check if exist document with same ID
     function checkPersonIdAsId( id) {
-      return !(exists(/databases/$(database)/documents/persons/$(id)));
+      return !(exists(/databases/$(database)/documents/staffs/$(id)));
     }
-    // check all constraints for name
-    function checkName( name) {
-      return name != null
-             && name is string
-             && name.trim() != "";
-    }
-    // if present, check if it is integer
-    function checkType( type) {
-      return type != null
-             && type is int
-             && type > 0
-             && type < 4;
-    }
-    match /persons/{document=**} {
+
+    match /staffs/{document=**} {
       /** RULES FOR allow read WITH CONVENIENCE METHOD - LOW GRANULARITY **/
       /** NO authentication required **/
       allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
 
       /** RULES FOR allow write WITH STANDARD METHODS - HIGH GRANULARITY **/
       /** authentication required **/
       //validate when create new person record
-      allow create: if request.auth.token.email_verified == true
-                       && checkPersonIdAsId( request.resource.data.personId) == true
-                       && checkPersonId( request.resource.data.personId) == true
-                       && checkName( request.resource.data.name) == true
-                       && checkType( request.resource.data.type) == true;
+      // allow create: if request.auth.token.email_verified == true
+      //                  && checkPersonIdAsId( request.resource.data.personId) == true
+      //                  && checkPersonId( request.resource.data.personId) == true
+      //                  && checkName( request.resource.data.firstname) == true
+      //                  && checkName( request.resource.data.lastname) == true
+      //                  && checkType( request.resource.data.type) == true;
 
-      // validate when update person record
-      allow update: if request.auth.token.email_verified == true
-                       && (request.resource.data.diff( resource.data).affectedKeys()
-                        .hasOnly(['name', 'type']))
-                       && request.resource.data.name != null ?
-                           checkName( request.resource.data.name) : true
-                       && request.resource.data.type != null ?
-                           checkType( request.resource.data.type) : true;
+      // // validate when update person record
+      // allow update: if request.auth.token.email_verified == true
+      //                  && (request.resource.data.diff( resource.data).affectedKeys()
+      //                   .hasOnly(['firstname', 'lastname', 'type']))
+      //                  && request.resource.data.name != null ?
+      //                      checkName( request.resource.data.firstname) : true
+      //                  && request.resource.data.name != null ?
+      //                      checkName( request.resource.data.lastname) : true
+      //                  && request.resource.data.type != null ?
+      //                      checkType( request.resource.data.type) : true;      
+                           
+      // // validate when delete staffs record
+      // allow delete: if request.auth.token.email_verified == true;
     }
-    /** Class Member **/
-    // check if id is correct
-    function checkPersonId( id) {
-      return id != null
-             && id is string
-             && id.trim() != "";
-    }
-    // check if exist document with same ID
-    function checkPersonIdAsId( id) {
-      return !(exists(/databases/$(database)/documents/persons/$(id)));
-    }
-    // check all constraints for name
-    function checkName( name) {
-      return name != null
-             && name is string
-             && name.trim() != "";
-    }
-    // if present, check if it is integer
-    function checkType( type) {
-      return type != null
-             && type is int
-             && type > 0
-             && type < 4;
-    }
-    match /persons/{document=**} {
-      /** RULES FOR allow read WITH CONVENIENCE METHOD - LOW GRANULARITY **/
-      /** NO authentication required **/
-      allow read: if request.auth != null;
-
-      /** RULES FOR allow write WITH STANDARD METHODS - HIGH GRANULARITY **/
-      /** authentication required **/
-      //validate when create new person record
-      allow create: if request.auth.token.email_verified == true
-                       && checkPersonIdAsId( request.resource.data.personId) == true
-                       && checkPersonId( request.resource.data.personId) == true
-                       && checkName( request.resource.data.name) == true
-                       && checkType( request.resource.data.type) == true;
-
-      // validate when update person record
-      allow update: if request.auth.token.email_verified == true
-                       && (request.resource.data.diff( resource.data).affectedKeys()
-                        .hasOnly(['name', 'type']))
-                       && request.resource.data.name != null ?
-                           checkName( request.resource.data.name) : true
-                       && request.resource.data.type != null ?
-                           checkType( request.resource.data.type) : true;
-    }
-
-      /** Class Club **/
+    
+    /** Class Club **/
     // check if id is correct
     function checkClubId( id) {
       return id != null
@@ -155,8 +106,9 @@ service cloud.firestore {
     function checkClubIdAsId( id) {
       return !(exists(/databases/$(database)/documents/clubs/$(id)));
     }
+    
     // check all constraints for name
-    function checkName( name) {
+    function checkClubName( name) {
       return name != null
              && name is string
              && name.trim() != "";
@@ -198,76 +150,79 @@ service cloud.firestore {
     // Check all constraints for dayInWeek
     function checkDayInWeek( dayInWeek) {
       return dayInWeek != null
-             && dayInWeek is string;
+             && dayInWeek is string
              && dayInWeek.trim() != "";
              //TODO: this constraint must be checked (not sure)                 
     }
     // Check all constraints for time
     function checkTime( time) {
       return time != null
-             && time is string;
+             && time is string
              && time.trim() != "";
              //TODO: check the form of date is missing                 
     }
     // Check all constraints for location
     function checkLocation( location) {
       return location != null
-             && location is string;
+             && location is string
              && location.trim() != "";
+    }
 
     match /clubs/{document=**} {
       /** RULES FOR allow read WITH CONVENIENCE METHOD - LOW GRANULARITY **/
       /** NO authentication required **/
       allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null;
 
       /** RULES FOR allow write WITH STANDARD METHODS - HIGH GRANULARITY **/
       /** authentication required **/
-      //validate when create new club record
-      allow create: if request.auth.token.email_verified == true
-                       && checkClubIdAsId( request.resource.data.clubId) == true
-                       && checkClubId( request.resource.data.clubId) == true
-                       && checkClubIdAsIdRef( request.resource.data.clubId) == true;
-                       && checkName( request.resource.data.name) == true
-                       && checkStatus( request.resource.data.status) == true;
-                       && checkFee( request.resource.data.fee) == true;
-                       && checkDescription( request.resource.data.description) == true;
-                       && checkContactInfo( request.resource.data.ContactInfo) == true;
-                       && checkStartDate( request.resource.data.StartDate) == true;
-                       && checkEndDate( request.resource.data.EndDate) == true;
-                       && checkDayInWeek( request.resource.data.DayInWeek) == true;
-                       && checkDaysInWeek( request.resource.data.DaysInWeek) == true;
-                       && checkTime( request.resource.data.time) == true;
-                       && checkLocation( request.resource.data.location) == true;
+      // //validate when create new club record
+      // allow create: if request.auth.token.email_verified == true
+      //                  && checkClubIdAsId( request.resource.data.clubId) == true
+      //                  && checkClubId( request.resource.data.clubId) == true
+      //                  //&& checkClubIdAsIdRef( request.resource.data.clubId) == true
+      //                  && checkClubName( request.resource.data.name) == true
+      //                  && checkStatus( request.resource.data.status) == true
+      //                  && checkFee( request.resource.data.fee) == true
+      //                  && checkDescription( request.resource.data.description) == true
+      //                  && checkContactInfo( request.resource.data.contactInfo) == true
+      //                  && checkStartDate( request.resource.data.startDate) == true
+      //                  && checkEndDate( request.resource.data.endDate) == true
+      //                  //&& checkDayInWeek( request.resource.data.DayInWeek) == true
+      //                  //&& checkDaysInWeek( request.resource.data.DaysInWeek) == true
+      //                  && checkTime( request.resource.data.time) == true
+      //                  && checkLocation( request.resource.data.location) == true;
 
 
-      // validate when update club record
-      allow update: if request.auth.token.email_verified == true
-                       && (request.resource.data.diff( resource.data).affectedKeys()
-                        .hasOnly(['name', 'type', 'status', 'fee', 'description', 'startDate', 'endDate', 'daysInWeek', 'time', 'location']))
-                       && request.resource.data.name != null ?
-                           checkName( request.resource.data.name) : true
-                       && request.resource.data.status != null ?
-                           checkStatus( request.resource.data.status) : true;
-                       && request.resource.data.fee != null ?
-                           checkFee( request.resource.data.fee) : true;
-                       && request.resource.data.description != null ?
-                           checkDescription( request.resource.data.description) : true;
-                       && request.resource.data.startDate != null ?
-                           checkStartDate( request.resource.data.startDate) : true;
-                       && request.resource.data.endDate != null ?
-                           checkEndDate( request.resource.data.endDate) : true;
-                       && request.resource.data.daysInWeek != null ?
-                           checkDayInWeek( request.resource.data.daysInWeek) : true;
-                       && request.resource.data.daysInWeek != null ?
-                           checkDaysInWeek( request.resource.data.daysInWeek) : true;
-                       && request.resource.data.time != null ?
-                           checkTime( request.resource.data.time) : true;
-                       && request.resource.data.location != null ?
-                           checkLocation( request.resource.data.location) : true;
+      // // validate when update club record
+      // allow update: if request.auth.token.email_verified == true
+      //                  && (request.resource.data.diff( resource.data).affectedKeys()
+      //                   .hasOnly(['name', 'type', 'status', 'fee', 'description', 'startDate', 'endDate', 'daysInWeek', 'time', 'location']))
+      //                  && request.resource.data.name != null ?
+      //                      checkName( request.resource.data.name) : true
+      //                  && request.resource.data.status != null ?
+      //                      checkStatus( request.resource.data.status) : true
+      //                  && request.resource.data.fee != null ?
+      //                      checkFee( request.resource.data.fee) : true
+      //                  && request.resource.data.description != null ?
+      //                      checkDescription( request.resource.data.description) : true
+      //                  && request.resource.data.startDate != null ?
+      //                      checkStartDate( request.resource.data.startDate) : true
+      //                  && request.resource.data.endDate != null ?
+      //                      checkEndDate( request.resource.data.endDate) : true
+      //                  && request.resource.data.daysInWeek != null ?
+      //                      checkDayInWeek( request.resource.data.daysInWeek) : true
+      //                  //&& request.resource.data.daysInWeek != null ?
+      //                      //checkDaysInWeek( request.resource.data.daysInWeek) : true
+      //                  && request.resource.data.time != null ?
+      //                      checkTime( request.resource.data.time) : true
+      //                  && request.resource.data.location != null ?
+      //                      checkLocation( request.resource.data.location) : true;
 
-      // validate when delete book record
-      allow delete: if request.auth.token.email_verified == true;
+      // // validate when delete club record
+      // allow delete: if request.auth.token.email_verified == true;
     }
   }
-}
 }

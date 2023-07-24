@@ -264,7 +264,7 @@ class Club {
       return new NoConstraintViolation();
     } else {
       fee = parseInt( fee); 
-      if (isNaN( fee) || !Number.isInteger( fee) || fee < 1) {
+      if (isNaN( fee) || !Number.isInteger( fee) || fee < 0) {
         return new RangeConstraintViolation("The fee must be a positive integer!");
       } else {
         return new NoConstraintViolation();
@@ -339,14 +339,14 @@ class Club {
     }
   };
   static checkTime( timeString) {
-    const newDate = new Date(timeString);
+    const regexp = /^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])$/;
     if (!timeString) {
       return new MandatoryValueConstraintViolation("A time must be provided!");
     } else if (!isNonEmptyString( timeString)) {
       return new RangeConstraintViolation("The time must be a non-empty string!");
-    } else if (isNaN(newDate) || !/\b\d{2}:\d{2}\b/.test(newDateString)) {
+    } else if (!regexp.test(timeString)) {
       return new RangeConstraintViolation(
-          "The time must be a real date in the form HH:MM!");
+          "The time must be a real time in the form HH:MM!");
     } else {
       return new NoConstraintViolation();
     }
@@ -368,15 +368,15 @@ Club.converter = {
       clubId: club.clubId,
       name: club.name,
       status: parseInt( club.status),
-      trainerIdRef: club.trainerIdRef,
+      trainerIdRefs: club.trainerIdRefs,
       fee: club.fee,
       description: club.description,
       contactInfo: club.contactInfo,
-      memberIdRef: club.memberIdRef,
+      clubMemberIdRefs: club.clubMemberIdRefs,
       startDate: Timestamp.fromDate( new Date(club.startDate)),
       endDate: Timestamp.fromDate( new Date(club.endDate)),
       daysInWeek: club.daysInWeek,
-      time: Timestamp.fromDate( new Date(club.time)),
+      time: club.time,
       location: club.location
     };
     if (club.chair_id) data.chair_id = club.chair_id;
@@ -388,15 +388,15 @@ Club.converter = {
         clubId: club.clubId,
         name: club.name,
         status: parseInt( club.status),
-        trainerIdRef: club.trainerIdRef,
+        trainerIdRefs: club.trainerIdRefs,
         fee: club.fee,
         description: club.description,
         contactInfo: club.contactInfo,
-        memberIdRef: club.memberIdRef,
-        startDate: date2IsoDateString( club.startDate.toDate()),
-        endDate: date2IsoDateString( club.endDate.toDate()),
+        clubMemberIdRefs: club.clubMemberIdRefs,
+        startDate: date2IsoDateString( club.startDate),
+        endDate: date2IsoDateString( club.endDate),
         daysInWeek: club.daysInWeek,
-        time: date2IsoDateString( club.time.toDate()),
+        time: club.time,
         location: club.location
       };
     if (club.chair_id) data.chair_id = club.chair_id;
@@ -418,7 +418,7 @@ Club.add = async function (slots) {
     club = new Club( slots);
     let validationResult = await Club.checkClubIdAsId( club.clubId);
     if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
-    validationResult = await Staff.checkPersonIdAsIdRef( club.chair_id);
+    validationResult = await Staff.checkPersonIdAsIdRef( club.chair_id.personId);
     if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
     for (const a of club.trainerIdRefs) {
       const validationResult = await Staff.checkPersonIdAsIdRef( a.personId);
@@ -475,7 +475,7 @@ Club.retrieveBlock = async function (params) {
   try {
     let clubsCollRef = fsColl( fsDb, "clubs");
     // set limit and order in query
-    clubsCollRef = fsQuery( clubsCollRef, limit( 11));
+    clubsCollRef = fsQuery( clubsCollRef, limit( 10));
     if (params.order) clubsCollRef = fsQuery( clubsCollRef, orderBy( params.order));
     // set pagination "startAt" cursor
     if (params.cursor) {
@@ -496,14 +496,13 @@ Club.retrieveBlock = async function (params) {
  * @returns {Promise<void>}
  */
 Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsToRemove, chair_id, status, fee, description, contactInfo, clubMemberIdRefsToAdd, clubMemberIdRefsToRemove, startDate, endDate, daysInWeek, time, location}) {
-  let noConstraintViolated = true,
-    validationResult = null,
+  let validationResult = null,
     clubBeforeUpdate = null;
   const clubDocRef = fsDoc( fsDb, "clubs", clubId.toString()).withConverter( Club.converter),
     updatedSlots = {};
   try {
     // retrieve up-to-date club record
-    clubBeforeUpdate = await getDoc( clubDocRef).data();
+    clubBeforeUpdate = (await getDoc( clubDocRef)).data();
   } catch (e) {
     console.error(`${e.constructor.name}: ${e.message}`);
   }
@@ -559,10 +558,10 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
         if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
       }
       if (updatedSlots.chair_id) {
-        validationResult = await Staff.checkPersonIdAsIdRef( chair_id);
+        validationResult = await Staff.checkPersonIdAsIdRef( chair_id.personId);
         if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
       }
-      if (trainerIdRefsToAdd) {
+      if (trainerIdRefsToAdd) {    
         await Promise.all(trainerIdRefsToAdd.map( async a => {
           validationResult = await Staff.checkPersonIdAsIdRef( a.personId);
           if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
@@ -614,7 +613,6 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
         await Promise.all(clubMemberIdRefsToAdd.map( async a => {
           const memberDocRef = fsDoc(memberCollRef, a.personId);
           validationResult = await Member.checkPersonIdAsIdRef( a.personId);
-          console.log("happend error ?");
           if (!validationResult instanceof NoConstraintViolation) throw validationResult;
           batch.update(memberDocRef, {listOfClubs: arrayUnion( inverseRefAfter)});
         }));
@@ -664,7 +662,7 @@ Club.destroy = async function (clubId) {
       .withConverter( Member.converter);
   try {
     // delete master class object (club) while updating derived inverse
-    // properties in objects from slave classes (authors and publishers)
+    // properties in objects from slave classes
     const clubRec = (await getDoc( clubDocRef
       .withConverter( Club.converter))).data();
     const inverseRef = {clubId: clubRec.clubId, name: clubRec.name};
@@ -682,5 +680,6 @@ Club.destroy = async function (clubId) {
   }
 };
 
+Club.currentSelectedClub = 0;
 export { StatusEL, WeekDaysEL };
 export default Club;

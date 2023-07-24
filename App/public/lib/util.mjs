@@ -156,5 +156,190 @@ function createModalFromChange(change) {
   divModalWindowEl.classList.add("show-modal");
 }
 
-export { date2IsoDateString, isNonEmptyString, isIntegerOrIntegerString, fillSelectWithOptions, 
-  createOption , showProgressBar , hideProgressBar, createModalFromChange};
+// *************** Multiple Selection Widget ****************************************
+/**
+ * Create an input/button elements combo that creates associations between a "domain
+ * object" and a "target object". This UI component checks/retrieves target objects
+ * and adds them to a list (ul element) of ID references.
+ * 1) creates an input field of "number" type, where ID references are entered,
+ * 2) creates a button that adds li elements with ID reference's data to the list (ul),
+ * 3) creates a ul element containing the association list
+ * 4) each list item includes a button allowing each item to remove itself from the
+ *    association list
+ * @param {object} formEl The container form
+ * @param {array} idRefs A map of objects, which is used to create the list of ID references
+ * @param {string} inputEl Input element's name attribute
+ * @param {string} idRefDomainName Domain object's attribute
+ * @param {string} idRefTargetName Target object's attribute
+ * @param {function} checkerMethod Method to check target object
+ * @param {function} retrieveMethod Method to retrieve data from target object
+ * @returns {Promise<void>}
+ */
+// set up event handler for adding/removing multiple ID reference to associate 2 objects
+async function createMultiSelectionWidget (formEl, idRefs, inputEl,
+                                           idRefDomainName, idRefTargetName,
+                                           checkerMethod, retrieveMethod ) {
+  const widgetEl = formEl.querySelector(".MultiSelectionWidget");
+  const labelEl = document.createElement("label");
+  const inputNumEl = document.createElement("input");
+  const btnEl = document.createElement("button");
+  const listEl = document.createElement("ul");
+  inputNumEl.setAttribute("type", "number");
+  inputNumEl.setAttribute("placeholder", "Enter ID");
+  inputNumEl.setAttribute("name", "authors");
+  btnEl.textContent = "add";
+  labelEl.appendChild( inputNumEl);
+  labelEl.appendChild( btnEl);
+  labelEl.prepend("Trainers: ");
+  widgetEl.appendChild( labelEl);
+  widgetEl.appendChild( listEl);
+  // setup event handler for adding a new ID reference
+  btnEl.addEventListener("click", async function () {
+    const listEl = widgetEl.children[1]; // ul
+    const idReference = formEl[inputEl].value;
+    // if new ID reference is not empty or zero
+    if (idReference && parseInt(idReference) !== 0) {
+      let responseValidation = await checkerMethod( idReference); // invoke checker
+      if (responseValidation.message) {
+        formEl[inputEl].setCustomValidity( responseValidation.message);
+      } else { // if checker passes
+        // check if new ID reference has been already added
+        const listOfIdRefs = getListOfIdRefs( listEl),
+          alreadyAdded = !!listOfIdRefs
+            .find( a => a[idRefDomainName] === parseInt( idReference));
+        if (!alreadyAdded) { // if new ID reference has not yet added
+          formEl[inputEl].setCustomValidity("");
+          // retrieve target object
+          const targetObjt = await retrieveMethod( idReference);
+          // if target object is retrieved successfully, add ID reference to list
+          if (targetObjt) {
+            listEl.appendChild( addItemToListOfSelectedItems( targetObjt, idRefTargetName, "added"));
+            formEl[inputEl].value = "";
+            formEl[inputEl].focus();
+          }
+        } else { // if ID reference was already added
+          formEl[inputEl].setCustomValidity("ID reference has been already added!");
+        }
+      }
+    } else { // clear form if ID reference is not allowed
+      formEl[inputEl].value = "";
+    }
+  });
+  // setup event handler for removing an ID reference from list
+  listEl.addEventListener( "click", function (e) {
+    if (e.target.tagName === "BUTTON") {  // delete button
+      const btnEl = e.target,
+        listItemEl = btnEl.parentNode;
+      if (listItemEl.classList.contains("removed")) {
+        // undoing a previous removal
+        listItemEl.classList.remove("removed");
+        // change button text
+        btnEl.textContent = "✕";
+      } else if (listItemEl.classList.contains("added")) {
+        listItemEl.remove();
+      } else {
+        // removing an ordinary item
+        listItemEl.classList.add("removed");
+        // change button text
+        btnEl.textContent = "undo";
+      }
+    }
+  });
+  // fill loaded target ID references with
+  if (idRefs.length) {
+    for (const aId of idRefs) {
+      const listEl = widgetEl.children[1];
+      listEl.appendChild( addItemToListOfSelectedItems( aId, "id"));
+    }
+  }
+  /** get references of associated objects from list **/
+  function getListOfIdRefs (listEl) {
+    const listItemEls = Array.from( listEl.children);
+    return listItemEls.map( a => JSON.parse(a.getAttribute("data-value")));
+  }
+}
+/**
+ * Create a choice widget in a given fieldset element.
+ * A choice element is either an HTML radio button or an HTML checkbox.
+ * @param containerEl
+ * @param fld
+ * @param values
+ * @param choiceWidgetType
+ * @param choiceItems
+ * @param isMandatory
+ * @returns {*}
+ */
+function createChoiceWidget( containerEl, fld, values,
+                             choiceWidgetType, choiceItems, isMandatory) {
+  const choiceControls = containerEl.querySelectorAll("label");
+  // remove old content
+  for (const j of choiceControls.keys()) {
+    containerEl.removeChild( choiceControls[j]);
+  }
+  if (!containerEl.hasAttribute("data-bind")) {
+    containerEl.setAttribute("data-bind", fld);
+  }
+  // for a mandatory radio button group initialze to first value
+  if (choiceWidgetType === "radio" && isMandatory && values.length === 0) {
+    values[0] = 1;
+  }
+  if (values.length >= 1) {
+    if (choiceWidgetType === "radio") {
+      containerEl.setAttribute("data-value", values[0]);
+    } else {  // checkboxes
+      containerEl.setAttribute("data-value", "["+ values.join() +"]");
+    }
+  }
+  for (const j of choiceItems.keys()) {
+    // button values = 1..n
+    const el = createLabeledChoiceControl( choiceWidgetType, fld,
+      j+1, choiceItems[j]);
+    // mark the radio button or checkbox as selected/checked
+    if (values.includes(j+1)) el.firstElementChild.checked = true;
+    containerEl.appendChild( el);
+    el.firstElementChild.addEventListener("click", function (e) {
+      const btnEl = e.target;
+      if (choiceWidgetType === "radio") {
+        if (containerEl.getAttribute("data-value") !== btnEl.value) {
+          containerEl.setAttribute("data-value", btnEl.value);
+        } else if (!isMandatory) {
+          // turn off radio button
+          btnEl.checked = false;
+          containerEl.setAttribute("data-value", "");
+        }
+      } else {  // checkbox
+        let values = JSON.parse( containerEl.getAttribute("data-value")) || [];
+        let i = values.indexOf( parseInt( btnEl.value));
+        if (i > -1) {
+          values.splice(i, 1);  // delete from value list
+        } else {  // add to value list
+          values.push( btnEl.value);
+        }
+        containerEl.setAttribute("data-value", "["+ values.join() +"]");
+      }
+    });
+  }
+  return containerEl;
+}
+/**
+ * * Create a choice control (radio button or checkbox) element
+ * @param {string} t  The type of choice control ("radio" or "checkbox")
+ * @param {string} n  The name of the choice control input element
+ * @param {string} v  The value of the choice control input element
+ * @param {string} lbl  The label text of the choice control
+ * @return {object}
+ */
+function createLabeledChoiceControl( t,n,v,lbl) {
+  const ccEl = document.createElement("input"),
+    lblEl = document.createElement("label");
+  ccEl.type = t;
+  ccEl.name = n;
+  ccEl.value = v;
+  lblEl.appendChild( ccEl);
+  lblEl.appendChild( document.createTextNode( lbl));
+  return lblEl;
+}
+
+export { date2IsoDateString, isNonEmptyString, isIntegerOrIntegerString,
+  fillSelectWithOptions, createOption , showProgressBar , hideProgressBar,
+  createModalFromChange, createMultiSelectionWidget, createChoiceWidget};

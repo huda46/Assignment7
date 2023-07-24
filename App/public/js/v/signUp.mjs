@@ -74,7 +74,7 @@ signUpBtn.addEventListener("click", async function () {
       console.log (`User ${emailEl.value} became "Registered"`);
       await Member.add( slots);
       alert (`Account created ${emailEl.value}. Check your email for instructions to verify this account.`);
-      window.location.pathname = "/menu.html"; // redirect user to menu page
+      window.location.pathname = "/index.html"; // redirect user to menu page
     } catch (e) {
       const divMsgEl = document.getElementById("message");
       divMsgEl.textContent = e.message;

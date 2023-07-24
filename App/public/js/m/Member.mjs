@@ -112,16 +112,20 @@ Member.retrieve = async function (personId) {
   }
 };
 /**
- * Load all member records from Firestore
- * @returns {Promise<*>} memberRecords: {array}
+ * Load a block of member records from Firestore
  */
-Member.retrieveAll = async function (order) {
-  if (!order) order = "personId";
-  const membersCollRef = fsColl( fsDb, "members"),
-    q = fsQuery( membersCollRef, orderBy( order));
+Member.retrieveBlock = async function (params) {
   try {
-    const memberRecs = (await getDocs( q.withConverter( Member.converter))).docs.map( d => d.data());
-    console.log(`${memberRecs.length} member records retrieved ${order ? "ordered by " + order : ""}`);
+    let membersCollRef = fsColl( fsDb, "members");
+    // set limit and order in query
+    membersCollRef = fsQuery( membersCollRef, limit( 10));
+    if (params.order) membersCollRef = fsQuery( membersCollRef, orderBy( params.order));
+    // set pagination "startAt" cursor
+    if (params.cursor) {
+      membersCollRef = fsQuery( membersCollRef, startAt( params.cursor));
+    }
+    const memberRecs = (await getDocs( membersCollRef.withConverter( Member.converter))).docs.map( d => d.data());
+    console.log(`${memberRecs.length} member records retrieved ${params.order ? "ordered by " + params.order : ""}`);
     return memberRecs;
   } catch (e) {
     console.error(`Error retrieving member records: ${e}`);
