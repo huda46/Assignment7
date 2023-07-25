@@ -247,3 +247,15 @@ Fee should not be added for an inactive club the person is associated too.</p>
 <li>Adjust UI elements: the view code and Styling of the webpage: Rania Ouaja</li>
 <li>Debugging: Dustin Troppa</li>
 </ul>
+<H9>Work division for assignment 7C-4:<H9>
+<ul>
+<li>most of the html files: Rania Ouaja</li>
+<li>some html files like createClub and updateClub: Dustin Troppa</li>
+<li>creation of test data and auxDataMngtOps.mjs: Rania Ouaja</li>
+<li>first idea of the firestore rules: Rania Ouaja</li>
+<li>final version firestore rules: Dustin Troppa</li>
+<li>Css files and UI design: Rania Ouaja</li>
+<li>Model classes: Dustin Troppa</li>
+<li>View code files: Rania Ouaja & Dustin Troppa</li>
+<li>alot of Debugging: Dustin Troppa</li>
+</ul>
