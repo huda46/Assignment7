@@ -10,19 +10,16 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.8.1/fir
 handleAuthentication();
 
 /**********************************************
- * Use case Create Club
+ * Use case Update Club
  **********************************************/
-const formEl = document.forms["Create"],
+const formEl = document.forms["Update"],
   progressEl = document.querySelector("progress"),
   daysFieldsetEl = formEl.querySelector("fieldset[data-bind='days']"),
-  createTrainerWidget = formEl.querySelector(".MultiSelectionWidget");
+  createTrainerWidget = formEl.querySelector(".MultiSelectionWidget"),
+  clubId = localStorage.getItem("clubNo");
 
-await createMultiSelectionWidget (formEl, [], "trainers",
-  "id", "personId", Member.checkPersonIdAsIdRef, Member.retrieve);
 
 fillSelectWithOptions(formEl["status"], StatusEL.labels, true);
-createChoiceWidget( daysFieldsetEl, "days", [],
-  "checkbox", WeekDaysEL.labels);
 
 let userRef = null;
 onAuthStateChanged(auth, async function (user) {
@@ -33,6 +30,23 @@ onAuthStateChanged(auth, async function (user) {
     formEl["chair_id"].value = memberRec.firstname + " " + memberRec.lastname;
   }
 });
+
+const clubRec = await Club.retrieve( clubId);
+formEl["clubId"].value = clubRec.clubId;
+formEl["name"].value = clubRec.name;
+formEl["status"].selectedIndex = clubRec.status - 1;
+formEl["fee"].value = clubRec.fee;
+formEl["description"].value = clubRec.description;
+formEl["contactInfo"].value = clubRec.contactInfo;
+formEl["startDate"].value = clubRec.startDate;
+formEl["endDate"].value = clubRec.endDate;
+formEl["time"].value = clubRec.time;
+formEl["location"].value = clubRec.location;
+formEl["chair_id"].value = clubRec.chair_id.lastname;
+createChoiceWidget( daysFieldsetEl, "days", clubRec.daysInWeek,
+  "checkbox", WeekDaysEL.labels);
+await createMultiSelectionWidget (formEl, clubRec.trainerIdRefs, "trainers",
+  "personId", "personId", Member.checkPersonIdAsIdRef, Member.retrieve);
 
 // set up event handlers for responsive constraint validation
 formEl["clubId"].addEventListener("input", async function () {
@@ -154,11 +168,7 @@ formEl["commit"].addEventListener("click", async function () {
   // save the input data only if all form fields are valid
   if (formEl.reportValidity()) {
     showProgressBar(progressEl);
-    await Club.add( slots);
-
-    formEl.reset();
-    addedTrainersListEl.innerHTML = "";
-    formEl["chair_id"].value = userRef.firstname + " " + userRef.lastname;
+    await Club.update( slots);
     hideProgressBar(progressEl);
   }
 });  

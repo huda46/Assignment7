@@ -62,7 +62,7 @@ async function clearData () {
       console.log("Clearing staff data...");
       const staffsCollRef = fsColl( fsDb, "staffs");
       const staffQrySns = (await getDocs( staffsCollRef, orderBy( "personId")));
-      await Promise.all( staffQrySns.docs.map( d => Staff.destroy( d.id)))
+      await Promise.all( staffQrySns.docs.map( d => Staff.destroy( d.data())))
       console.log(`${staffQrySns.docs.length} staff dara deleted.`);
 
       // recreate saved account

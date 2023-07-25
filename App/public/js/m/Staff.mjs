@@ -1,7 +1,8 @@
 import { fsDb } from "../initFirebase.mjs";
-import Person from "../m/Person.mjs";
+import Person from "./Person.mjs";
+import Club from "./Club.mjs"
 import { collection as fsColl, doc as fsDoc, getDoc, getDocs, where, writeBatch,
-  setDoc, orderBy, updateDoc, deleteField, query as fsQuery }
+  setDoc, orderBy, deleteField, query as fsQuery }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
 import { NoConstraintViolation, MandatoryValueConstraintViolation,
    UniquenessConstraintViolation, ReferentialIntegrityConstraintViolation } from "../../lib/errorTypes.mjs";
@@ -55,7 +56,7 @@ class Staff extends Person {
 Staff.converter = {
   toFirestore: function(staff) {
     return {
-      staffId: staff.personId,
+      personId: staff.personId,
       firstname: staff.firstname,
       lastname: staff.lastname,
       type: parseInt( staff.type)
@@ -130,55 +131,91 @@ Staff.retrieveAll = async function (order) {
   }
 };
 /**
+ * Load all staff records from Firestore
+ * @returns {Promise<*>} staffRecords: {array}
+ */
+Staff.retrieveSpecified = async function (order, listOfIds) {
+  const staffsCollRef = fsColl( fsDb, "staffs"),
+    q1 = fsQuery( staffsCollRef, where("personId", "in", listOfIds)),
+    q2 = fsQuery( q1, orderBy( order));
+  try {
+    const staffRecs = (await getDocs( q2.withConverter( Staff.converter))).docs.map( d => d.data());
+    console.log(`${staffRecs.length} staff records retrieved ${order ? "ordered by " + order : ""}`);
+    return staffRecs;
+  } catch (e) {
+    console.error(`Error retrieving staff records: ${e}`);
+  }
+};
+/**
  * Update a Firestore document in the Firestore collection "staffs"
  * @param slots: {object}
  * @returns {Promise<void>}
  */
 Staff.update = async function (slots) {
   let noConstraintViolated = true,
-  validationResult = null,
-  staffBeforeUpdate = null;
-const staffDocRef = fsDoc( fsDb, "staffs", slots.personId).withConverter( Staff.converter),
-  updatedSlots = {};
-try {
-  // retrieve up-to-date staff record
-  const staffDocSn = await getDoc( staffDocRef);
-  staffBeforeUpdate = staffDocSn.data();
-} catch (e) {
-  console.error(`${e.constructor.name}: ${e.message}`);
-}
-try {
-  if (staffBeforeUpdate.firstname !== slots.firstname) {
-    validationResult = Person.checkName( slots.firstname);
-    if (validationResult instanceof NoConstraintViolation) updatedSlots.firstname = slots.firstname;
-    else throw validationResult;
+    validationResult = null,
+    staffBeforeUpdate = null;
+  const clubsCollRef = fsColl (fsDb, "clubs"),
+    staffDocRef = fsDoc( fsDb, "staffs", slots.personId).withConverter( Staff.converter),
+    updatedSlots = {};
+  try {
+    // retrieve up-to-date staff record
+    const staffDocSn = await getDoc( staffDocRef);
+    staffBeforeUpdate = staffDocSn.data();
+  } catch (e) {
+    console.error(`${e.constructor.name}: ${e.message}`);
   }
-  if (staffBeforeUpdate.lastname !== slots.lastname) {
-    validationResult = Person.checkName( slots.lastname);
-    if (validationResult instanceof NoConstraintViolation) updatedSlots.lastname = slots.lastname;
-    else throw validationResult;
+  try {
+    if (staffBeforeUpdate.firstname !== slots.firstname) {
+      validationResult = Person.checkName( slots.firstname);
+      if (validationResult instanceof NoConstraintViolation) updatedSlots.firstname = slots.firstname;
+      else throw validationResult;
+    }
+    if (staffBeforeUpdate.lastname !== slots.lastname) {
+      validationResult = Person.checkName( slots.lastname);
+      if (validationResult instanceof NoConstraintViolation) updatedSlots.lastname = slots.lastname;
+      else throw validationResult;
+    }
+    if (staffBeforeUpdate.type !== parseInt( slots.type)) {
+      validationResult = Person.checkType( slots.type);
+      if (validationResult instanceof NoConstraintViolation) updatedSlots.type = parseInt( slots.type);
+      else throw validationResult;
+    }
+  } catch (e) {
+    noConstraintViolated = false;
+    console.error(`${e.constructor.name}: ${e.message}`);
   }
-  if (staffBeforeUpdate.type !== parseInt( slots.type)) {
-    validationResult = Person.checkType( slots.type);
-    if (validationResult instanceof NoConstraintViolation) updatedSlots.type = parseInt( slots.type);
-    else throw validationResult;
-  }
-} catch (e) {
-  noConstraintViolated = false;
-  console.error(`${e.constructor.name}: ${e.message}`);
-}
-if (noConstraintViolated) {
   const updatedProperties = Object.keys(updatedSlots);
-  if (updatedProperties.length === 1) {
-    await updateDoc(staffDocRef, updatedSlots);
-    console.log(`Property ${updatedProperties.toString()} modified for staff record "${slots.personId}"`);
-  } else if (updatedProperties.length) {
-    await updateDoc(staffDocRef, updatedSlots);
-    console.log(`Properties ${updatedProperties.toString()} modified for staff record "${slots.personId}"`);
+  if (updatedProperties.length && noConstraintViolated) {
+    try {
+      const staffRefBefore
+          = {personId: slots.personId, lastname: staffBeforeUpdate.lastname},
+      staffRefAfter = {personId: slots.personId, lastname: slots.lastname},
+      q = fsQuery( clubsCollRef, where("chair_id", "==", staffRefBefore)),
+      clubQrySns = (await getDocs(q)),
+      batch = writeBatch( fsDb); // initiate batch write
+      // iterate personId references (foreign keys) of master class objects (clubs) and
+      // update derived inverse reference properties, remove/add
+      await Promise.all( clubQrySns.docs.map( d => {
+        const id = d.data();
+        const clubDocRef = fsDoc(clubsCollRef, id.clubId.toString());
+        batch.update(clubDocRef, {chair_id: staffRefAfter});
+      }));
+      // update club object
+      batch.update(staffDocRef, updatedSlots);
+      batch.commit(); // commit batch write
+    } catch (e) {
+      console.error(`${e.constructor.name}: ${e.message}`);
+    }
+
+    if (updatedProperties.length === 1) {
+      console.log(`Property ${updatedProperties.toString()} modified for staff record "${slots.personId}"`);
+    } else if (updatedProperties.length) {
+      console.log(`Properties ${updatedProperties.toString()} modified for staff record "${slots.personId}"`);
+    }
   } else {
     console.log(`No property value changed for staff record "${slots.personId}"!`);
   }
-}
 };
 
 /**
@@ -186,23 +223,26 @@ if (noConstraintViolated) {
  * @param personId: {string}
  * @returns {Promise<void>}
  */
-Staff.destroy = async function (personId) {
+Staff.destroy = async function (slots) {
   const clubsCollRef = fsColl( fsDb, "clubs"),
-    q = fsQuery( clubsCollRef, where("chair_id", "==", personId)),
-    staffDocRef = fsDoc( fsColl( fsDb, "staffs"), personId);
+    staffsCollRef = fsColl( fsDb, "staffs");
   try {
-    const clubQrySns = (await getDocs( q)),
-      batch = writeBatch( fsDb); // initiate batch write
-    // iterate personId references (foreign keys) of master class objects (books) and
-    // update derived inverse reference property
-    await Promise.all( clubQrySns.docs.map( d => {
-      batch.update( fsDoc( clubsCollRef, d.personId), {
-        chair_id: deleteField()
-      });
-    }));
+    const staff = {personId: slots.personId, lastname: slots.lastname},
+      q = fsQuery( clubsCollRef, where("chair_id", "==", staff)),
+      staffDocRef = fsDoc(staffsCollRef, slots.personId),
+      clubQrySns = (await getDocs( q));
+
+    // CASCADE deletion policy
+    for (const clubDoc of clubQrySns.docs) {
+      console.log(clubDoc);
+      const id = clubDoc.data();
+      await Club.destroy(id.clubId);
+    }
+    
+    const batch = writeBatch( fsDb); // initiate batch write
     batch.delete( staffDocRef); // delete publisher record
     batch.commit(); // finish batch write
-    console.log(`Staff record "${personId}" deleted!`);
+    console.log(`Staff record "${slots.personId}" deleted!`);
   } catch (e) {
     console.error(`Error deleting staff record: ${e}`);
   }

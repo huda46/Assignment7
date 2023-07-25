@@ -419,10 +419,20 @@ Club.add = async function (slots) {
     let validationResult = await Club.checkClubIdAsId( club.clubId);
     if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
     validationResult = await Staff.checkPersonIdAsIdRef( club.chair_id.personId);
-    if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+    
+    // if the staff not existing yet, create him
+    if (validationResult instanceof ReferentialIntegrityConstraintViolation) {
+      const memberDoc = (await getDoc( fsDoc( fsDb, "members", club.chair_id.personId))).data();
+      if (memberDoc.listOfClubs) memberDoc.listOfClubs = deleteField();
+      await Staff.add(memberDoc);
+    } else if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
     for (const a of club.trainerIdRefs) {
       const validationResult = await Staff.checkPersonIdAsIdRef( a.personId);
-      if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
+      if (validationResult instanceof ReferentialIntegrityConstraintViolation) {
+        const memberDoc = (await getDoc( fsDoc( fsDb, "members", a.personId))).data();
+        if (memberDoc.listOfClubs) memberDoc.listOfClubs = deleteField();
+        await Staff.add(memberDoc);
+      } else if (!(validationResult instanceof NoConstraintViolation)) throw validationResult;
     }
     for (const a of club.clubMemberIdRefs) {
       const validationResult = await Member.checkPersonIdAsIdRef( a.personId);
@@ -436,7 +446,9 @@ Club.add = async function (slots) {
     const clubDocRef = fsDoc( fsDb, "clubs", club.clubId.toString())
         .withConverter( Club.converter),
       membersCollRef = fsColl( fsDb, "members")
-        .withConverter( Member.converter);
+        .withConverter( Member.converter),
+      staffsCollRef = fsColl( fsDb, "staffs")
+        .withConverter( Staff.converter);
     const clubInverseRef = {clubId: club.clubId, name: club.name};
     try {
       const batch = writeBatch( fsDb);
@@ -445,6 +457,12 @@ Club.add = async function (slots) {
         const memberDocRef = fsDoc( membersCollRef, a.personId);
         batch.update( memberDocRef, {listOfClubs: arrayUnion( clubInverseRef)});
       }));
+      if (club.chair_id) {
+        // create derived inverse reference properties between slave class objects
+        // (staff) with master class object (club) Staff::managingClubs
+        const staffDocRef = fsDoc( staffsCollRef, club.chair_id.personId);
+        batch.update( staffDocRef, {managingClubs: arrayUnion( clubInverseRef)});
+      }
       batch.commit();
       console.log(`Club record "${club.clubId}" created!`);
     } catch (e) {
@@ -495,7 +513,10 @@ Club.retrieveBlock = async function (params) {
  * Update a Firestore document in the Firestore collection "clubs"
  * @returns {Promise<void>}
  */
-Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsToRemove, chair_id, status, fee, description, contactInfo, clubMemberIdRefsToAdd, clubMemberIdRefsToRemove, startDate, endDate, daysInWeek, time, location}) {
+Club.update = async function ({clubId, name, trainerIdRefsToAdd, 
+    trainerIdRefsToRemove, chair_id, status, fee, description, contactInfo, 
+    clubMemberIdRefsToAdd, clubMemberIdRefsToRemove, startDate, endDate, 
+    daysInWeek, time, location}) {
   let validationResult = null,
     clubBeforeUpdate = null;
   const clubDocRef = fsDoc( fsDb, "clubs", clubId.toString()).withConverter( Club.converter),
@@ -546,8 +567,8 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
   const updatedProperties = Object.keys(updatedSlots);
   if (updatedProperties.length) {
     try {
-      const memberCollRef = fsColl( fsDb, "members")
-          .withConverter( Member.converter);
+      const memberCollRef = fsColl( fsDb, "members").withConverter( Member.converter),
+          staffCollRef = fsColl( fsDb, "staffs").withConverter( Staff.converter);
       // initialize (before and after update) inverse personId references
       const inverseRefBefore = {clubId: clubId, name: clubBeforeUpdate.name};
       const inverseRefAfter = {clubId: clubId, name: name};
@@ -634,6 +655,14 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
           batch.update(memberDocRef, {listOfClubs: arrayUnion( inverseRefAfter)});
         }));
       }
+      if (!updatedSlots.chair_id && updatedSlots.name) {
+        // update derived inverse references property if staff didn't change,
+        // but name changed
+        const staffBeforeUpdtDocRef = fsDoc(staffCollRef, clubBeforeUpdate.chair_id);
+        batch.update(staffBeforeUpdtDocRef, {managingClubs: arrayRemove( inverseRefBefore)});
+        batch.update(staffBeforeUpdtDocRef, {managingClubs: arrayUnion( inverseRefAfter)});
+      }
+      // normally chair cant change
 
       batch.update(clubDocRef, updatedSlots);
       batch.commit(); // commit batch write
@@ -658,8 +687,8 @@ Club.update = async function ({clubId, name, trainerIdRefsToAdd, trainerIdRefsTo
 Club.destroy = async function (clubId) {
   const clubDocRef = fsDoc( fsDb, "clubs", clubId.toString())
       .withConverter( Club.converter),
-    membersCollRef = fsColl( fsDb, "members")
-      .withConverter( Member.converter);
+    membersCollRef = fsColl( fsDb, "members").withConverter( Member.converter),
+    staffsCollRef = fsColl( fsDb, "staffs").withConverter( Staff.converter);
   try {
     // delete master class object (club) while updating derived inverse
     // properties in objects from slave classes
@@ -672,6 +701,11 @@ Club.destroy = async function (clubId) {
       const authorDocRef = fsDoc( membersCollRef, aId.personId);
       batch.update( authorDocRef, {listOfClubs: arrayRemove( inverseRef)});
     }));
+    if (clubRec.chair_id) {
+      // create derived inverse reference property, Staff::/managingClubs
+      const staffDocRef = fsDoc( staffsCollRef, clubRec.chair_id.personId);
+      batch.update( staffDocRef, {managingClubs: arrayRemove( inverseRef)});
+    }
     batch.delete( clubDocRef); // create club record (master)
     batch.commit(); // commit batch write
     console.log(`Club record "${clubId}" deleted!`);

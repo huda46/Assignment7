@@ -10,45 +10,45 @@
 </head>
 <body>
   <div class="page-content">
-<header>
-  <div id="login-management"></div>
-  <div class="wrapper clearfix">
-    <div class="title">
-      <h1>See all clubs and join one or more!</h1>
-    </div>
+    <header>
+      <div id="login-management"></div>
+      <div class="wrapper clearfix">
+        <div class="title">
+          <h1>See all clubs and join one or more!</h1>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="wrapper clearfix">
+        <div>
+          <label>Ordered by:
+            <select>
+              <option value="clubId">ClubId</option>
+              <option value="name">Name</option>
+              <option value="status">Status</option>
+            </select>
+          </label>
+          <span>
+            <button type="button" id="previousPage">« Previous</button>
+            <button type="button" id="nextPage">Next »</button>
+          </span>
+        </div>
+        <progress hidden="hidden" max="100">%</progress>
+        <table id="clubs">
+          <thead>
+            <tr>
+              <th>ClubID</th>
+              <th>Club name</th>
+              <th>Status</th>
+              <th value="type">Club details</th>
+              <th value="type">join club</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button onclick="history.back()" class="back">Back to menu</button>
+      </div>
+    </main>
   </div>
-</header>
-<main>
-  <div class="wrapper clearfix">
-    <div>
-      <label>Ordered by:
-        <select>
-          <option value="clubId">ClubId</option>
-          <option value="name">Name</option>
-          <option value="status">Status</option>
-        </select>
-      </label>
-      <span>
-        <button type="button" id="previousPage">« Previous</button>
-        <button type="button" id="nextPage">Next »</button>
-      </span>
-    </div>
-    <progress hidden="hidden" max="100">%</progress>
-    <table id="clubs">
-      <thead>
-        <tr>
-          <th>ClubID</th>
-          <th>Club name</th>
-          <th>Status</th>
-          <th value="type">Club details</th>
-          <th value="type">join club</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <button onclick="history.back()" class="back">Back to menu</button>
-  </div>
-</main>
-</div>
 </body>
 </html>

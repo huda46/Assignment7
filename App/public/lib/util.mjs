@@ -46,55 +46,6 @@ function date2IsoDateString(timeStamp) {
   return [y, m, d].join("-");
 }
 
-/**
- * Fill a select element with option elements created from a 
- * map of objects 
- *
- * @param {object} selectEl  A select(ion list) element
- * @param {object|array} selectionRange  A map of objects or an array list
- * @param {bool} hasDefOpt Look if it has a default value, 
- *     else create an empty (---) option
- * @param {object} optPar [optional]  An optional parameter record including
- *     optPar.displayProp and optPar.selection
- */
-function fillSelectWithOptions2(selectEl, selectionRange, hasDefOpt, optPar ) {
-  // create option elements from object property values
-  const options = Array.isArray( selectionRange) ? selectionRange :
-  Object.keys( selectionRange);
-  var initValue = 0;
-  // delete old contents
-  selectEl.innerHTML = "";
-  if (!hasDefOpt) {
-    initValue = 1;
-    let initOptionEl = createOption( 0, "---");
-    initOptionEl.selected = true;
-    selectEl.add( initOptionEl);
-  }
-  for (let i=initValue; i < options.length + initValue; i++) {
-    let optionEl=null;
-    if (Array.isArray( selectionRange)) {
-      optionEl = createOption( i+1, options[i-initValue]);
-      if (selectEl.multiple && optPar && optPar.selection && 
-          optPar.selection.includes(i+1) && hasDefOpt) {
-        // flag the option element with this value as selected
-        optionEl.selected = true;
-      }      
-    } else {
-      const key = options[i-initValue];
-      const obj = selectionRange[key];
-      if (optPar && optPar.displayProp) {
-        optionEl = createOption( key, obj[optPar.displayProp]);
-      } else optionEl = createOption( key);
-      // if invoked with a selection argument, flag the selected options
-      if (selectEl.multiple && optPar && optPar.selection && 
-          optPar.selection[key] && hasDefOpt) {
-        // flag the option element with this value as selected
-        optionEl.selected = true;
-      }      
-    }
-    selectEl.add( optionEl);
-  }
-}
 function fillSelectWithOptions( selectEl, selectionRange, defaultSelection, optPar) {
   // create option elements from array key and values
   const options = selectionRange.entries();
@@ -184,9 +135,9 @@ async function createMultiSelectionWidget (formEl, idRefs, inputEl,
   const inputNumEl = document.createElement("input");
   const btnEl = document.createElement("button");
   const listEl = document.createElement("ul");
-  inputNumEl.setAttribute("type", "number");
+  inputNumEl.setAttribute("type", "text");
   inputNumEl.setAttribute("placeholder", "Enter ID");
-  inputNumEl.setAttribute("name", "authors");
+  inputNumEl.setAttribute("name", "trainers");
   btnEl.textContent = "add";
   labelEl.appendChild( inputNumEl);
   labelEl.appendChild( btnEl);
@@ -197,7 +148,7 @@ async function createMultiSelectionWidget (formEl, idRefs, inputEl,
   btnEl.addEventListener("click", async function () {
     const listEl = widgetEl.children[1]; // ul
     const idReference = formEl[inputEl].value;
-    // if new ID reference is not empty or zero
+    //if new ID reference is not empty or zero
     if (idReference && parseInt(idReference) !== 0) {
       let responseValidation = await checkerMethod( idReference); // invoke checker
       if (responseValidation.message) {
@@ -249,7 +200,7 @@ async function createMultiSelectionWidget (formEl, idRefs, inputEl,
   if (idRefs.length) {
     for (const aId of idRefs) {
       const listEl = widgetEl.children[1];
-      listEl.appendChild( addItemToListOfSelectedItems( aId, "id"));
+      listEl.appendChild( addItemToListOfSelectedItems( aId, "personId"));
     }
   }
   /** get references of associated objects from list **/
@@ -338,6 +289,38 @@ function createLabeledChoiceControl( t,n,v,lbl) {
   lblEl.appendChild( ccEl);
   lblEl.appendChild( document.createTextNode( lbl));
   return lblEl;
+}
+
+/**
+ * Add an item to a list element showing selected objects
+ *
+ * @param {object} targetObjt  Referenced target object
+ * @param {string} idRefTargetName  ID reference of target
+ * @param {string} classValue  CSS class name
+ */
+function addItemToListOfSelectedItems( targetObjt, idRefTargetName , classValue) {
+  const listItemEl = document.createElement("li"),
+    removeBtn = createPushButton("x");
+  // add first 18 chars in list item
+  listItemEl.innerText = `${targetObjt[idRefTargetName]}: ${targetObjt.lastname}`.substring(0, 16);
+  // convert target object into text
+  const targetObjText = JSON.stringify({personId: targetObjt[idRefTargetName], lastname: targetObjt.lastname});
+  // embed target object in list item (li element)
+  listItemEl.setAttribute("data-value", targetObjText);
+  if (classValue) listItemEl.classList.add( classValue);
+  listItemEl.appendChild( removeBtn);
+  return listItemEl;
+}
+/**
+ * Create a Push Button
+ * @param {string} txt [optional]
+ * @return {object}
+ */
+function createPushButton( txt) {
+  const pB = document.createElement("button");
+  pB.type = "button";
+  if (txt) pB.textContent = txt;
+  return pB;
 }
 
 export { date2IsoDateString, isNonEmptyString, isIntegerOrIntegerString,

@@ -55,12 +55,12 @@ function handleAuthorization( userStatus, currentPage, email) {
       if (startPageLoggedIn.includes( currentPage)) {
         // declare variables for accessing UI elements
         const clearDataBtn = document.getElementById("clearData"),
-          generateDataBtns = document.querySelectorAll(".generateTestData"),
+          generateDataBtns = document.getElementById("generateTestData"),
           disabledEls = document.querySelectorAll(".disabled");
         // perform DOM operations to enable menu items
         for (const el of disabledEls) el.classList.remove("disabled");
         clearDataBtn.disabled = false;
-        for (const btn of generateDataBtns) btn.disabled = false;
+        generateDataBtns.disabled = false;
       }
       divLoginMgmtEl.appendChild( createSignOutUI( email));
       console.log(`Authenticated as "${userStatus}" (${email})`);

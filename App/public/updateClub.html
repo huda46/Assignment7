@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>BTU-WellnessClub - create a new Club</title>
+  <title>BTU-WellnessClub - update club</title>
   <meta name="description" content="BTU-WellnessClub Application"/>
   <link rel="icon" href="./Logo.png"/>
   <link rel="stylesheet" href="css/normalize.min.css"/>
   <link rel="stylesheet" href="css/SignIn-Up.css"/>
-  <script src="js/v/createClub.mjs" type="module"></script>
+  <script src="js/v/updateClub.mjs" type="module"></script>
 </head>
 <body>
 <header>
@@ -24,13 +24,12 @@
       <div class="imgcontainer">
         <img src="./Logo.png" alt="Logo" class="logo">
       </div>
-      <h2>Create your own club</h2>
-      <form id="Create">
+      <form id="Update">
         <div class="field">
-          <label>ID: <input type="text" name="clubId"/></label>
+          <label>ID: <output name="clubId"></output></label>
         </div>
         <div class="field">
-          <label>Administrator: <output name="chair_id"></output></label>
+          <label>Chair: <output name="chair_id"></output></label>
         </div>
         <div class="field">
           <label>Name: <input type="text" name="name"/></label>
@@ -64,11 +63,11 @@
         </div>
         <div class="MultiSelectionWidget"></div>
         <div class="button-group">
-          <button type="submit" name="commit">Create</button>
+          <button type="submit" name="commit">Update</button>
           <progress hidden="hidden" max="100">%</progress>
         </div>
       </form>
-      <button onclick="history.back()" class="back">Back to menu</button>
+      <button type="button" onclick="window.location.href = 'manageDataClub.html';" class="back">Back to list</button>
     </div>
   </div>
 </main>

@@ -1,7 +1,7 @@
 import { fsDb } from "../initFirebase.mjs";
 import Person from "../m/Person.mjs";
 import { collection as fsColl, doc as fsDoc, getDoc, getDocs, where,
-  setDoc, orderBy, updateDoc, writeBatch, arrayRemove, arrayUnion, query as fsQuery }
+  setDoc, orderBy, writeBatch, arrayRemove, arrayUnion, query as fsQuery }
   from "https://www.gstatic.com/firebasejs/9.8.1/firebase-firestore.js";
 import { NoConstraintViolation, MandatoryValueConstraintViolation, 
   UniquenessConstraintViolation, ReferentialIntegrityConstraintViolation } from "../../lib/errorTypes.mjs";
@@ -183,7 +183,8 @@ Member.update = async function (slots) {
       // iterate personId references (foreign keys) of master class objects (clubs) and
       // update derived inverse reference properties, remove/add
       await Promise.all( clubQrySns.docs.map( d => {
-        const clubDocRef = fsDoc(clubsCollRef, d.personId);
+        const id = d.data();
+        const clubDocRef = fsDoc(clubsCollRef, id.clubId.toString());
         batch.update(clubDocRef, {clubMemberIdRefs: arrayRemove( memberRefBefore)});
         batch.update(clubDocRef, {clubMemberIdRefs: arrayUnion( memberRefAfter)});
       }));
@@ -193,12 +194,9 @@ Member.update = async function (slots) {
     } catch (e) {
       console.error(`${e.constructor.name}: ${e.message}`);
     }
-
     if (updatedProperties.length === 1) {
-      await updateDoc(memberDocRef, updatedSlots);
       console.log(`Property ${updatedProperties.toString()} modified for member record "${slots.personId}"`);
     } else if (updatedProperties.length) {
-      await updateDoc(memberDocRef, updatedSlots);
       console.log(`Properties ${updatedProperties.toString()} modified for member record "${slots.personId}"`);
     }
   } else {
@@ -223,7 +221,8 @@ Member.destroy = async function (slots) {
     // iterate personId references (foreign keys) of master class objects (clubs) and
     // delete derived inverse reference properties
     await Promise.all( clubQrySns.docs.map( d => {
-      const clubDocRef = fsDoc(clubsCollRef, d.personId);
+      const id = d.data();
+      const clubDocRef = fsDoc(clubsCollRef, id.clubId.toString());
       batch.update(clubDocRef, {clubMemberIdRefs: arrayRemove( memberRef)});
     }));
     batch.delete( memberDocRef);
