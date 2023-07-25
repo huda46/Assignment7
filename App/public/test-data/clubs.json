@@ -175,7 +175,7 @@
         "lastname": "David Black"
       },
     "fee": 0,
-    "description": "Exemple description text",
+    "description": "Example description text",
     "contactInfo": "handball.club@btu.de",
     "clubMemberIdRefs": [
       {

@@ -33,8 +33,8 @@ service cloud.firestore {
       /** RULES FOR allow write WITH STANDARD METHODS - HIGH GRANULARITY **/
       /** authentication required **/
       //validate when create new member record
-      // is needed else if is not possible to create a new account
-      allow create: if request.auth.token.email_verified == false
+      // is needed else it is not possible to create a new account
+      allow create: if request.auth != null
                        && checkPersonIdAsIdMember( request.resource.data.personId) == true
                        && checkPersonId( request.resource.data.personId) == true
                        && checkName( request.resource.data.firstname) == true
@@ -119,7 +119,7 @@ service cloud.firestore {
     // if present, check all constraints for fee
     function checkFee( fee) {
       return fee is int
-             && fee > 0; 
+             && fee >= 0; 
     }
     // if present, check all constraints for description
     function checkDescription( description) {
